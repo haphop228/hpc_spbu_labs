@@ -1,0 +1,25 @@
+{
+  "description": "Test configurations for OpenMP min/max benchmarks",
+  "vector_sizes": [
+    {
+      "size": 1000000,
+      "description": "1 million elements (~8 MB)"
+    },
+    {
+      "size": 10000000,
+      "description": "10 million elements (~80 MB)"
+    },
+    {
+      "size": 100000000,
+      "description": "100 million elements (~800 MB)"
+    }
+  ],
+  "thread_counts": [1, 2, 4, 8, 16],
+  "methods": ["reduction", "no-reduction"],
+  "runs_per_config": 10,
+  "notes": [
+    "Thread count 1 serves as baseline for speedup calculation",
+    "Multiple runs allow for statistical analysis (median, variance)",
+    "Larger sizes help observe scalability patterns"
+  ]
+}
