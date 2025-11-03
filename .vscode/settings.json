@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.tf": "hcl",
+        "limits": "c",
+        "ratio": "c",
+        "algorithm": "c"
+    }
+}
