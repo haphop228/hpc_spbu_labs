@@ -14,7 +14,7 @@
       "description": "100 million elements (~800 MB)"
     }
   ],
-  "thread_counts": [1, 2, 4, 8, 16],
+  "thread_counts": [1, 2, 4, 8, 16, 32, 64, 128],
   "methods": ["reduction", "no-reduction"],
   "runs_per_config": 10,
   "notes": [

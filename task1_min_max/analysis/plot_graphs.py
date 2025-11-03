@@ -680,7 +680,7 @@ def main():
     print(f"✓ Loaded {len(stats)} processed statistics")
     
     # Create report directory
-    report_dir = script_dir.parent / 'report'
+    report_dir = script_dir.parent / 'graphs'
     report_dir.mkdir(exist_ok=True)
     
     print("\nGenerating graphs...")
@@ -723,3 +723,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    

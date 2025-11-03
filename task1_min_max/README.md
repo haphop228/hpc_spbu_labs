@@ -1,121 +1,153 @@
-# Task 1: Finding Minimum/Maximum in Vector using OpenMP
+# Quick Start Guide - Task 1: Min/Max with OpenMP
 
-## Project Structure
+## Быстрый старт (Quick Start)
 
-```
-task1_min_max/
-├── src/
-│   ├── min_max.c           # Main OpenMP program
-│   └── utils.h             # Helper functions
-├── data/
-│   ├── generate_tests.py   # Test data generator
-│   └── test_configs.json   # Test configurations
-├── results/
-│   └── (benchmark results will be stored here)
-├── analysis/
-│   ├── analyze.py          # Data analysis script
-│   └── plot_graphs.py      # Graph generation
-├── scripts/
-│   ├── run_benchmarks.sh   # Automated benchmark runner
-│   └── compile.sh          # Compilation script
-└── report/
-    └── (generated graphs and tables)
+### 1. Компиляция программы (Compile the program)
+
+```bash
+cd HPC_korhov/task1_min_max/scripts
+./compile.sh
 ```
 
-## Pipeline Stages
+Скрипт автоматически:
+- Определит вашу ОС (macOS/Linux)
+- Установит необходимые зависимости (libomp для macOS)
+- Скомпилирует программу с оптимизациями
+- Проверит работу OpenMP
 
-### Stage 1: Input/Test Data Generation
-- `data/generate_tests.py`: Generates test vectors of various sizes
-- `data/test_configs.json`: Configuration for test parameters
+### 2. Запуск бенчмарков (Run benchmarks)
 
-### Stage 2: Main Program
-- `src/min_max.c`: OpenMP implementation with/without reduction
-- Measures execution time for core computation only
-- Outputs results in JSON format for analysis
-
-### Stage 3: Analysis & Visualization
-- `analysis/analyze.py`: Processes benchmark results
-- `analysis/plot_graphs.py`: Generates graphs for report
-  - Execution time vs thread count
-  - Speedup vs thread count
-  - Comparison: reduction vs non-reduction
-
-## Usage
-
-1. Compile the program:
-   ```bash
-   cd scripts
-   chmod +x *.sh
-   ./compile.sh
-   ```
-
-2. Run benchmarks:
-   ```bash
-   ./run_benchmarks.sh
-   ```
-
-3. Analyze results:
-   ```bash
-   cd ../analysis
-   python3 analyze.py ../results/benchmark_YYYYMMDD_HHMMSS.json
-   ```
-
-4. Generate graphs:
-   ```bash
-   python3 plot_graphs.py
-   ```
-
-## Test Configuration
-
-- Vector sizes: 10^6, 10^7, 10^8 elements
-- Thread counts: 1, 2, 4, 8, 16
-- Repetitions: 10 runs per configuration
-- Variants: with reduction, without reduction
-
-## Implementation Details
-
-### With Reduction
-Uses OpenMP's built-in `reduction(min:var)` and `reduction(max:var)` clauses:
-```c
-#pragma omp parallel for reduction(min:min_val)
-for (long long i = 0; i < n; i++) {
-    if (arr[i] < min_val) {
-        min_val = arr[i];
-    }
-}
+```bash
+./run_benchmarks.sh
 ```
 
-### Without Reduction
-Manual implementation using thread-local variables:
-```c
-#pragma omp parallel
-{
-    int tid = omp_get_thread_num();
-    double local_min = DBL_MAX;
-    
-    #pragma omp for
-    for (long long i = 0; i < n; i++) {
-        if (arr[i] < local_min) {
-            local_min = arr[i];
-        }
-    }
-    
-    thread_mins[tid] = local_min;
-}
-// Then combine thread_mins to find global minimum
+Это запустит полный набор тестов:
+- Размеры векторов: 10^6, 10^7, 10^8 элементов
+- Количество потоков: 1, 2, 4, 8, 16, 32, 64, 128
+- Методы: с редукцией и без редукции
+- По 10 запусков каждой конфигурации
+
+### 3. Анализ результатов (Analyze results)
+
+```bash
+cd ../analysis
+python3 analyze.py ../results/benchmark_YYYYMMDD_HHMMSS.json
 ```
 
-## Expected Results
+Замените `YYYYMMDD_HHMMSS` на имя файла, созданного в шаге 2.
 
-The benchmarks will show:
-1. **Speedup**: Both methods should show good speedup up to the number of physical cores
-2. **Efficiency**: Efficiency typically decreases as thread count increases
-3. **Comparison**: Reduction method is usually slightly faster due to compiler optimizations
-4. **Scalability**: Performance scales well with problem size
+Скрипт выведет:
+- Таблицу с временем выполнения
+- Ускорение (speedup)
+- Эффективность (efficiency)
 
-## Notes
+### 4. Построение графиков (Generate graphs)
 
-- The program measures only the core computation time (excluding data generation)
-- Results are output in JSON format for easy parsing
-- Multiple runs allow for statistical analysis (median values are used)
-- Graphs include ideal speedup lines for comparison
+```bash
+python3 plot_graphs.py
+```
+
+Графики будут сохранены в `../report/`:
+- `execution_time_size_*.png` - время выполнения vs количество потоков
+- `speedup_size_*.png` - ускорение vs количество потоков (с идеальной линией)
+- `efficiency_size_*.png` - эффективность vs количество потоков
+- `comparison_reduction_methods.png` - сравнение методов
+- `summary_table.txt` - сводная таблица
+
+## Быстрый тест (Quick Test)
+
+Для быстрой проверки работы программы:
+
+```bash
+cd HPC_korhov/task1_min_max
+
+# Тест с редукцией, 4 потока, 100K элементов, 3 запуска
+./bin/min_max 100000 4 reduction 3
+
+# Тест без редукции, 2 потока, 100K элементов, 3 запуска
+./bin/min_max 100000 2 no-reduction 3
+```
+
+## Структура результатов (Results Structure)
+
+```
+results/
+├── benchmark_YYYYMMDD_HHMMSS.json          # Сырые данные
+└── benchmark_YYYYMMDD_HHMMSS_processed.json # Обработанные данные
+
+report/
+├── execution_time_size_1000000.png
+├── execution_time_size_10000000.png
+├── execution_time_size_100000000.png
+├── speedup_size_1000000.png
+├── speedup_size_10000000.png
+├── speedup_size_100000000.png
+├── efficiency_size_1000000.png
+├── efficiency_size_10000000.png
+├── efficiency_size_100000000.png
+├── comparison_reduction_methods.png
+└── summary_table.txt
+```
+
+## Параметры программы (Program Parameters)
+
+```bash
+./bin/min_max <size> <threads> <method> <runs>
+```
+
+- `size` - размер вектора (количество элементов)
+- `threads` - количество потоков OpenMP
+- `method` - метод: `reduction` или `no-reduction`
+- `runs` - количество запусков для усреднения
+
+## Требования (Requirements)
+
+### Система (System)
+- macOS или Linux
+- Компилятор с поддержкой OpenMP (gcc или clang+libomp)
+- Python 3.6+
+
+### Python библиотеки (Python packages)
+```bash
+pip3 install numpy matplotlib
+```
+
+## Устранение проблем (Troubleshooting)
+
+### Ошибка компиляции на macOS
+```bash
+# Установите libomp вручную
+brew install libomp
+```
+
+### Python библиотеки не найдены
+```bash
+pip3 install --user numpy matplotlib
+```
+
+### Программа работает медленно
+- Уменьшите размеры векторов в `scripts/run_benchmarks.sh`
+- Уменьшите количество запусков (RUNS=3 вместо 10)
+
+## Что дальше? (Next Steps)
+
+1. Изучите сгенерированные графики в `report/`
+2. Проанализируйте `summary_table.txt`
+3. Сравните результаты с редукцией и без
+4. Обратите внимание на:
+   - Ускорение при увеличении потоков
+   - Эффективность параллелизации
+   - Разницу между методами
+
+## Для отчета (For Report)
+
+Используйте следующие графики:
+1. **Speedup graphs** - показывают эффективность параллелизации
+2. **Comparison graph** - сравнение методов с/без редукции
+3. **Summary table** - числовые данные для таблиц в отчете
+
+Ключевые выводы для отчета:
+- Как масштабируется производительность с ростом потоков?
+- Достигается ли линейное ускорение?
+- Какой метод эффективнее и почему?
+- Как размер задачи влияет на эффективность?
