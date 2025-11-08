@@ -1,0 +1,47 @@
+{
+  "description": "Test configurations for numerical integration benchmarks",
+  "test_functions": {
+    "x2": {
+      "name": "x^2",
+      "description": "Polynomial function",
+      "bounds": [0, 1],
+      "exact_integral": 0.333333333333
+    },
+    "sin": {
+      "name": "sin(x)",
+      "description": "Trigonometric function",
+      "bounds": [0, 3.14159265358979],
+      "exact_integral": 2.0
+    },
+    "exp": {
+      "name": "e^x",
+      "description": "Exponential function",
+      "bounds": [0, 1],
+      "exact_integral": 1.718281828459
+    },
+    "arctan": {
+      "name": "1/(1+x^2)",
+      "description": "Arctangent derivative",
+      "bounds": [0, 1],
+      "exact_integral": 0.785398163397
+    },
+    "circle": {
+      "name": "sqrt(1-x^2)",
+      "description": "Quarter circle",
+      "bounds": [0, 1],
+      "exact_integral": 0.785398163397
+    }
+  },
+  "benchmark_settings": {
+    "problem_sizes": [1000000, 10000000, 100000000],
+    "thread_counts": [1, 2, 4, 8, 16, 32, 64, 128],
+    "methods": ["reduction"],
+    "iterations_per_config": 10
+  },
+  "quick_test_settings": {
+    "problem_sizes": [1000000],
+    "thread_counts": [1, 2, 4, 8],
+    "methods": ["reduction"],
+    "iterations_per_config": 3
+  }
+}

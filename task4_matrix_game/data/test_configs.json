@@ -1,0 +1,37 @@
+{
+  "description": "Test configurations for matrix game (maximin) benchmarks",
+  "problem_description": "Find maximum value among minimum elements of matrix rows: y = max(min(row_i)) for i=1..N",
+  "benchmark_settings": {
+    "matrix_sizes": [100, 500, 1000, 2000, 3000],
+    "thread_counts": [1, 2, 4, 8, 16, 32, 64, 128],
+    "methods": ["reduction"],
+    "iterations_per_config": 10
+  },
+  "quick_test_settings": {
+    "matrix_sizes": [100, 500, 1000],
+    "thread_counts": [1, 2, 4, 8],
+    "methods": ["reduction"],
+    "iterations_per_config": 3
+  },
+  "methods_description": {
+    "sequential": "Sequential implementation without parallelization",
+    "reduction": "OpenMP parallel for with reduction(max:) clause - optimal performance"
+  },
+  "expected_performance": {
+    "small_matrices": {
+      "size": "100x100",
+      "speedup": "2-4x at 4-8 threads",
+      "notes": "Overhead may limit scalability"
+    },
+    "medium_matrices": {
+      "size": "1000x1000",
+      "speedup": "4-8x at 8-16 threads",
+      "notes": "Good balance of computation and synchronization"
+    },
+    "large_matrices": {
+      "size": "3000x3000",
+      "speedup": "8-16x at 16-32 threads",
+      "notes": "Best scalability, minimal relative overhead"
+    }
+  }
+}
