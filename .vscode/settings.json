@@ -3,6 +3,7 @@
         "*.tf": "hcl",
         "limits": "c",
         "ratio": "c",
-        "algorithm": "c"
+        "algorithm": "c",
+        "vector": "cpp"
     }
 }

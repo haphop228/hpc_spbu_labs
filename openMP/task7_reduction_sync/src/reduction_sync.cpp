@@ -1,17 +1,3 @@
-/**
- * Task 7: Reduction Operations with Different Synchronization Methods
- * 
- * This program implements reduction operations using different synchronization
- * approaches in OpenMP:
- * 1. Atomic operations
- * 2. Critical sections
- * 3. Locks (omp_lock_t)
- * 4. Built-in reduction clause (baseline for comparison)
- * 
- * The task is to compute the sum of all elements in a large array and compare
- * the performance of different synchronization methods.
- */
-
 #include <iostream>
 #include <vector>
 #include <random>
@@ -24,7 +10,6 @@
 
 using namespace std;
 
-// Structure to hold benchmark results
 struct BenchmarkResult {
     string method;
     int num_threads;
@@ -33,9 +18,6 @@ struct BenchmarkResult {
     double result;
 };
 
-/**
- * Initialize array with random values
- */
 void initialize_array(vector<double>& arr, int seed = 42) {
     mt19937 gen(seed);
     uniform_real_distribution<double> dist(0.0, 100.0);
@@ -45,9 +27,6 @@ void initialize_array(vector<double>& arr, int seed = 42) {
     }
 }
 
-/**
- * Sequential reduction (baseline)
- */
 double reduction_sequential(const vector<double>& arr) {
     double sum = 0.0;
     
@@ -58,10 +37,6 @@ double reduction_sequential(const vector<double>& arr) {
     return sum;
 }
 
-/**
- * Reduction using built-in OpenMP reduction clause
- * This is the most efficient and recommended way
- */
 double reduction_builtin(const vector<double>& arr, int num_threads) {
     double sum = 0.0;
     
@@ -75,11 +50,6 @@ double reduction_builtin(const vector<double>& arr, int num_threads) {
     return sum;
 }
 
-/**
- * Reduction using atomic operations
- * Each thread atomically updates the shared sum variable
- * Optimized: use local sums to reduce atomic operations
- */
 double reduction_atomic(const vector<double>& arr, int num_threads) {
     double sum = 0.0;
     
@@ -101,11 +71,6 @@ double reduction_atomic(const vector<double>& arr, int num_threads) {
     return sum;
 }
 
-/**
- * Reduction using critical sections
- * Only one thread can execute the critical section at a time
- * Optimized: use local sums to reduce synchronization frequency
- */
 double reduction_critical(const vector<double>& arr, int num_threads) {
     double sum = 0.0;
     
@@ -129,11 +94,6 @@ double reduction_critical(const vector<double>& arr, int num_threads) {
     return sum;
 }
 
-/**
- * Reduction using locks (omp_lock_t)
- * Manual lock/unlock for synchronization
- * Optimized: use local sums to reduce lock operations
- */
 double reduction_lock(const vector<double>& arr, int num_threads) {
     double sum = 0.0;
     omp_lock_t lock;
@@ -159,9 +119,7 @@ double reduction_lock(const vector<double>& arr, int num_threads) {
     return sum;
 }
 
-/**
- * Run benchmark for a specific method
- */
+
 BenchmarkResult run_benchmark(const string& method, const vector<double>& arr, 
                               int num_threads, int runs) {
     BenchmarkResult result;
@@ -198,9 +156,7 @@ BenchmarkResult run_benchmark(const string& method, const vector<double>& arr,
     return result;
 }
 
-/**
- * Verify correctness by comparing all methods with sequential
- */
+
 bool verify_correctness(int array_size) {
     cout << "\n=== Correctness Verification ===" << endl;
     
@@ -262,9 +218,6 @@ bool verify_correctness(int array_size) {
     return all_passed;
 }
 
-/**
- * Print usage information
- */
 void print_usage(const char* program_name) {
     cout << "Usage: " << program_name << " <array_size> <num_threads> <method> <runs> [output_file]" << endl;
     cout << "\nParameters:" << endl;

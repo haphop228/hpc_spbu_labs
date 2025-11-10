@@ -1,14 +1,3 @@
-/**
- * Task 6: OpenMP Loop Scheduling Investigation
- * 
- * This program investigates different OpenMP loop scheduling strategies
- * (static, dynamic, guided) with uneven workload across iterations.
- * 
- * The workload is intentionally uneven: some iterations perform heavy
- * computations (random number generation and processing), while others
- * do minimal work.
- */
-
 #include <iostream>
 #include <vector>
 #include <random>
@@ -21,7 +10,6 @@
 
 using namespace std;
 
-// Structure to hold benchmark results
 struct BenchmarkResult {
     string schedule_type;
     int chunk_size;
@@ -31,55 +19,31 @@ struct BenchmarkResult {
     double result;
 };
 
-/**
- * Simulates heavy computational work by generating and processing random numbers
- * Returns the sum of processed random numbers
- */
 double heavy_work(int iteration, int work_amount) {
-    // Use iteration as seed for reproducibility
     mt19937 gen(iteration * 12345);
     uniform_real_distribution<double> dist(0.0, 1.0);
     
     double sum = 0.0;
     for (int i = 0; i < work_amount; ++i) {
         double val = dist(gen);
-        // Perform some mathematical operations to increase workload
         sum += sin(val) * cos(val) + sqrt(val) + log(val + 1.0);
     }
     
     return sum;
 }
 
-/**
- * Simulates light computational work
- */
 double light_work(int iteration) {
     return static_cast<double>(iteration) * 0.001;
 }
-
-/**
- * Main computation loop with uneven workload
- * 
- * Workload pattern:
- * - Every 10th iteration: very heavy work (10000 random numbers)
- * - Every 5th iteration (not 10th): medium work (5000 random numbers)
- * - Other iterations: light work (minimal computation)
- * 
- * This creates significant load imbalance that will affect different
- * scheduling strategies differently.
- */
 double uneven_workload_loop_sequential(int num_iterations) {
     double total_sum = 0.0;
     
     for (int i = 0; i < num_iterations; ++i) {
         if (i % 10 == 0) {
-            // Very heavy work every 10th iteration
             total_sum += heavy_work(i, 10000);
         } else if (i % 5 == 0) {
-            // Medium work every 5th iteration (not 10th)
             total_sum += heavy_work(i, 5000);
         } else {
-            // Light work for other iterations
             total_sum += light_work(i);
         }
     }
@@ -87,9 +51,6 @@ double uneven_workload_loop_sequential(int num_iterations) {
     return total_sum;
 }
 
-/**
- * Parallel version with static scheduling
- */
 double uneven_workload_loop_static(int num_iterations, int num_threads, int chunk_size) {
     double total_sum = 0.0;
     
@@ -121,10 +82,6 @@ double uneven_workload_loop_static(int num_iterations, int num_threads, int chun
     
     return total_sum;
 }
-
-/**
- * Parallel version with dynamic scheduling
- */
 double uneven_workload_loop_dynamic(int num_iterations, int num_threads, int chunk_size) {
     double total_sum = 0.0;
     
@@ -157,9 +114,6 @@ double uneven_workload_loop_dynamic(int num_iterations, int num_threads, int chu
     return total_sum;
 }
 
-/**
- * Parallel version with guided scheduling
- */
 double uneven_workload_loop_guided(int num_iterations, int num_threads, int chunk_size) {
     double total_sum = 0.0;
     
@@ -192,9 +146,6 @@ double uneven_workload_loop_guided(int num_iterations, int num_threads, int chun
     return total_sum;
 }
 
-/**
- * Run benchmark for a specific configuration
- */
 BenchmarkResult run_benchmark(const string& schedule_type, int num_iterations, 
                               int num_threads, int chunk_size, int runs) {
     BenchmarkResult result;
@@ -230,9 +181,6 @@ BenchmarkResult run_benchmark(const string& schedule_type, int num_iterations,
     return result;
 }
 
-/**
- * Verify correctness by comparing parallel results with sequential
- */
 bool verify_correctness(int num_iterations) {
     cout << "\n=== Correctness Verification ===" << endl;
     
@@ -242,7 +190,6 @@ bool verify_correctness(int num_iterations) {
     bool all_passed = true;
     const double tolerance = 1e-6;
     
-    // Test static
     double static_result = uneven_workload_loop_static(num_iterations, 4, 0);
     double static_error = abs(static_result - sequential_result);
     cout << "Static result:     " << static_result << " (error: " << scientific << static_error << ")" << endl;
@@ -279,9 +226,6 @@ bool verify_correctness(int num_iterations) {
     return all_passed;
 }
 
-/**
- * Print usage information
- */
 void print_usage(const char* program_name) {
     cout << "Usage: " << program_name << " <num_iterations> <num_threads> <schedule> <chunk_size> <runs> [output_file]" << endl;
     cout << "\nParameters:" << endl;

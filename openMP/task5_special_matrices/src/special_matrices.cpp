@@ -10,7 +10,6 @@
 #include <random>
 #include <limits>
 
-// Matrix types
 enum class MatrixType {
     DENSE,
     BANDED,
@@ -18,20 +17,18 @@ enum class MatrixType {
     UPPER_TRIANGULAR
 };
 
-// Scheduling types
 enum class ScheduleType {
     STATIC,
     DYNAMIC,
     GUIDED
 };
 
-// Matrix class for special types
 class SpecialMatrix {
 private:
     std::vector<std::vector<double>> data;
     int N;
     MatrixType type;
-    int bandwidth; // for banded matrices
+    int bandwidth;
     
 public:
     SpecialMatrix(int size, MatrixType mat_type, int band = 5, int seed = 42)
@@ -46,7 +43,6 @@ public:
         
         switch (type) {
             case MatrixType::DENSE:
-                // Full matrix
                 for (int i = 0; i < N; ++i) {
                     for (int j = 0; j < N; ++j) {
                         data[i][j] = dis(gen);
@@ -55,7 +51,6 @@ public:
                 break;
                 
             case MatrixType::BANDED:
-                // Banded matrix: non-zero only within bandwidth from diagonal
                 for (int i = 0; i < N; ++i) {
                     for (int j = 0; j < N; ++j) {
                         if (std::abs(i - j) <= bandwidth) {
@@ -68,7 +63,6 @@ public:
                 break;
                 
             case MatrixType::LOWER_TRIANGULAR:
-                // Lower triangular: non-zero only when i >= j
                 for (int i = 0; i < N; ++i) {
                     for (int j = 0; j <= i; ++j) {
                         data[i][j] = dis(gen);
@@ -77,7 +71,6 @@ public:
                 break;
                 
             case MatrixType::UPPER_TRIANGULAR:
-                // Upper triangular: non-zero only when i <= j
                 for (int i = 0; i < N; ++i) {
                     for (int j = i; j < N; ++j) {
                         data[i][j] = dis(gen);
@@ -97,7 +90,6 @@ public:
     
     int getBandwidth() const { return bandwidth; }
     
-    // Get row minimum considering matrix structure
     double getRowMin(int row) const {
         double row_min = std::numeric_limits<double>::max();
         
@@ -109,7 +101,6 @@ public:
                 break;
                 
             case MatrixType::BANDED:
-                // Only check within bandwidth
                 {
                     int j_start = std::max(0, row - bandwidth);
                     int j_end = std::min(N - 1, row + bandwidth);
@@ -120,14 +111,12 @@ public:
                 break;
                 
             case MatrixType::LOWER_TRIANGULAR:
-                // Only check j <= row
                 for (int j = 0; j <= row; ++j) {
                     row_min = std::min(row_min, data[row][j]);
                 }
                 break;
                 
             case MatrixType::UPPER_TRIANGULAR:
-                // Only check j >= row
                 for (int j = row; j < N; ++j) {
                     row_min = std::min(row_min, data[row][j]);
                 }
@@ -138,7 +127,6 @@ public:
     }
 };
 
-// Convert string to MatrixType
 MatrixType stringToMatrixType(const std::string& str) {
     if (str == "dense") return MatrixType::DENSE;
     if (str == "banded") return MatrixType::BANDED;
@@ -147,7 +135,6 @@ MatrixType stringToMatrixType(const std::string& str) {
     return MatrixType::DENSE;
 }
 
-// Convert string to ScheduleType
 ScheduleType stringToScheduleType(const std::string& str) {
     if (str == "static") return ScheduleType::STATIC;
     if (str == "dynamic") return ScheduleType::DYNAMIC;
@@ -189,7 +176,6 @@ double maximin_sequential(const SpecialMatrix& matrix) {
     return max_of_mins;
 }
 
-// Parallel method with different scheduling strategies
 double maximin_parallel(const SpecialMatrix& matrix, int num_threads, ScheduleType schedule, int chunk_size = 0) {
     int N = matrix.size();
     double max_of_mins = std::numeric_limits<double>::lowest();

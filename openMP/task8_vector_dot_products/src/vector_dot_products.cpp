@@ -1,14 +1,3 @@
-/**
- * Task 8: Vector Dot Products with OpenMP Sections
- * 
- * This program computes dot products for a sequence of vector pairs.
- * It uses OpenMP sections directive to parallelize two separate tasks:
- * 1. Reading vectors from file (input task)
- * 2. Computing dot products (computation task)
- * 
- * The tasks are organized as separate sections that can run in parallel.
- */
-
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -21,21 +10,18 @@
 
 using namespace std;
 
-// Structure to hold a pair of vectors
 struct VectorPair {
     vector<double> vec1;
     vector<double> vec2;
     int id;
 };
 
-// Structure to hold computation result
 struct DotProductResult {
     int pair_id;
     double result;
     double computation_time_ms;
 };
 
-// Structure to hold benchmark results
 struct BenchmarkResult {
     string method;
     int num_threads;
@@ -47,9 +33,6 @@ struct BenchmarkResult {
     vector<DotProductResult> results;
 };
 
-/**
- * Generate test data file with vector pairs
- */
 void generate_test_data(const string& filename, int num_pairs, int vector_size) {
     ofstream file(filename);
     if (!file.is_open()) {
@@ -57,20 +40,15 @@ void generate_test_data(const string& filename, int num_pairs, int vector_size) 
         return;
     }
     
-    // Write header: num_pairs, vector_size
     file << num_pairs << " " << vector_size << endl;
     
-    // Generate random vector pairs
-    srand(42); // Fixed seed for reproducibility
     for (int p = 0; p < num_pairs; ++p) {
-        // Vector 1
         for (int i = 0; i < vector_size; ++i) {
             file << (rand() % 1000) / 10.0;
             if (i < vector_size - 1) file << " ";
         }
         file << endl;
         
-        // Vector 2
         for (int i = 0; i < vector_size; ++i) {
             file << (rand() % 1000) / 10.0;
             if (i < vector_size - 1) file << " ";
@@ -83,9 +61,6 @@ void generate_test_data(const string& filename, int num_pairs, int vector_size) 
     cout << "  Pairs: " << num_pairs << ", Vector size: " << vector_size << endl;
 }
 
-/**
- * Compute dot product of two vectors
- */
 double compute_dot_product(const vector<double>& vec1, const vector<double>& vec2) {
     double result = 0.0;
     for (size_t i = 0; i < vec1.size(); ++i) {
@@ -94,10 +69,6 @@ double compute_dot_product(const vector<double>& vec1, const vector<double>& vec
     return result;
 }
 
-/**
- * Sequential implementation (baseline)
- * Read all vectors, then compute all dot products
- */
 BenchmarkResult sequential_method(const string& filename, int runs) {
     BenchmarkResult bench_result;
     bench_result.method = "sequential";
@@ -108,7 +79,6 @@ BenchmarkResult sequential_method(const string& filename, int runs) {
     vector<DotProductResult> final_results;
     
     for (int run = 0; run < runs; ++run) {
-        // Input phase
         auto input_start = chrono::high_resolution_clock::now();
         
         ifstream file(filename);
@@ -139,7 +109,6 @@ BenchmarkResult sequential_method(const string& filename, int runs) {
         chrono::duration<double, milli> input_duration = input_end - input_start;
         total_input_time += input_duration.count();
         
-        // Computation phase
         auto comp_start = chrono::high_resolution_clock::now();
         
         vector<DotProductResult> results(num_pairs);
@@ -173,10 +142,6 @@ BenchmarkResult sequential_method(const string& filename, int runs) {
     return bench_result;
 }
 
-/**
- * Parallel implementation using OpenMP sections
- * Uses sections to parallelize input and computation tasks
- */
 BenchmarkResult sections_method(const string& filename, int num_threads, int runs) {
     BenchmarkResult bench_result;
     bench_result.method = "sections";
@@ -192,7 +157,6 @@ BenchmarkResult sections_method(const string& filename, int num_threads, int run
     for (int run = 0; run < runs; ++run) {
         auto total_start = chrono::high_resolution_clock::now();
         
-        // Shared data structures
         vector<VectorPair> input_buffer;
         vector<VectorPair> compute_buffer;
         vector<DotProductResult> results;
@@ -205,7 +169,6 @@ BenchmarkResult sections_method(const string& filename, int num_threads, int run
         double input_time = 0.0;
         double computation_time = 0.0;
         
-        // Read metadata first
         ifstream meta_file(filename);
         meta_file >> num_pairs >> vector_size;
         meta_file.close();
@@ -214,7 +177,6 @@ BenchmarkResult sections_method(const string& filename, int num_threads, int run
         
         #pragma omp parallel sections
         {
-            // Section 1: Input task - read vectors from file
             #pragma omp section
             {
                 auto input_start = chrono::high_resolution_clock::now();
@@ -236,7 +198,6 @@ BenchmarkResult sections_method(const string& filename, int num_threads, int run
                         file >> pair.vec2[i];
                     }
                     
-                    // Add to compute buffer for processing
                     #pragma omp critical
                     {
                         compute_buffer.push_back(pair);
@@ -254,7 +215,6 @@ BenchmarkResult sections_method(const string& filename, int num_threads, int run
                 input_time = duration.count();
             }
             
-            // Section 2: Computation task - compute dot products
             #pragma omp section
             {
                 auto comp_start = chrono::high_resolution_clock::now();
@@ -264,7 +224,6 @@ BenchmarkResult sections_method(const string& filename, int num_threads, int run
                     VectorPair pair;
                     bool has_work = false;
                     
-                    // Get next pair to process
                     #pragma omp critical
                     {
                         if (!compute_buffer.empty()) {
@@ -286,14 +245,12 @@ BenchmarkResult sections_method(const string& filename, int num_threads, int run
                         
                         processed++;
                     } else {
-                        // Check if input is done
                         bool done = false;
                         #pragma omp critical
                         {
                             done = input_done;
                         }
                         if (!done) {
-                            // Wait a bit for more data
                             #pragma omp taskyield
                         }
                     }
@@ -331,9 +288,6 @@ BenchmarkResult sections_method(const string& filename, int num_threads, int run
     return bench_result;
 }
 
-/**
- * Verify correctness by comparing results
- */
 bool verify_correctness(const string& filename) {
     cout << "\n=== Correctness Verification ===" << endl;
     
@@ -370,9 +324,6 @@ bool verify_correctness(const string& filename) {
     return all_passed;
 }
 
-/**
- * Print usage information
- */
 void print_usage(const char* program_name) {
     cout << "Usage: " << program_name << " <command> [options]" << endl;
     cout << "\nCommands:" << endl;

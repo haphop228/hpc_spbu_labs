@@ -10,10 +10,8 @@
 #include <random>
 #include <limits>
 
-// Matrix type
 using Matrix = std::vector<std::vector<double>>;
 
-// Generate random matrix
 Matrix generate_matrix(int N, int seed = 42) {
     Matrix matrix(N, std::vector<double>(N));
     std::mt19937 gen(seed);
@@ -28,7 +26,6 @@ Matrix generate_matrix(int N, int seed = 42) {
     return matrix;
 }
 
-// Sequential method: find max of row minimums
 double maximin_sequential(const Matrix& matrix) {
     int N = matrix.size();
     double max_of_mins = std::numeric_limits<double>::lowest();
@@ -44,8 +41,6 @@ double maximin_sequential(const Matrix& matrix) {
     return max_of_mins;
 }
 
-// Flat parallelism: parallelize only outer loop (rows)
-// Inner loop (finding min in row) is sequential
 double maximin_flat(const Matrix& matrix, int num_threads) {
     int N = matrix.size();
     double max_of_mins = std::numeric_limits<double>::lowest();
@@ -64,25 +59,19 @@ double maximin_flat(const Matrix& matrix, int num_threads) {
     return max_of_mins;
 }
 
-// Nested parallelism: parallelize both outer loop (rows) and inner loop (columns)
-// Outer loop: distribute rows among threads
-// Inner loop: each thread further parallelizes finding min in its row
 double maximin_nested(const Matrix& matrix, int outer_threads, int inner_threads) {
     int N = matrix.size();
     double max_of_mins = std::numeric_limits<double>::lowest();
     
-    // Enable nested parallelism
     omp_set_nested(1);
     omp_set_max_active_levels(2);
     
-    // Set number of threads for outer level
     omp_set_num_threads(outer_threads);
     
     #pragma omp parallel for reduction(max:max_of_mins)
     for (int i = 0; i < N; ++i) {
         double row_min = std::numeric_limits<double>::max();
         
-        // Inner parallel region: find minimum in row using reduction
         #pragma omp parallel for num_threads(inner_threads) reduction(min:row_min)
         for (int j = 0; j < N; ++j) {
             row_min = std::min(row_min, matrix[i][j]);
@@ -157,7 +146,6 @@ std::vector<BenchmarkResult> run_benchmark(const Matrix& matrix,
 bool verify_correctness() {
     std::cout << "\n=== Correctness Verification ===" << std::endl;
     
-    // Test 1: Small matrix with known result
     {
         Matrix test_matrix = {
             {5.0, 3.0, 7.0},
@@ -169,7 +157,6 @@ bool verify_correctness() {
         double flat = maximin_flat(test_matrix, 2);
         double nested = maximin_nested(test_matrix, 2, 2);
         
-        // Expected: row mins are [3.0, 1.0, 4.0], max is 4.0
         double expected = 4.0;
         
         std::cout << "\nTest 1: 3x3 matrix (expected = " << expected << ")" << std::endl;
@@ -189,7 +176,6 @@ bool verify_correctness() {
         std::cout << "  ✓ PASSED" << std::endl;
     }
     
-    // Test 2: Larger random matrix - all methods should give same result
     {
         int N = 100;
         Matrix test_matrix = generate_matrix(N, 12345);
@@ -217,16 +203,13 @@ bool verify_correctness() {
 void check_nested_support() {
     std::cout << "\n=== Checking Nested Parallelism Support ===" << std::endl;
     
-    // Check if nested parallelism is supported
     int max_levels = omp_get_max_active_levels();
     std::cout << "Max active levels: " << max_levels << std::endl;
     
-    // Try to enable nested parallelism
     omp_set_nested(1);
     int nested_enabled = omp_get_nested();
     std::cout << "Nested parallelism enabled: " << (nested_enabled ? "YES" : "NO") << std::endl;
     
-    // Test nested parallelism
     std::cout << "\nTesting nested parallelism:" << std::endl;
     #pragma omp parallel num_threads(2)
     {
@@ -280,7 +263,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    // Parse thread configuration
     int num_threads = 0;
     int outer_threads = 0;
     int inner_threads = 0;
@@ -298,21 +280,17 @@ int main(int argc, char* argv[]) {
         num_threads = std::stoi(threads_str);
     }
     
-    // Check nested parallelism support
     check_nested_support();
     
-    // Run verification
     if (!verify_correctness()) {
         std::cerr << "Error: Correctness verification failed!" << std::endl;
         return 1;
     }
     
-    // Generate matrix
     std::cout << "\nGenerating " << N << "x" << N << " matrix..." << std::endl;
     Matrix matrix = generate_matrix(N);
     std::cout << "Matrix generated." << std::endl;
     
-    // Run benchmark
     std::cout << "\nRunning benchmark..." << std::endl;
     if (method == "nested") {
         std::cout << "Method: " << method << " (outer=" << outer_threads 
@@ -323,7 +301,6 @@ int main(int argc, char* argv[]) {
     
     auto results = run_benchmark(matrix, num_threads, method, iterations, outer_threads, inner_threads);
     
-    // Calculate statistics
     double sum_time = 0.0;
     double min_time = results[0].execution_time;
     double max_time = results[0].execution_time;
@@ -342,7 +319,6 @@ int main(int argc, char* argv[]) {
     std::cout << "  Max time:     " << max_time << " ms" << std::endl;
     std::cout << "  Result value: " << std::setprecision(6) << results[0].result_value << std::endl;
     
-    // Save results to file if specified
     if (!output_file.empty()) {
         std::ofstream out(output_file, std::ios::app);
         if (out.is_open()) {

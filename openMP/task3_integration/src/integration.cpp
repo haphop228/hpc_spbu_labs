@@ -45,7 +45,7 @@ FunctionPtr get_function(const std::string& name) {
     if (name == "exp") return test_function_3;
     if (name == "arctan") return test_function_4;
     if (name == "circle") return test_function_5;
-    return test_function_1; // default
+    return test_function_1;
 }
 
 // Sequential rectangle method
@@ -96,7 +96,6 @@ std::vector<BenchmarkResult> run_benchmark(const std::string& function_name,
     std::vector<BenchmarkResult> results;
     FunctionPtr f = get_function(function_name);
     
-    // Warmup
     if (method == "reduction") {
         integrate_reduction(f, a, b, N, num_threads);
     }
@@ -136,7 +135,6 @@ std::vector<BenchmarkResult> run_benchmark(const std::string& function_name,
 bool verify_correctness() {
     std::cout << "\n=== Correctness Verification ===" << std::endl;
     
-    // Test 1: x^2 from 0 to 1, exact = 1/3
     {
         double a = 0.0, b = 1.0;
         long long N = 1000000;
@@ -152,7 +150,6 @@ bool verify_correctness() {
                   << " (error: " << std::abs(par_red - exact) << ")" << std::endl;
     }
     
-    // Test 2: sin(x) from 0 to π, exact = 2
     {
         double a = 0.0, b = M_PI;
         long long N = 1000000;

@@ -10,10 +10,8 @@
 #include <random>
 #include <limits>
 
-// Matrix type
 using Matrix = std::vector<std::vector<double>>;
 
-// Generate random matrix
 Matrix generate_matrix(int N, int seed = 42) {
     Matrix matrix(N, std::vector<double>(N));
     std::mt19937 gen(seed);
@@ -28,7 +26,6 @@ Matrix generate_matrix(int N, int seed = 42) {
     return matrix;
 }
 
-// Sequential method: find max of row minimums
 double maximin_sequential(const Matrix& matrix) {
     int N = matrix.size();
     double max_of_mins = std::numeric_limits<double>::lowest();
@@ -44,7 +41,6 @@ double maximin_sequential(const Matrix& matrix) {
     return max_of_mins;
 }
 
-// Parallel method with reduction
 double maximin_reduction(const Matrix& matrix, int num_threads) {
     int N = matrix.size();
     double max_of_mins = std::numeric_limits<double>::lowest();
