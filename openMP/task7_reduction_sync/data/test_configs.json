@@ -1,0 +1,18 @@
+{
+  "description": "Test configurations for Task 7: Reduction with Different Synchronization Methods (optimized for laptops)",
+  "array_sizes": [100000, 1000000, 10000000],
+  "thread_counts": [1, 2, 4, 8, 16, 32, 64, 128],
+  "methods": ["sequential", "builtin", "atomic", "critical", "lock"],
+  "runs_per_config": 5,
+  "notes": {
+    "array_sizes": "Test with different problem sizes to see how synchronization overhead scales",
+    "thread_counts": "Test from 1 to 128 threads to observe scalability and overhead",
+    "methods": {
+      "sequential": "Baseline for comparison",
+      "builtin": "OpenMP reduction clause - most efficient",
+      "atomic": "Atomic operations - fine-grained synchronization",
+      "critical": "Critical sections - coarse-grained synchronization",
+      "lock": "Manual locks - explicit synchronization"
+    }
+  }
+}

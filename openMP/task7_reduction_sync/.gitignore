@@ -1,0 +1,33 @@
+# Compiled binaries
+bin/
+*.o
+*.out
+*.exe
+
+# Results and graphs
+results/*.csv
+graphs/*.png
+graphs/*.txt
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Keep directory structure
+!results/.gitkeep
+!graphs/.gitkeep
