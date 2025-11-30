@@ -1,0 +1,13 @@
+Mode;Processes;MatrixSize;Time
+Standard;16;576;0.0366693
+Synchronous;16;576;0.0444302
+Buffered;16;576;0.0442813
+Ready;16;576;0.0433843
+Standard;16;1152;0.149672
+Synchronous;16;1152;0.174953
+Buffered;16;1152;0.180208
+Ready;16;1152;0.196572
+Standard;16;2304;1.04072
+Synchronous;16;2304;1.04763
+Buffered;16;2304;1.1078
+Ready;16;2304;1.23686

@@ -1,0 +1,17 @@
+Algorithm;Processes;MatrixSize;Time
+Striped;1;576;0.115471
+Cannon;1;576;0.11937
+Striped;4;576;0.0327424
+Cannon;4;576;0.0371386
+Striped;9;576;0.025228
+Cannon;9;576;0.0455542
+Striped;16;576;0.0186134
+Cannon;16;576;0.0344785
+Striped;1;1152;0.887701
+Cannon;1;1152;0.906419
+Striped;4;1152;0.517568
+Cannon;4;1152;0.240324
+Striped;9;1152;0.434348
+Cannon;9;1152;0.195089
+Striped;16;1152;0.25208
+Cannon;16;1152;0.184528

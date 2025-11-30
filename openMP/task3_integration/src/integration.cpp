@@ -9,7 +9,6 @@
 #include <cmath>
 #include <string>
 
-// Test functions for integration
 double test_function_1(double x) {
     // f(x) = x^2
     return x * x;
@@ -35,10 +34,8 @@ double test_function_5(double x) {
     return std::sqrt(1.0 - x * x);
 }
 
-// Function pointer type
 typedef double (*FunctionPtr)(double);
 
-// Get function by name
 FunctionPtr get_function(const std::string& name) {
     if (name == "x2") return test_function_1;
     if (name == "sin") return test_function_2;
@@ -48,7 +45,6 @@ FunctionPtr get_function(const std::string& name) {
     return test_function_1;
 }
 
-// Sequential rectangle method
 double integrate_sequential(FunctionPtr f, double a, double b, long long N) {
     double h = (b - a) / N;
     double sum = 0.0;
@@ -61,7 +57,6 @@ double integrate_sequential(FunctionPtr f, double a, double b, long long N) {
     return h * sum;
 }
 
-// Parallel rectangle method with reduction
 double integrate_reduction(FunctionPtr f, double a, double b, long long N, int num_threads) {
     double h = (b - a) / N;
     double sum = 0.0;
