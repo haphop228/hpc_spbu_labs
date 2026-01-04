@@ -15,7 +15,7 @@ void solve_striped(int n, int rank, int size) {
     std::vector<double> B(n * n, 1.0);
     std::vector<double> C_local(local_rows * n, 0.0);
 
-    MPI_Bcast(B.data(), n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(B.data(), n * n, MPI_DOUBLE, 0, MPI_COMM_WORLD); // рассылаем матрицу B всем процессам
 
     MPI_Barrier(MPI_COMM_WORLD);
     double start = MPI_Wtime();
@@ -54,15 +54,15 @@ void solve_cannon(int n, int rank, int size) {
 
     dims[0] = dims[1] = sqrt_p;
     
-    MPI_Comm cart_comm;
-    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 1, &cart_comm);
-    MPI_Cart_coords(cart_comm, rank, 2, coords);
+    MPI_Comm cart_comm; // создаем коммуникатор для решетки
+    MPI_Cart_create(MPI_COMM_WORLD, 2, dims, periods, 1, &cart_comm); // создаем 2D решетку
+    MPI_Cart_coords(cart_comm, rank, 2, coords); // получаем координаты процесса в решетке
     
     int my_row = coords[0];
     int my_col = coords[1];
     
     int left, right, up, down;
-    MPI_Cart_shift(cart_comm, 1, 1, &left, &right);
+    MPI_Cart_shift(cart_comm, 1, 1, &left, &right); // получаем индексы соседей в решетке
     MPI_Cart_shift(cart_comm, 0, 1, &up, &down);
 
     int block_size = n / sqrt_p;
@@ -73,9 +73,14 @@ void solve_cannon(int n, int rank, int size) {
     MPI_Status status;
     int shift_src, shift_dst;
 
+    // Вычисляем, насколько сдвигать и КУДА отправлять
+    // Для матрицы A сдвигаем строку влево на величину 'my_row'
     MPI_Cart_shift(cart_comm, 1, -my_row, &shift_src, &shift_dst);
+    // Физически меняемся данными
+    // Функция MPI_Sendrecv_replace это обмен данными между процессами
     MPI_Sendrecv_replace(A_block.data(), block_size * block_size, MPI_DOUBLE, shift_dst, 1, shift_src, 1, cart_comm, &status);
 
+    // То же самое для B, только сдвигаем столбцы вверх на 'my_col'
     MPI_Cart_shift(cart_comm, 0, -my_col, &shift_src, &shift_dst);
     MPI_Sendrecv_replace(B_block.data(), block_size * block_size, MPI_DOUBLE, shift_dst, 1, shift_src, 1, cart_comm, &status);
 
@@ -91,7 +96,7 @@ void solve_cannon(int n, int rank, int size) {
                 }
             }
         }
-
+        // Блок A всегда едет на 1 шаг ВЛЕВО, а B - ВВЕРХ
         MPI_Sendrecv_replace(A_block.data(), block_size * block_size, MPI_DOUBLE, left, 1, right, 1, cart_comm, &status);
         MPI_Sendrecv_replace(B_block.data(), block_size * block_size, MPI_DOUBLE, up, 1, down, 1, cart_comm, &status);
     }

@@ -87,7 +87,7 @@ for idx, op in enumerate(operations):
     ax.grid(True, which="both", ls="--", alpha=0.3)
     ax.legend(fontsize=8)
 
-plt.suptitle('Speedup Analysis: Custom Time / MPI Time\n(<1 = MPI faster, >1 = Custom faster)', 
+plt.suptitle('Speedup Analysis: Custom Time / MPI Time\n(<1 = Custom faster, >1 = MPI faster)', 
             fontsize=14, fontweight='bold')
 plt.tight_layout()
 plt.savefig(f'{OUTPUT_FOLDER}/speedup_all_ops.png', dpi=150)
@@ -109,7 +109,7 @@ for i, config in enumerate(configs):
 plt.axhline(y=1.0, color='red', linestyle='--', linewidth=2, label='Equal performance')
 plt.xlabel('Operation', fontsize=12)
 plt.ylabel('Average Speedup (Custom / MPI)', fontsize=12)
-plt.title('Average Speedup by Operation\n(<1 = MPI faster, >1 = Custom faster)', 
+plt.title('Average Speedup by Operation\n(<1 = Custom faster, >1 = MPI faster)', 
          fontsize=14, fontweight='bold')
 plt.xticks(x, operations, rotation=0)
 plt.legend()

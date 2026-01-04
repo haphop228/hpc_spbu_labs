@@ -4,8 +4,8 @@ import seaborn as sns
 import os
 import numpy as np
 
-INPUT_FILE = 'data.csv'
-OUTPUT_FOLDER = 'graphs'
+INPUT_FILE = 'data1.csv'
+OUTPUT_FOLDER = 'graphs1'
 
 if not os.path.exists(OUTPUT_FOLDER):
     os.makedirs(OUTPUT_FOLDER)

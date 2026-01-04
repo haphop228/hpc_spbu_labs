@@ -12,13 +12,13 @@ int main(int argc, char** argv) {
 
     if (size != 2) {
         if (rank == 0) {
-            std::cerr << "Error: need 2 prcs" << std::endl;
+            std::cerr << "Error: need 2 processes" << std::endl;
         }
         MPI_Finalize();
         return 1;
     }
 
-    // Размеры сообщений: от 0 байт до 16 МБ
+    // Message sizes: from 0 bytes to 16 MB
     std::vector<long long> msg_sizes;
     msg_sizes.push_back(0);
     for (long long s = 1; s <= 16 * 1024 * 1024; s *= 2) {
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     }
 
     for (long long n : msg_sizes) {
-        // много итераций для малых, мало итераций для больших
+        // Many iterations for small messages, fewer for large ones
         int iterations = 1000;
         if (n > 64 * 1024) iterations = 100;
         if (n > 1024 * 1024) iterations = 20;
@@ -44,13 +44,15 @@ int main(int argc, char** argv) {
 
         for (int i = 0; i < iterations; ++i) {
             if (rank == 0) {
-                // Ping
-                MPI_Send(send_buf.data(), n, MPI_BYTE, 1, 0, MPI_COMM_WORLD);
-                // Pong
-                MPI_Recv(recv_buf.data(), n, MPI_BYTE, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+                // Simultaneous send to rank 1 and receive from rank 1
+                MPI_Sendrecv(send_buf.data(), n, MPI_BYTE, 1, 0,
+                            recv_buf.data(), n, MPI_BYTE, 1, 0,
+                            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             } else if (rank == 1) {
-                MPI_Recv(recv_buf.data(), n, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-                MPI_Send(send_buf.data(), n, MPI_BYTE, 0, 0, MPI_COMM_WORLD);
+                // Simultaneous send to rank 0 and receive from rank 0
+                MPI_Sendrecv(send_buf.data(), n, MPI_BYTE, 0, 0,
+                            recv_buf.data(), n, MPI_BYTE, 0, 0,
+                            MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             }
         }
 
