@@ -18,7 +18,6 @@ void initialize_vector(std::vector<double>& vec, unsigned int seed) {
     }
 }
 
-// Последовательное вычисление
 double dot_product_sequential(const std::vector<double>& a, const std::vector<double>& b) {
     double result = 0.0;
     for (size_t i = 0; i < a.size(); ++i) {
@@ -27,7 +26,6 @@ double dot_product_sequential(const std::vector<double>& a, const std::vector<do
     return result;
 }
 
-// Параллельное вычисление с редукцией
 double dot_product_reduction(const std::vector<double>& a, const std::vector<double>& b, int num_threads) {
     double result = 0.0;
     size_t n = a.size();
@@ -42,7 +40,6 @@ double dot_product_reduction(const std::vector<double>& a, const std::vector<dou
     return result;
 }
 
-// Параллельное вычисление без редукции
 double dot_product_no_reduction(const std::vector<double>& a, const std::vector<double>& b, int num_threads) {
     double result = 0.0;
     size_t n = a.size();
@@ -139,13 +136,6 @@ bool verify_correctness(size_t test_size = 10000) {
     bool reduction_ok = rel_error_reduction < epsilon;
     bool no_reduction_ok = rel_error_no_reduction < epsilon;
     
-    std::cout << "Verification Results (test size: " << test_size << "):" << std::endl;
-    std::cout << "  Sequential:    " << std::scientific << std::setprecision(10) << seq_result << std::endl;
-    std::cout << "  Reduction:     " << par_reduction << " - " << (reduction_ok ? "OK" : "FAIL") 
-              << " (rel_error: " << rel_error_reduction << ")" << std::endl;
-    std::cout << "  No-Reduction:  " << par_no_reduction << " - " << (no_reduction_ok ? "OK" : "FAIL")
-              << " (rel_error: " << rel_error_no_reduction << ")" << std::endl;
-    
     return reduction_ok && no_reduction_ok;
 }
 
@@ -174,31 +164,6 @@ int main(int argc, char* argv[]) {
     }
 
     auto results = run_benchmark(vector_size, num_threads, method, iterations);
-    
-    double sum_time = 0.0;
-    double min_time = results[0].execution_time;
-    double max_time = results[0].execution_time;
-    
-    for (const auto& result : results) {
-        sum_time += result.execution_time;
-        min_time = std::min(min_time, result.execution_time);
-        max_time = std::max(max_time, result.execution_time);
-    }
-    
-    double avg_time = sum_time / results.size();
-    
-    std::vector<double> times;
-    for (const auto& result : results) {
-        times.push_back(result.execution_time);
-    }
-    std::sort(times.begin(), times.end());
-    double median_time = times[times.size() / 2];
-    
-    double variance = 0.0;
-    for (const auto& result : results) {
-        variance += (result.execution_time - avg_time) * (result.execution_time - avg_time);
-    }
-    double std_dev = std::sqrt(variance / results.size());
     
     if (!output_file.empty()) {
         std::ofstream out(output_file, std::ios::app);

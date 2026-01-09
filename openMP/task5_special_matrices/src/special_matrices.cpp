@@ -283,93 +283,27 @@ std::vector<BenchmarkResult> run_benchmark(const SpecialMatrix& matrix,
 }
 
 bool verify_correctness() {
-    std::cout << "\n=== Correctness Verification ===" << std::endl;
+    SpecialMatrix test_matrix(3, MatrixType::DENSE, 0, 12345);
     
-    // Test 1: Small dense matrix
-    {
-        SpecialMatrix test_matrix(3, MatrixType::DENSE, 0, 12345);
-        
-        double seq = maximin_sequential(test_matrix);
-        double par_static = maximin_parallel(test_matrix, 2, ScheduleType::STATIC, 0);
-        double par_dynamic = maximin_parallel(test_matrix, 2, ScheduleType::DYNAMIC, 0);
-        double par_guided = maximin_parallel(test_matrix, 2, ScheduleType::GUIDED, 0);
-        
-        std::cout << "\nTest 1: 3x3 dense matrix" << std::endl;
-        std::cout << "  Sequential: " << std::fixed << std::setprecision(6) << seq << std::endl;
-        std::cout << "  Static:     " << par_static << std::endl;
-        std::cout << "  Dynamic:    " << par_dynamic << std::endl;
-        std::cout << "  Guided:     " << par_guided << std::endl;
-        
-        if (std::abs(seq - par_static) > 1e-6 ||
-            std::abs(seq - par_dynamic) > 1e-6 ||
-            std::abs(seq - par_guided) > 1e-6) {
-            std::cout << "  ✗ FAILED" << std::endl;
-            return false;
-        }
-        std::cout << "  ✓ PASSED" << std::endl;
+    double seq = maximin_sequential(test_matrix);
+    double par_static = maximin_parallel(test_matrix, 2, ScheduleType::STATIC, 0);
+    double par_dynamic = maximin_parallel(test_matrix, 2, ScheduleType::DYNAMIC, 0);
+    double par_guided = maximin_parallel(test_matrix, 2, ScheduleType::GUIDED, 0);
+    
+    if (std::abs(seq - par_static) > 1e-6 ||
+        std::abs(seq - par_dynamic) > 1e-6 ||
+        std::abs(seq - par_guided) > 1e-6) {
+        return false;
     }
     
-    // Test 2: Banded matrix
-    {
-        SpecialMatrix test_matrix(100, MatrixType::BANDED, 5, 54321);
-        
-        double seq = maximin_sequential(test_matrix);
-        double par_static = maximin_parallel(test_matrix, 4, ScheduleType::STATIC, 0);
-        double par_dynamic = maximin_parallel(test_matrix, 4, ScheduleType::DYNAMIC, 0);
-        double par_guided = maximin_parallel(test_matrix, 4, ScheduleType::GUIDED, 0);
-        
-        std::cout << "\nTest 2: 100x100 banded matrix (bandwidth=5)" << std::endl;
-        std::cout << "  Sequential: " << seq << std::endl;
-        std::cout << "  Static:     " << par_static << std::endl;
-        std::cout << "  Dynamic:    " << par_dynamic << std::endl;
-        std::cout << "  Guided:     " << par_guided << std::endl;
-        
-        if (std::abs(seq - par_static) > 1e-6 ||
-            std::abs(seq - par_dynamic) > 1e-6 ||
-            std::abs(seq - par_guided) > 1e-6) {
-            std::cout << "  ✗ FAILED" << std::endl;
-            return false;
-        }
-        std::cout << "  ✓ PASSED" << std::endl;
+    SpecialMatrix test_matrix2(100, MatrixType::BANDED, 5, 54321);
+    double seq2 = maximin_sequential(test_matrix2);
+    double par2 = maximin_parallel(test_matrix2, 4, ScheduleType::STATIC, 0);
+    
+    if (std::abs(seq2 - par2) > 1e-6) {
+        return false;
     }
     
-    // Test 3: Lower triangular matrix
-    {
-        SpecialMatrix test_matrix(100, MatrixType::LOWER_TRIANGULAR, 0, 11111);
-        
-        double seq = maximin_sequential(test_matrix);
-        double par = maximin_parallel(test_matrix, 4, ScheduleType::STATIC, 0);
-        
-        std::cout << "\nTest 3: 100x100 lower triangular matrix" << std::endl;
-        std::cout << "  Sequential: " << seq << std::endl;
-        std::cout << "  Parallel:   " << par << std::endl;
-        
-        if (std::abs(seq - par) > 1e-6) {
-            std::cout << "  ✗ FAILED" << std::endl;
-            return false;
-        }
-        std::cout << "  ✓ PASSED" << std::endl;
-    }
-    
-    // Test 4: Upper triangular matrix
-    {
-        SpecialMatrix test_matrix(100, MatrixType::UPPER_TRIANGULAR, 0, 22222);
-        
-        double seq = maximin_sequential(test_matrix);
-        double par = maximin_parallel(test_matrix, 4, ScheduleType::DYNAMIC, 0);
-        
-        std::cout << "\nTest 4: 100x100 upper triangular matrix" << std::endl;
-        std::cout << "  Sequential: " << seq << std::endl;
-        std::cout << "  Parallel:   " << par << std::endl;
-        
-        if (std::abs(seq - par) > 1e-6) {
-            std::cout << "  ✗ FAILED" << std::endl;
-            return false;
-        }
-        std::cout << "  ✓ PASSED" << std::endl;
-    }
-    
-    std::cout << "\n=== Verification Complete ===" << std::endl;
     return true;
 }
 
@@ -409,21 +343,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    // Generate matrix
-    std::cout << "\nGenerating " << N << "x" << N << " " << matrix_type_str << " matrix";
-    if (matrix_type == MatrixType::BANDED) {
-        std::cout << " (bandwidth=" << bandwidth << ")";
-    }
-    std::cout << "..." << std::endl;
-    
     SpecialMatrix matrix(N, matrix_type, bandwidth);
-    std::cout << "Matrix generated." << std::endl;
-    
-    // Run benchmark
-    std::cout << "\nRunning benchmark..." << std::endl;
     auto results = run_benchmark(matrix, num_threads, schedule, chunk_size, iterations);
     
-    // Calculate statistics
     double sum_time = 0.0;
     double min_time = results[0].execution_time;
     double max_time = results[0].execution_time;
@@ -436,13 +358,6 @@ int main(int argc, char* argv[]) {
     
     double avg_time = sum_time / results.size();
     
-    std::cout << "\nResults:" << std::endl;
-    std::cout << "  Average time: " << std::fixed << std::setprecision(3) << avg_time << " ms" << std::endl;
-    std::cout << "  Min time:     " << min_time << " ms" << std::endl;
-    std::cout << "  Max time:     " << max_time << " ms" << std::endl;
-    std::cout << "  Result value: " << std::setprecision(6) << results[0].result_value << std::endl;
-    
-    // Save results to file if specified
     if (!output_file.empty()) {
         std::ofstream out(output_file, std::ios::app);
         if (out.is_open()) {

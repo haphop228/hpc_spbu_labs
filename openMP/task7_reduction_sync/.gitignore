@@ -1,15 +1,11 @@
-# Compiled binaries
 bin/
 *.o
 *.out
 *.exe
 
-# Results and graphs
-results/*.csv
-graphs/*.png
-graphs/*.txt
+data/
+results/
 
-# Python cache
 __pycache__/
 *.pyc
 *.pyo
@@ -17,17 +13,15 @@ __pycache__/
 .Python
 *.so
 
-# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Keep directory structure
-!results/.gitkeep
-!graphs/.gitkeep
+*.log
+*.tmp
+*.bak

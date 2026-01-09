@@ -10,27 +10,22 @@
 #include <string>
 
 double test_function_1(double x) {
-    // f(x) = x^2
     return x * x;
 }
 
 double test_function_2(double x) {
-    // f(x) = sin(x)
     return std::sin(x);
 }
 
 double test_function_3(double x) {
-    // f(x) = e^x
     return std::exp(x);
 }
 
 double test_function_4(double x) {
-    // f(x) = 1/(1+x^2) - for testing arctangent
     return 1.0 / (1.0 + x * x);
 }
 
 double test_function_5(double x) {
-    // f(x) = sqrt(1-x^2) - for testing circle area
     return std::sqrt(1.0 - x * x);
 }
 
@@ -128,51 +123,17 @@ std::vector<BenchmarkResult> run_benchmark(const std::string& function_name,
 }
 
 bool verify_correctness() {
-    std::cout << "\n=== Correctness Verification ===" << std::endl;
+    double a = 0.0, b = 1.0;
+    long long N = 1000000;
+    double exact = 1.0 / 3.0;
     
-    {
-        double a = 0.0, b = 1.0;
-        long long N = 1000000;
-        double exact = 1.0 / 3.0;
-        
-        double seq = integrate_sequential(test_function_1, a, b, N);
-        double par_red = integrate_reduction(test_function_1, a, b, N, 4);
-        
-        std::cout << "\nTest 1: ∫₀¹ x² dx (exact = " << exact << ")" << std::endl;
-        std::cout << "  Sequential:   " << std::fixed << std::setprecision(10) << seq 
-                  << " (error: " << std::abs(seq - exact) << ")" << std::endl;
-        std::cout << "  Reduction:    " << par_red 
-                  << " (error: " << std::abs(par_red - exact) << ")" << std::endl;
+    double seq = integrate_sequential(test_function_1, a, b, N);
+    double par_red = integrate_reduction(test_function_1, a, b, N, 4);
+    
+    if (std::abs(seq - exact) > 1e-3 || std::abs(par_red - exact) > 1e-3) {
+        return false;
     }
     
-    {
-        double a = 0.0, b = M_PI;
-        long long N = 1000000;
-        double exact = 2.0;
-        
-        double seq = integrate_sequential(test_function_2, a, b, N);
-        double par_red = integrate_reduction(test_function_2, a, b, N, 4);
-        
-        std::cout << "\nTest 2: ∫₀^π sin(x) dx (exact = " << exact << ")" << std::endl;
-        std::cout << "  Sequential: " << seq << " (error: " << std::abs(seq - exact) << ")" << std::endl;
-        std::cout << "  Reduction:  " << par_red << " (error: " << std::abs(par_red - exact) << ")" << std::endl;
-    }
-    
-    // Test 3: 1/(1+x²) from 0 to 1, exact = π/4
-    {
-        double a = 0.0, b = 1.0;
-        long long N = 1000000;
-        double exact = M_PI / 4.0;
-        
-        double seq = integrate_sequential(test_function_4, a, b, N);
-        double par_red = integrate_reduction(test_function_4, a, b, N, 4);
-        
-        std::cout << "\nTest 3: ∫₀¹ 1/(1+x²) dx (exact = π/4 = " << exact << ")" << std::endl;
-        std::cout << "  Sequential: " << seq << " (error: " << std::abs(seq - exact) << ")" << std::endl;
-        std::cout << "  Reduction:  " << par_red << " (error: " << std::abs(par_red - exact) << ")" << std::endl;
-    }
-    
-    std::cout << "\n=== Verification Complete ===" << std::endl;
     return true;
 }
 

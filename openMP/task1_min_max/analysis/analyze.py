@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Analysis script for OpenMP min/max benchmark results
-Processes raw benchmark data and computes statistics
-"""
 
 import json
 import sys
@@ -11,9 +7,7 @@ from pathlib import Path
 from collections import defaultdict
 
 def load_results(filepath):
-    """Load benchmark results from JSON file"""
     with open(filepath, 'r') as f:
-        # Read line by line and parse each JSON object
         lines = f.readlines()
         results = []
         for line in lines:
@@ -26,7 +20,6 @@ def load_results(filepath):
     return results
 
 def group_results(results):
-    """Group results by configuration"""
     grouped = defaultdict(list)
     
     for result in results:
@@ -41,7 +34,6 @@ def group_results(results):
     return grouped
 
 def compute_statistics(grouped_results):
-    """Compute statistics for each configuration"""
     stats = []
     
     for key, times in grouped_results.items():
@@ -65,8 +57,6 @@ def compute_statistics(grouped_results):
     return stats
 
 def compute_speedup(stats):
-    """Compute speedup relative to single-threaded baseline"""
-    # Group by method, operation, and size
     baseline_times = {}
     
     for stat in stats:
@@ -120,10 +110,8 @@ def print_summary(stats):
                           f"{stat['efficiency']:<12.2%}")
 
 def save_processed_results(stats, output_path):
-    """Save processed statistics to JSON file"""
     with open(output_path, 'w') as f:
         json.dump(stats, f, indent=2)
-    print(f"\n✓ Processed results saved to: {output_path}")
 
 def main():
     if len(sys.argv) != 2:
@@ -133,27 +121,16 @@ def main():
     input_file = sys.argv[1]
     
     if not Path(input_file).exists():
-        print(f"Error: File not found: {input_file}")
         sys.exit(1)
     
-    print(f"Loading results from: {input_file}")
     results = load_results(input_file)
-    print(f"✓ Loaded {len(results)} benchmark results")
-    
-    print("Processing results...")
     grouped = group_results(results)
     stats = compute_statistics(grouped)
     stats = compute_speedup(stats)
     
     print_summary(stats)
-    
-    # Save processed results
     output_file = input_file.replace('.json', '_processed.json')
     save_processed_results(stats, output_file)
-    
-    print("\n" + "="*80)
-    print("Analysis complete!")
-    print("="*80)
 
 if __name__ == '__main__':
     main()

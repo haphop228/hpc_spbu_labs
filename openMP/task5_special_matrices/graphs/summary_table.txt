@@ -1,0 +1,1944 @@
+========================================================================================================================
+SPECIAL MATRICES (MAXIMIN) - PERFORMANCE SUMMARY
+Task 5: Matrix types (banded, triangular) with OpenMP scheduling strategies
+Formula: y = max(min(row_i)) for i=1..N
+========================================================================================================================
+
+
+========================================================================================================================
+Matrix Size: 500x500, Type: BANDED
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                0.006        1.00x      100.0%
+dynamic      default    2                0.013        0.44x       22.0%
+dynamic      default    4                0.009        0.64x       15.9%
+dynamic      default    8                0.082        0.07x        0.8%
+dynamic      default    16               0.127        0.04x        0.3%
+dynamic      default    32               0.269        0.02x        0.1%
+dynamic      default    64               0.611        0.01x        0.0%
+dynamic      default    128              1.980        0.00x        0.0%
+
+dynamic      10         1                0.006        1.00x      100.0%
+dynamic      10         2                0.007        0.75x       37.6%
+dynamic      10         4                0.009        0.63x       15.9%
+dynamic      10         8                0.054        0.10x        1.3%
+dynamic      10         16               0.118        0.05x        0.3%
+dynamic      10         32               0.269        0.02x        0.1%
+dynamic      10         64               0.546        0.01x        0.0%
+dynamic      10         128              1.251        0.00x        0.0%
+
+dynamic      50         1                0.006        1.00x      100.0%
+dynamic      50         2                0.008        0.73x       36.6%
+dynamic      50         4                0.009        0.61x       15.3%
+dynamic      50         8                0.046        0.13x        1.6%
+dynamic      50         16               0.114        0.05x        0.3%
+dynamic      50         32               0.261        0.02x        0.1%
+dynamic      50         64               0.552        0.01x        0.0%
+dynamic      50         128              1.265        0.00x        0.0%
+
+guided       default    1                0.006        1.00x      100.0%
+guided       default    2                0.007        0.83x       41.6%
+guided       default    4                0.009        0.63x       15.7%
+guided       default    8                0.077        0.07x        0.9%
+guided       default    16               0.127        0.04x        0.3%
+guided       default    32               0.253        0.02x        0.1%
+guided       default    64               0.564        0.01x        0.0%
+guided       default    128              1.206        0.00x        0.0%
+
+guided       10         1                0.006        1.00x      100.0%
+guided       10         2                0.009        0.63x       31.6%
+guided       10         4                0.008        0.68x       17.0%
+guided       10         8                0.076        0.08x        1.0%
+guided       10         16               0.122        0.05x        0.3%
+guided       10         32               0.258        0.02x        0.1%
+guided       10         64               0.561        0.01x        0.0%
+guided       10         128              1.235        0.00x        0.0%
+
+guided       50         1                0.006        1.00x      100.0%
+guided       50         2                0.009        0.59x       29.7%
+guided       50         4                0.009        0.61x       15.4%
+guided       50         8                0.063        0.09x        1.1%
+guided       50         16               0.118        0.05x        0.3%
+guided       50         32               0.254        0.02x        0.1%
+guided       50         64               0.568        0.01x        0.0%
+guided       50         128              1.258        0.00x        0.0%
+
+static       default    1                0.006        1.00x      100.0%
+static       default    2                0.009        0.68x       33.8%
+static       default    4                0.021        0.27x        6.8%
+static       default    8                0.055        0.11x        1.3%
+static       default    16               0.110        0.05x        0.3%
+static       default    32               0.247        0.02x        0.1%
+static       default    64               0.557        0.01x        0.0%
+static       default    128              1.217        0.00x        0.0%
+
+
+========================================================================================================================
+Matrix Size: 500x500, Type: LOWER
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                0.143        1.00x      100.0%
+dynamic      default    2                0.083        1.73x       86.5%
+dynamic      default    4                0.046        3.10x       77.5%
+dynamic      default    8                0.080        1.79x       22.4%
+dynamic      default    16               0.137        1.05x        6.5%
+dynamic      default    32               0.276        0.52x        1.6%
+dynamic      default    64               0.667        0.21x        0.3%
+dynamic      default    128              2.139        0.07x        0.1%
+
+dynamic      10         1                0.138        1.00x      100.0%
+dynamic      10         2                0.079        1.74x       87.0%
+dynamic      10         4                0.055        2.50x       62.4%
+dynamic      10         8                0.084        1.65x       20.7%
+dynamic      10         16               0.152        0.91x        5.7%
+dynamic      10         32               0.285        0.48x        1.5%
+dynamic      10         64               0.513        0.27x        0.4%
+dynamic      10         128              1.222        0.11x        0.1%
+
+dynamic      50         1                0.139        1.00x      100.0%
+dynamic      50         2                0.092        1.52x       75.9%
+dynamic      50         4                0.059        2.34x       58.5%
+dynamic      50         8                0.083        1.68x       21.0%
+dynamic      50         16               0.132        1.05x        6.6%
+dynamic      50         32               0.282        0.49x        1.5%
+dynamic      50         64               0.530        0.26x        0.4%
+dynamic      50         128              1.257        0.11x        0.1%
+
+guided       default    1                0.142        1.00x      100.0%
+guided       default    2                0.076        1.86x       93.2%
+guided       default    4                0.045        3.19x       79.6%
+guided       default    8                0.095        1.50x       18.8%
+guided       default    16               0.134        1.06x        6.6%
+guided       default    32               0.272        0.52x        1.6%
+guided       default    64               0.542        0.26x        0.4%
+guided       default    128              1.277        0.11x        0.1%
+
+guided       10         1                0.142        1.00x      100.0%
+guided       10         2                0.078        1.81x       90.6%
+guided       10         4                0.059        2.39x       59.6%
+guided       10         8                0.077        1.84x       23.0%
+guided       10         16               0.133        1.07x        6.7%
+guided       10         32               0.267        0.53x        1.7%
+guided       10         64               0.564        0.25x        0.4%
+guided       10         128              1.269        0.11x        0.1%
+
+guided       50         1                0.143        1.00x      100.0%
+guided       50         2                0.082        1.76x       87.8%
+guided       50         4                0.058        2.45x       61.3%
+guided       50         8                0.078        1.84x       23.0%
+guided       50         16               0.122        1.17x        7.3%
+guided       50         32               0.256        0.56x        1.7%
+guided       50         64               0.566        0.25x        0.4%
+guided       50         128              1.271        0.11x        0.1%
+
+static       default    1                0.139        1.00x      100.0%
+static       default    2                0.130        1.07x       53.6%
+static       default    4                0.076        1.84x       46.0%
+static       default    8                0.088        1.58x       19.7%
+static       default    16               0.121        1.15x        7.2%
+static       default    32               0.254        0.55x        1.7%
+static       default    64               0.533        0.26x        0.4%
+static       default    128              1.267        0.11x        0.1%
+
+
+========================================================================================================================
+Matrix Size: 500x500, Type: UPPER
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                0.138        1.00x      100.0%
+dynamic      default    2                0.079        1.74x       87.0%
+dynamic      default    4                0.053        2.60x       64.9%
+dynamic      default    8                0.078        1.76x       22.0%
+dynamic      default    16               0.142        0.98x        6.1%
+dynamic      default    32               0.262        0.53x        1.6%
+dynamic      default    64               0.626        0.22x        0.3%
+dynamic      default    128              1.962        0.07x        0.1%
+
+dynamic      10         1                0.140        1.00x      100.0%
+dynamic      10         2                0.080        1.74x       87.2%
+dynamic      10         4                0.045        3.10x       77.6%
+dynamic      10         8                0.071        1.97x       24.6%
+dynamic      10         16               0.135        1.03x        6.5%
+dynamic      10         32               0.274        0.51x        1.6%
+dynamic      10         64               0.540        0.26x        0.4%
+dynamic      10         128              1.234        0.11x        0.1%
+
+dynamic      50         1                0.140        1.00x      100.0%
+dynamic      50         2                0.090        1.55x       77.6%
+dynamic      50         4                0.049        2.87x       71.7%
+dynamic      50         8                0.077        1.81x       22.7%
+dynamic      50         16               0.140        1.00x        6.3%
+dynamic      50         32               0.272        0.51x        1.6%
+dynamic      50         64               0.549        0.25x        0.4%
+dynamic      50         128              1.253        0.11x        0.1%
+
+guided       default    1                0.138        1.00x      100.0%
+guided       default    2                0.080        1.73x       86.5%
+guided       default    4                0.043        3.24x       81.1%
+guided       default    8                0.084        1.64x       20.5%
+guided       default    16               0.153        0.90x        5.6%
+guided       default    32               0.316        0.44x        1.4%
+guided       default    64               0.623        0.22x        0.3%
+guided       default    128              1.323        0.10x        0.1%
+
+guided       10         1                0.141        1.00x      100.0%
+guided       10         2                0.082        1.71x       85.4%
+guided       10         4                0.055        2.55x       63.7%
+guided       10         8                0.081        1.74x       21.8%
+guided       10         16               0.146        0.97x        6.0%
+guided       10         32               0.302        0.47x        1.5%
+guided       10         64               0.578        0.24x        0.4%
+guided       10         128              1.282        0.11x        0.1%
+
+guided       50         1                0.143        1.00x      100.0%
+guided       50         2                0.075        1.92x       95.9%
+guided       50         4                0.049        2.93x       73.3%
+guided       50         8                0.076        1.89x       23.7%
+guided       50         16               0.131        1.09x        6.8%
+guided       50         32               0.238        0.60x        1.9%
+guided       50         64               0.558        0.26x        0.4%
+guided       50         128              1.266        0.11x        0.1%
+
+static       default    1                0.141        1.00x      100.0%
+static       default    2                0.111        1.27x       63.6%
+static       default    4                0.074        1.90x       47.5%
+static       default    8                0.072        1.96x       24.5%
+static       default    16               0.129        1.10x        6.9%
+static       default    32               0.234        0.60x        1.9%
+static       default    64               0.564        0.25x        0.4%
+static       default    128              1.269        0.11x        0.1%
+
+
+========================================================================================================================
+Matrix Size: 1000x1000, Type: BANDED
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                0.012        1.00x      100.0%
+dynamic      default    2                0.016        0.76x       38.0%
+dynamic      default    4                0.014        0.89x       22.2%
+dynamic      default    8                0.046        0.26x        3.3%
+dynamic      default    16               0.124        0.10x        0.6%
+dynamic      default    32               0.274        0.04x        0.1%
+dynamic      default    64               0.618        0.02x        0.0%
+dynamic      default    128              1.956        0.01x        0.0%
+
+dynamic      10         1                0.012        1.00x      100.0%
+dynamic      10         2                0.010        1.25x       62.3%
+dynamic      10         4                0.013        0.92x       23.0%
+dynamic      10         8                0.073        0.17x        2.1%
+dynamic      10         16               0.137        0.09x        0.6%
+dynamic      10         32               0.864        0.01x        0.0%
+dynamic      10         64               0.950        0.01x        0.0%
+dynamic      10         128              1.194        0.01x        0.0%
+
+dynamic      50         1                0.012        1.00x      100.0%
+dynamic      50         2                0.012        1.01x       50.4%
+dynamic      50         4                0.018        0.69x       17.1%
+dynamic      50         8                0.073        0.16x        2.1%
+dynamic      50         16               0.121        0.10x        0.6%
+dynamic      50         32               0.250        0.05x        0.2%
+dynamic      50         64               0.584        0.02x        0.0%
+dynamic      50         128              1.241        0.01x        0.0%
+
+guided       default    1                0.013        1.00x      100.0%
+guided       default    2                0.016        0.83x       41.3%
+guided       default    4                0.017        0.77x       19.2%
+guided       default    8                0.068        0.19x        2.4%
+guided       default    16               0.142        0.09x        0.6%
+guided       default    32               0.289        0.04x        0.1%
+guided       default    64               0.594        0.02x        0.0%
+guided       default    128              1.261        0.01x        0.0%
+
+guided       10         1                0.012        1.00x      100.0%
+guided       10         2                0.011        1.14x       56.8%
+guided       10         4                0.010        1.17x       29.2%
+guided       10         8                0.075        0.16x        2.0%
+guided       10         16               0.148        0.08x        0.5%
+guided       10         32               0.289        0.04x        0.1%
+guided       10         64               0.562        0.02x        0.0%
+guided       10         128              1.243        0.01x        0.0%
+
+guided       50         1                0.013        1.00x      100.0%
+guided       50         2                0.010        1.28x       63.9%
+guided       50         4                0.013        1.00x       25.0%
+guided       50         8                0.065        0.19x        2.4%
+guided       50         16               0.127        0.10x        0.6%
+guided       50         32               0.262        0.05x        0.2%
+guided       50         64               0.535        0.02x        0.0%
+guided       50         128              1.239        0.01x        0.0%
+
+static       default    1                0.013        1.00x      100.0%
+static       default    2                0.012        1.05x       52.3%
+static       default    4                0.018        0.73x       18.1%
+static       default    8                0.051        0.25x        3.2%
+static       default    16               0.122        0.11x        0.7%
+static       default    32               0.252        0.05x        0.2%
+static       default    64               0.569        0.02x        0.0%
+static       default    128              1.257        0.01x        0.0%
+
+
+========================================================================================================================
+Matrix Size: 1000x1000, Type: LOWER
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                0.594        1.00x      100.0%
+dynamic      default    2                0.334        1.78x       89.0%
+dynamic      default    4                0.184        3.23x       80.8%
+dynamic      default    8                0.154        3.86x       48.3%
+dynamic      default    16               0.226        2.63x       16.4%
+dynamic      default    32               0.363        1.64x        5.1%
+dynamic      default    64               0.743        0.80x        1.2%
+dynamic      default    128              2.243        0.26x        0.2%
+
+dynamic      10         1                0.593        1.00x      100.0%
+dynamic      10         2                0.330        1.80x       90.0%
+dynamic      10         4                0.174        3.40x       85.1%
+dynamic      10         8                0.144        4.12x       51.5%
+dynamic      10         16               0.213        2.79x       17.4%
+dynamic      10         32               0.336        1.77x        5.5%
+dynamic      10         64               0.766        0.77x        1.2%
+dynamic      10         128              1.391        0.43x        0.3%
+
+dynamic      50         1                0.597        1.00x      100.0%
+dynamic      50         2                0.331        1.80x       90.1%
+dynamic      50         4                0.190        3.14x       78.5%
+dynamic      50         8                0.166        3.59x       44.9%
+dynamic      50         16               0.205        2.91x       18.2%
+dynamic      50         32               0.307        1.94x        6.1%
+dynamic      50         64               0.580        1.03x        1.6%
+dynamic      50         128              1.274        0.47x        0.4%
+
+guided       default    1                0.603        1.00x      100.0%
+guided       default    2                0.330        1.83x       91.4%
+guided       default    4                0.166        3.64x       91.0%
+guided       default    8                0.138        4.36x       54.5%
+guided       default    16               0.218        2.77x       17.3%
+guided       default    32               0.355        1.70x        5.3%
+guided       default    64               0.660        0.91x        1.4%
+guided       default    128              1.397        0.43x        0.3%
+
+guided       10         1                0.604        1.00x      100.0%
+guided       10         2                0.319        1.90x       94.8%
+guided       10         4                0.180        3.35x       83.8%
+guided       10         8                0.170        3.55x       44.3%
+guided       10         16               0.217        2.78x       17.4%
+guided       10         32               0.337        1.79x        5.6%
+guided       10         64               0.637        0.95x        1.5%
+guided       10         128              1.378        0.44x        0.3%
+
+guided       50         1                0.600        1.00x      100.0%
+guided       50         2                0.330        1.82x       90.9%
+guided       50         4                0.196        3.07x       76.7%
+guided       50         8                0.171        3.52x       43.9%
+guided       50         16               0.215        2.79x       17.4%
+guided       50         32               0.329        1.83x        5.7%
+guided       50         64               0.579        1.04x        1.6%
+guided       50         128              1.266        0.47x        0.4%
+
+static       default    1                0.595        1.00x      100.0%
+static       default    2                0.494        1.20x       60.2%
+static       default    4                0.296        2.01x       50.3%
+static       default    8                0.201        2.95x       36.9%
+static       default    16               0.229        2.60x       16.2%
+static       default    32               0.276        2.16x        6.7%
+static       default    64               0.608        0.98x        1.5%
+static       default    128              1.340        0.44x        0.3%
+
+
+========================================================================================================================
+Matrix Size: 1000x1000, Type: UPPER
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                0.593        1.00x      100.0%
+dynamic      default    2                0.319        1.86x       92.9%
+dynamic      default    4                0.174        3.42x       85.5%
+dynamic      default    8                0.171        3.48x       43.5%
+dynamic      default    16               0.188        3.16x       19.7%
+dynamic      default    32               0.328        1.81x        5.7%
+dynamic      default    64               0.653        0.91x        1.4%
+dynamic      default    128              2.011        0.29x        0.2%
+
+dynamic      10         1                0.595        1.00x      100.0%
+dynamic      10         2                0.323        1.84x       92.0%
+dynamic      10         4                0.167        3.56x       89.0%
+dynamic      10         8                0.136        4.37x       54.6%
+dynamic      10         16               0.197        3.01x       18.8%
+dynamic      10         32               0.340        1.75x        5.5%
+dynamic      10         64               0.657        0.91x        1.4%
+dynamic      10         128              1.327        0.45x        0.4%
+
+dynamic      50         1                0.597        1.00x      100.0%
+dynamic      50         2                0.323        1.85x       92.6%
+dynamic      50         4                0.177        3.37x       84.3%
+dynamic      50         8                0.142        4.21x       52.7%
+dynamic      50         16               0.208        2.87x       18.0%
+dynamic      50         32               0.315        1.89x        5.9%
+dynamic      50         64               0.598        1.00x        1.6%
+dynamic      50         128              1.299        0.46x        0.4%
+
+guided       default    1                0.596        1.00x      100.0%
+guided       default    2                0.310        1.92x       96.2%
+guided       default    4                0.186        3.21x       80.3%
+guided       default    8                0.145        4.11x       51.4%
+guided       default    16               0.203        2.93x       18.3%
+guided       default    32               0.336        1.78x        5.5%
+guided       default    64               0.621        0.96x        1.5%
+guided       default    128              1.352        0.44x        0.3%
+
+guided       10         1                0.602        1.00x      100.0%
+guided       10         2                0.321        1.88x       93.8%
+guided       10         4                0.172        3.51x       87.7%
+guided       10         8                0.140        4.32x       54.0%
+guided       10         16               0.187        3.23x       20.2%
+guided       10         32               0.336        1.80x        5.6%
+guided       10         64               0.610        0.99x        1.5%
+guided       10         128              1.323        0.46x        0.4%
+
+guided       50         1                0.598        1.00x      100.0%
+guided       50         2                0.318        1.88x       94.0%
+guided       50         4                0.175        3.42x       85.5%
+guided       50         8                0.139        4.30x       53.8%
+guided       50         16               0.187        3.20x       20.0%
+guided       50         32               0.303        1.98x        6.2%
+guided       50         64               0.587        1.02x        1.6%
+guided       50         128              1.294        0.46x        0.4%
+
+static       default    1                0.599        1.00x      100.0%
+static       default    2                0.465        1.29x       64.4%
+static       default    4                0.273        2.19x       54.8%
+static       default    8                0.181        3.30x       41.3%
+static       default    16               0.232        2.59x       16.2%
+static       default    32               0.285        2.11x        6.6%
+static       default    64               0.548        1.09x        1.7%
+static       default    128              1.219        0.49x        0.4%
+
+
+========================================================================================================================
+Matrix Size: 2000x2000, Type: BANDED
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                0.025        1.00x      100.0%
+dynamic      default    2                0.030        0.84x       41.8%
+dynamic      default    4                0.036        0.70x       17.5%
+dynamic      default    8                0.055        0.45x        5.7%
+dynamic      default    16               0.143        0.17x        1.1%
+dynamic      default    32               0.238        0.10x        0.3%
+dynamic      default    64               0.609        0.04x        0.1%
+dynamic      default    128              1.928        0.01x        0.0%
+
+dynamic      10         1                0.025        1.00x      100.0%
+dynamic      10         2                0.021        1.19x       59.5%
+dynamic      10         4                0.013        1.85x       46.3%
+dynamic      10         8                0.064        0.39x        4.8%
+dynamic      10         16               0.117        0.21x        1.3%
+dynamic      10         32               0.275        0.09x        0.3%
+dynamic      10         64               0.608        0.04x        0.1%
+dynamic      10         128              1.937        0.01x        0.0%
+
+dynamic      50         1                0.025        1.00x      100.0%
+dynamic      50         2                0.016        1.55x       77.4%
+dynamic      50         4                0.017        1.45x       36.2%
+dynamic      50         8                0.067        0.37x        4.6%
+dynamic      50         16               0.121        0.20x        1.3%
+dynamic      50         32               0.271        0.09x        0.3%
+dynamic      50         64               0.551        0.04x        0.1%
+dynamic      50         128              1.258        0.02x        0.0%
+
+guided       default    1                0.026        1.00x      100.0%
+guided       default    2                0.023        1.15x       57.4%
+guided       default    4                0.017        1.56x       38.9%
+guided       default    8                0.074        0.35x        4.4%
+guided       default    16               0.154        0.17x        1.1%
+guided       default    32               0.286        0.09x        0.3%
+guided       default    64               0.624        0.04x        0.1%
+guided       default    128              1.359        0.02x        0.0%
+
+guided       10         1                0.025        1.00x      100.0%
+guided       10         2                0.022        1.15x       57.7%
+guided       10         4                0.016        1.53x       38.4%
+guided       10         8                0.061        0.41x        5.2%
+guided       10         16               0.139        0.18x        1.1%
+guided       10         32               0.230        0.11x        0.3%
+guided       10         64               0.540        0.05x        0.1%
+guided       10         128              1.291        0.02x        0.0%
+
+guided       50         1                0.025        1.00x      100.0%
+guided       50         2                0.020        1.24x       62.1%
+guided       50         4                0.015        1.62x       40.5%
+guided       50         8                0.062        0.40x        5.0%
+guided       50         16               0.122        0.20x        1.3%
+guided       50         32               0.253        0.10x        0.3%
+guided       50         64               0.553        0.04x        0.1%
+guided       50         128              1.274        0.02x        0.0%
+
+static       default    1                0.025        1.00x      100.0%
+static       default    2                0.022        1.16x       58.1%
+static       default    4                0.017        1.46x       36.4%
+static       default    8                0.058        0.44x        5.5%
+static       default    16               0.122        0.21x        1.3%
+static       default    32               0.246        0.10x        0.3%
+static       default    64               0.513        0.05x        0.1%
+static       default    128              1.196        0.02x        0.0%
+
+
+========================================================================================================================
+Matrix Size: 2000x2000, Type: LOWER
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                2.908        1.00x      100.0%
+dynamic      default    2                1.336        2.18x      108.8%
+dynamic      default    4                0.716        4.06x      101.5%
+dynamic      default    8                0.443        6.56x       82.1%
+dynamic      default    16               0.454        6.40x       40.0%
+dynamic      default    32               0.579        5.02x       15.7%
+dynamic      default    64               0.938        3.10x        4.8%
+dynamic      default    128              2.239        1.30x        1.0%
+
+dynamic      10         1                2.542        1.00x      100.0%
+dynamic      10         2                1.321        1.92x       96.2%
+dynamic      10         4                0.713        3.56x       89.1%
+dynamic      10         8                0.434        5.86x       73.2%
+dynamic      10         16               0.464        5.48x       34.3%
+dynamic      10         32               0.589        4.32x       13.5%
+dynamic      10         64               0.912        2.79x        4.4%
+dynamic      10         128              2.213        1.15x        0.9%
+
+dynamic      50         1                2.517        1.00x      100.0%
+dynamic      50         2                1.364        1.85x       92.3%
+dynamic      50         4                0.758        3.32x       83.0%
+dynamic      50         8                0.473        5.32x       66.5%
+dynamic      50         16               0.471        5.34x       33.4%
+dynamic      50         32               0.576        4.37x       13.7%
+dynamic      50         64               0.807        3.12x        4.9%
+dynamic      50         128              1.523        1.65x        1.3%
+
+guided       default    1                2.515        1.00x      100.0%
+guided       default    2                1.311        1.92x       96.0%
+guided       default    4                0.713        3.53x       88.2%
+guided       default    8                0.443        5.68x       71.0%
+guided       default    16               0.448        5.62x       35.1%
+guided       default    32               0.600        4.19x       13.1%
+guided       default    64               0.860        2.92x        4.6%
+guided       default    128              1.594        1.58x        1.2%
+
+guided       10         1                2.565        1.00x      100.0%
+guided       10         2                1.319        1.95x       97.3%
+guided       10         4                0.719        3.57x       89.1%
+guided       10         8                0.452        5.67x       70.9%
+guided       10         16               0.448        5.72x       35.8%
+guided       10         32               0.564        4.55x       14.2%
+guided       10         64               0.843        3.04x        4.8%
+guided       10         128              1.594        1.61x        1.3%
+
+guided       50         1                2.520        1.00x      100.0%
+guided       50         2                1.354        1.86x       93.0%
+guided       50         4                0.749        3.36x       84.1%
+guided       50         8                0.476        5.29x       66.2%
+guided       50         16               0.473        5.32x       33.3%
+guided       50         32               0.562        4.49x       14.0%
+guided       50         64               0.816        3.09x        4.8%
+guided       50         128              1.536        1.64x        1.3%
+
+static       default    1                2.537        1.00x      100.0%
+static       default    2                1.938        1.31x       65.5%
+static       default    4                1.156        2.20x       54.9%
+static       default    8                0.703        3.61x       45.1%
+static       default    16               0.542        4.68x       29.3%
+static       default    32               0.602        4.21x       13.2%
+static       default    64               0.797        3.18x        5.0%
+static       default    128              1.423        1.78x        1.4%
+
+
+========================================================================================================================
+Matrix Size: 2000x2000, Type: UPPER
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                2.485        1.00x      100.0%
+dynamic      default    2                1.283        1.94x       96.9%
+dynamic      default    4                0.696        3.57x       89.3%
+dynamic      default    8                0.425        5.85x       73.2%
+dynamic      default    16               0.440        5.64x       35.3%
+dynamic      default    32               0.592        4.20x       13.1%
+dynamic      default    64               0.962        2.58x        4.0%
+dynamic      default    128              2.260        1.10x        0.9%
+
+dynamic      10         1                2.488        1.00x      100.0%
+dynamic      10         2                1.315        1.89x       94.6%
+dynamic      10         4                0.705        3.53x       88.2%
+dynamic      10         8                0.418        5.95x       74.4%
+dynamic      10         16               0.448        5.55x       34.7%
+dynamic      10         32               0.597        4.17x       13.0%
+dynamic      10         64               0.927        2.68x        4.2%
+dynamic      10         128              2.252        1.10x        0.9%
+
+dynamic      50         1                2.486        1.00x      100.0%
+dynamic      50         2                1.326        1.87x       93.7%
+dynamic      50         4                0.721        3.45x       86.2%
+dynamic      50         8                0.445        5.59x       69.8%
+dynamic      50         16               0.463        5.37x       33.6%
+dynamic      50         32               0.580        4.29x       13.4%
+dynamic      50         64               0.891        2.79x        4.4%
+dynamic      50         128              1.595        1.56x        1.2%
+
+guided       default    1                2.650        1.00x      100.0%
+guided       default    2                1.322        2.01x      100.3%
+guided       default    4                0.687        3.86x       96.5%
+guided       default    8                0.436        6.08x       75.9%
+guided       default    16               0.461        5.75x       36.0%
+guided       default    32               0.617        4.29x       13.4%
+guided       default    64               0.902        2.94x        4.6%
+guided       default    128              1.506        1.76x        1.4%
+
+guided       10         1                2.595        1.00x      100.0%
+guided       10         2                1.328        1.95x       97.7%
+guided       10         4                0.694        3.74x       93.4%
+guided       10         8                0.457        5.68x       71.0%
+guided       10         16               0.477        5.44x       34.0%
+guided       10         32               0.579        4.48x       14.0%
+guided       10         64               0.867        2.99x        4.7%
+guided       10         128              1.574        1.65x        1.3%
+
+guided       50         1                2.485        1.00x      100.0%
+guided       50         2                1.297        1.92x       95.8%
+guided       50         4                0.708        3.51x       87.7%
+guided       50         8                0.469        5.29x       66.2%
+guided       50         16               0.433        5.74x       35.9%
+guided       50         32               0.578        4.30x       13.4%
+guided       50         64               0.872        2.85x        4.5%
+guided       50         128              1.584        1.57x        1.2%
+
+static       default    1                2.488        1.00x      100.0%
+static       default    2                1.895        1.31x       65.6%
+static       default    4                1.113        2.24x       55.9%
+static       default    8                0.643        3.87x       48.4%
+static       default    16               0.532        4.67x       29.2%
+static       default    32               0.546        4.56x       14.2%
+static       default    64               0.788        3.16x        4.9%
+static       default    128              1.392        1.79x        1.4%
+
+
+========================================================================================================================
+Matrix Size: 3000x3000, Type: BANDED
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                0.042        1.00x      100.0%
+dynamic      default    2                0.046        0.92x       45.8%
+dynamic      default    4                0.030        1.41x       35.2%
+dynamic      default    8                0.079        0.53x        6.7%
+dynamic      default    16               0.159        0.26x        1.6%
+dynamic      default    32               0.263        0.16x        0.5%
+dynamic      default    64               0.658        0.06x        0.1%
+dynamic      default    128              1.957        0.02x        0.0%
+
+dynamic      10         1                0.042        1.00x      100.0%
+dynamic      10         2                0.034        1.24x       62.1%
+dynamic      10         4                0.024        1.77x       44.2%
+dynamic      10         8                0.057        0.74x        9.2%
+dynamic      10         16               0.160        0.26x        1.7%
+dynamic      10         32               0.286        0.15x        0.5%
+dynamic      10         64               0.637        0.07x        0.1%
+dynamic      10         128              1.911        0.02x        0.0%
+
+dynamic      50         1                0.043        1.00x      100.0%
+dynamic      50         2                0.024        1.80x       90.1%
+dynamic      50         4                0.019        2.32x       58.0%
+dynamic      50         8                0.063        0.69x        8.6%
+dynamic      50         16               0.140        0.31x        1.9%
+dynamic      50         32               0.263        0.16x        0.5%
+dynamic      50         64               0.589        0.07x        0.1%
+dynamic      50         128              1.298        0.03x        0.0%
+
+guided       default    1                0.043        1.00x      100.0%
+guided       default    2                0.022        1.93x       96.7%
+guided       default    4                0.025        1.72x       43.0%
+guided       default    8                0.080        0.54x        6.8%
+guided       default    16               0.162        0.27x        1.7%
+guided       default    32               0.325        0.13x        0.4%
+guided       default    64               0.606        0.07x        0.1%
+guided       default    128              1.448        0.03x        0.0%
+
+guided       10         1                0.042        1.00x      100.0%
+guided       10         2                0.025        1.68x       83.9%
+guided       10         4                0.123        0.34x        8.6%
+guided       10         8                0.101        0.42x        5.2%
+guided       10         16               0.158        0.27x        1.7%
+guided       10         32               0.280        0.15x        0.5%
+guided       10         64               0.591        0.07x        0.1%
+guided       10         128              1.300        0.03x        0.0%
+
+guided       50         1                0.046        1.00x      100.0%
+guided       50         2                0.023        2.00x      100.1%
+guided       50         4                0.021        2.19x       54.9%
+guided       50         8                0.060        0.77x        9.6%
+guided       50         16               0.133        0.35x        2.2%
+guided       50         32               0.238        0.19x        0.6%
+guided       50         64               0.590        0.08x        0.1%
+guided       50         128              1.212        0.04x        0.0%
+
+static       default    1                0.045        1.00x      100.0%
+static       default    2                0.031        1.45x       72.7%
+static       default    4                0.043        1.04x       26.1%
+static       default    8                0.056        0.81x       10.1%
+static       default    16               0.121        0.38x        2.3%
+static       default    32               0.285        0.16x        0.5%
+static       default    64               0.581        0.08x        0.1%
+static       default    128              1.319        0.03x        0.0%
+
+
+========================================================================================================================
+Matrix Size: 3000x3000, Type: LOWER
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                5.704        1.00x      100.0%
+dynamic      default    2                2.939        1.94x       97.0%
+dynamic      default    4                1.545        3.69x       92.3%
+dynamic      default    8                0.865        6.59x       82.4%
+dynamic      default    16               0.831        6.86x       42.9%
+dynamic      default    32               0.973        5.86x       18.3%
+dynamic      default    64               1.311        4.35x        6.8%
+dynamic      default    128              2.609        2.19x        1.7%
+
+dynamic      10         1                5.732        1.00x      100.0%
+dynamic      10         2                2.981        1.92x       96.1%
+dynamic      10         4                1.552        3.69x       92.3%
+dynamic      10         8                0.856        6.70x       83.7%
+dynamic      10         16               0.815        7.04x       44.0%
+dynamic      10         32               0.947        6.05x       18.9%
+dynamic      10         64               1.294        4.43x        6.9%
+dynamic      10         128              2.544        2.25x        1.8%
+
+dynamic      50         1                5.697        1.00x      100.0%
+dynamic      50         2                2.988        1.91x       95.3%
+dynamic      50         4                1.576        3.61x       90.4%
+dynamic      50         8                0.928        6.14x       76.8%
+dynamic      50         16               0.852        6.69x       41.8%
+dynamic      50         32               0.944        6.04x       18.9%
+dynamic      50         64               1.164        4.90x        7.7%
+dynamic      50         128              1.851        3.08x        2.4%
+
+guided       default    1                5.703        1.00x      100.0%
+guided       default    2                2.944        1.94x       96.9%
+guided       default    4                1.535        3.72x       92.9%
+guided       default    8                0.848        6.72x       84.0%
+guided       default    16               0.817        6.98x       43.6%
+guided       default    32               0.938        6.08x       19.0%
+guided       default    64               1.227        4.65x        7.3%
+guided       default    128              1.878        3.04x        2.4%
+
+guided       10         1                5.707        1.00x      100.0%
+guided       10         2                2.975        1.92x       95.9%
+guided       10         4                1.540        3.71x       92.6%
+guided       10         8                0.878        6.50x       81.3%
+guided       10         16               0.806        7.08x       44.3%
+guided       10         32               0.928        6.15x       19.2%
+guided       10         64               1.207        4.73x        7.4%
+guided       10         128              1.960        2.91x        2.3%
+
+guided       50         1                5.706        1.00x      100.0%
+guided       50         2                2.985        1.91x       95.6%
+guided       50         4                1.597        3.57x       89.3%
+guided       50         8                0.934        6.11x       76.4%
+guided       50         16               0.871        6.55x       40.9%
+guided       50         32               1.008        5.66x       17.7%
+guided       50         64               1.171        4.87x        7.6%
+guided       50         128              1.842        3.10x        2.4%
+
+static       default    1                5.807        1.00x      100.0%
+static       default    2                4.257        1.36x       68.2%
+static       default    4                2.553        2.27x       56.9%
+static       default    8                1.471        3.95x       49.4%
+static       default    16               1.021        5.69x       35.5%
+static       default    32               0.999        5.81x       18.2%
+static       default    64               1.145        5.07x        7.9%
+static       default    128              1.709        3.40x        2.7%
+
+
+========================================================================================================================
+Matrix Size: 3000x3000, Type: UPPER
+========================================================================================================================
+
+Schedule     Chunk      Threads  Time (ms)       Speedup      Efficiency  
+------------------------------------------------------------------------------------------------------------------------
+dynamic      default    1                5.896        1.00x      100.0%
+dynamic      default    2                3.007        1.96x       98.0%
+dynamic      default    4                1.532        3.85x       96.2%
+dynamic      default    8                0.861        6.85x       85.6%
+dynamic      default    16               0.828        7.12x       44.5%
+dynamic      default    32               0.952        6.20x       19.4%
+dynamic      default    64               1.306        4.52x        7.1%
+dynamic      default    128              2.630        2.24x        1.8%
+
+dynamic      10         1                5.727        1.00x      100.0%
+dynamic      10         2                2.980        1.92x       96.1%
+dynamic      10         4                1.551        3.69x       92.3%
+dynamic      10         8                0.868        6.60x       82.5%
+dynamic      10         16               0.829        6.91x       43.2%
+dynamic      10         32               0.942        6.08x       19.0%
+dynamic      10         64               1.291        4.44x        6.9%
+dynamic      10         128              2.562        2.24x        1.7%
+
+dynamic      50         1                5.727        1.00x      100.0%
+dynamic      50         2                3.020        1.90x       94.8%
+dynamic      50         4                1.587        3.61x       90.2%
+dynamic      50         8                0.875        6.55x       81.8%
+dynamic      50         16               0.842        6.80x       42.5%
+dynamic      50         32               0.939        6.10x       19.1%
+dynamic      50         64               1.203        4.76x        7.4%
+dynamic      50         128              1.852        3.09x        2.4%
+
+guided       default    1                5.720        1.00x      100.0%
+guided       default    2                2.965        1.93x       96.5%
+guided       default    4                1.542        3.71x       92.7%
+guided       default    8                0.858        6.67x       83.4%
+guided       default    16               0.916        6.25x       39.0%
+guided       default    32               0.963        5.94x       18.6%
+guided       default    64               1.254        4.56x        7.1%
+guided       default    128              1.887        3.03x        2.4%
+
+guided       10         1                5.734        1.00x      100.0%
+guided       10         2                2.968        1.93x       96.6%
+guided       10         4                1.536        3.73x       93.3%
+guided       10         8                0.854        6.72x       84.0%
+guided       10         16               0.818        7.01x       43.8%
+guided       10         32               0.952        6.02x       18.8%
+guided       10         64               1.215        4.72x        7.4%
+guided       10         128              1.916        2.99x        2.3%
+
+guided       50         1                5.749        1.00x      100.0%
+guided       50         2                2.969        1.94x       96.8%
+guided       50         4                1.545        3.72x       93.0%
+guided       50         8                0.852        6.74x       84.3%
+guided       50         16               0.833        6.90x       43.1%
+guided       50         32               0.939        6.12x       19.1%
+guided       50         64               1.216        4.73x        7.4%
+guided       50         128              1.850        3.11x        2.4%
+
+static       default    1                6.009        1.00x      100.0%
+static       default    2                4.331        1.39x       69.4%
+static       default    4                2.569        2.34x       58.5%
+static       default    8                1.491        4.03x       50.4%
+static       default    16               1.068        5.63x       35.2%
+static       default    32               1.048        5.73x       17.9%
+static       default    64               1.278        4.70x        7.3%
+static       default    128              1.729        3.48x        2.7%
+
+
+========================================================================================================================
+SCHEDULING STRATEGY COMPARISON
+========================================================================================================================
+
+
+Matrix Size: 500x500, Type: BANDED
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    0.006 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    0.006 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    0.006 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    0.006 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    0.006 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    0.006 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    0.006 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    0.013 ms (speedup:   0.44x, efficiency:  22.0%)
+    dynamic    (chunk=10    ):    0.007 ms (speedup:   0.75x, efficiency:  37.6%)
+    dynamic    (chunk=50    ):    0.008 ms (speedup:   0.73x, efficiency:  36.6%)
+    guided     (default     ):    0.007 ms (speedup:   0.83x, efficiency:  41.6%)
+    guided     (chunk=10    ):    0.009 ms (speedup:   0.63x, efficiency:  31.6%)
+    guided     (chunk=50    ):    0.009 ms (speedup:   0.59x, efficiency:  29.7%)
+    static     (default     ):    0.009 ms (speedup:   0.68x, efficiency:  33.8%)
+
+  Threads: 4
+    dynamic    (default     ):    0.009 ms (speedup:   0.64x, efficiency:  15.9%)
+    dynamic    (chunk=10    ):    0.009 ms (speedup:   0.63x, efficiency:  15.9%)
+    dynamic    (chunk=50    ):    0.009 ms (speedup:   0.61x, efficiency:  15.3%)
+    guided     (default     ):    0.009 ms (speedup:   0.63x, efficiency:  15.7%)
+    guided     (chunk=10    ):    0.008 ms (speedup:   0.68x, efficiency:  17.0%)
+    guided     (chunk=50    ):    0.009 ms (speedup:   0.61x, efficiency:  15.4%)
+    static     (default     ):    0.021 ms (speedup:   0.27x, efficiency:   6.8%)
+
+  Threads: 8
+    dynamic    (default     ):    0.082 ms (speedup:   0.07x, efficiency:   0.8%)
+    dynamic    (chunk=10    ):    0.054 ms (speedup:   0.10x, efficiency:   1.3%)
+    dynamic    (chunk=50    ):    0.046 ms (speedup:   0.13x, efficiency:   1.6%)
+    guided     (default     ):    0.077 ms (speedup:   0.07x, efficiency:   0.9%)
+    guided     (chunk=10    ):    0.076 ms (speedup:   0.08x, efficiency:   1.0%)
+    guided     (chunk=50    ):    0.063 ms (speedup:   0.09x, efficiency:   1.1%)
+    static     (default     ):    0.055 ms (speedup:   0.11x, efficiency:   1.3%)
+
+  Threads: 16
+    dynamic    (default     ):    0.127 ms (speedup:   0.04x, efficiency:   0.3%)
+    dynamic    (chunk=10    ):    0.118 ms (speedup:   0.05x, efficiency:   0.3%)
+    dynamic    (chunk=50    ):    0.114 ms (speedup:   0.05x, efficiency:   0.3%)
+    guided     (default     ):    0.127 ms (speedup:   0.04x, efficiency:   0.3%)
+    guided     (chunk=10    ):    0.122 ms (speedup:   0.05x, efficiency:   0.3%)
+    guided     (chunk=50    ):    0.118 ms (speedup:   0.05x, efficiency:   0.3%)
+    static     (default     ):    0.110 ms (speedup:   0.05x, efficiency:   0.3%)
+
+  Threads: 32
+    dynamic    (default     ):    0.269 ms (speedup:   0.02x, efficiency:   0.1%)
+    dynamic    (chunk=10    ):    0.269 ms (speedup:   0.02x, efficiency:   0.1%)
+    dynamic    (chunk=50    ):    0.261 ms (speedup:   0.02x, efficiency:   0.1%)
+    guided     (default     ):    0.253 ms (speedup:   0.02x, efficiency:   0.1%)
+    guided     (chunk=10    ):    0.258 ms (speedup:   0.02x, efficiency:   0.1%)
+    guided     (chunk=50    ):    0.254 ms (speedup:   0.02x, efficiency:   0.1%)
+    static     (default     ):    0.247 ms (speedup:   0.02x, efficiency:   0.1%)
+
+  Threads: 64
+    dynamic    (default     ):    0.611 ms (speedup:   0.01x, efficiency:   0.0%)
+    dynamic    (chunk=10    ):    0.546 ms (speedup:   0.01x, efficiency:   0.0%)
+    dynamic    (chunk=50    ):    0.552 ms (speedup:   0.01x, efficiency:   0.0%)
+    guided     (default     ):    0.564 ms (speedup:   0.01x, efficiency:   0.0%)
+    guided     (chunk=10    ):    0.561 ms (speedup:   0.01x, efficiency:   0.0%)
+    guided     (chunk=50    ):    0.568 ms (speedup:   0.01x, efficiency:   0.0%)
+    static     (default     ):    0.557 ms (speedup:   0.01x, efficiency:   0.0%)
+
+  Threads: 128
+    dynamic    (default     ):    1.980 ms (speedup:   0.00x, efficiency:   0.0%)
+    dynamic    (chunk=10    ):    1.251 ms (speedup:   0.00x, efficiency:   0.0%)
+    dynamic    (chunk=50    ):    1.265 ms (speedup:   0.00x, efficiency:   0.0%)
+    guided     (default     ):    1.206 ms (speedup:   0.00x, efficiency:   0.0%)
+    guided     (chunk=10    ):    1.235 ms (speedup:   0.00x, efficiency:   0.0%)
+    guided     (chunk=50    ):    1.258 ms (speedup:   0.00x, efficiency:   0.0%)
+    static     (default     ):    1.217 ms (speedup:   0.00x, efficiency:   0.0%)
+
+
+Matrix Size: 500x500, Type: LOWER
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    0.143 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    0.138 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    0.139 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    0.142 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    0.142 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    0.143 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    0.139 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    0.083 ms (speedup:   1.73x, efficiency:  86.5%)
+    dynamic    (chunk=10    ):    0.079 ms (speedup:   1.74x, efficiency:  87.0%)
+    dynamic    (chunk=50    ):    0.092 ms (speedup:   1.52x, efficiency:  75.9%)
+    guided     (default     ):    0.076 ms (speedup:   1.86x, efficiency:  93.2%)
+    guided     (chunk=10    ):    0.078 ms (speedup:   1.81x, efficiency:  90.6%)
+    guided     (chunk=50    ):    0.082 ms (speedup:   1.76x, efficiency:  87.8%)
+    static     (default     ):    0.130 ms (speedup:   1.07x, efficiency:  53.6%)
+
+  Threads: 4
+    dynamic    (default     ):    0.046 ms (speedup:   3.10x, efficiency:  77.5%)
+    dynamic    (chunk=10    ):    0.055 ms (speedup:   2.50x, efficiency:  62.4%)
+    dynamic    (chunk=50    ):    0.059 ms (speedup:   2.34x, efficiency:  58.5%)
+    guided     (default     ):    0.045 ms (speedup:   3.19x, efficiency:  79.6%)
+    guided     (chunk=10    ):    0.059 ms (speedup:   2.39x, efficiency:  59.6%)
+    guided     (chunk=50    ):    0.058 ms (speedup:   2.45x, efficiency:  61.3%)
+    static     (default     ):    0.076 ms (speedup:   1.84x, efficiency:  46.0%)
+
+  Threads: 8
+    dynamic    (default     ):    0.080 ms (speedup:   1.79x, efficiency:  22.4%)
+    dynamic    (chunk=10    ):    0.084 ms (speedup:   1.65x, efficiency:  20.7%)
+    dynamic    (chunk=50    ):    0.083 ms (speedup:   1.68x, efficiency:  21.0%)
+    guided     (default     ):    0.095 ms (speedup:   1.50x, efficiency:  18.8%)
+    guided     (chunk=10    ):    0.077 ms (speedup:   1.84x, efficiency:  23.0%)
+    guided     (chunk=50    ):    0.078 ms (speedup:   1.84x, efficiency:  23.0%)
+    static     (default     ):    0.088 ms (speedup:   1.58x, efficiency:  19.7%)
+
+  Threads: 16
+    dynamic    (default     ):    0.137 ms (speedup:   1.05x, efficiency:   6.5%)
+    dynamic    (chunk=10    ):    0.152 ms (speedup:   0.91x, efficiency:   5.7%)
+    dynamic    (chunk=50    ):    0.132 ms (speedup:   1.05x, efficiency:   6.6%)
+    guided     (default     ):    0.134 ms (speedup:   1.06x, efficiency:   6.6%)
+    guided     (chunk=10    ):    0.133 ms (speedup:   1.07x, efficiency:   6.7%)
+    guided     (chunk=50    ):    0.122 ms (speedup:   1.17x, efficiency:   7.3%)
+    static     (default     ):    0.121 ms (speedup:   1.15x, efficiency:   7.2%)
+
+  Threads: 32
+    dynamic    (default     ):    0.276 ms (speedup:   0.52x, efficiency:   1.6%)
+    dynamic    (chunk=10    ):    0.285 ms (speedup:   0.48x, efficiency:   1.5%)
+    dynamic    (chunk=50    ):    0.282 ms (speedup:   0.49x, efficiency:   1.5%)
+    guided     (default     ):    0.272 ms (speedup:   0.52x, efficiency:   1.6%)
+    guided     (chunk=10    ):    0.267 ms (speedup:   0.53x, efficiency:   1.7%)
+    guided     (chunk=50    ):    0.256 ms (speedup:   0.56x, efficiency:   1.7%)
+    static     (default     ):    0.254 ms (speedup:   0.55x, efficiency:   1.7%)
+
+  Threads: 64
+    dynamic    (default     ):    0.667 ms (speedup:   0.21x, efficiency:   0.3%)
+    dynamic    (chunk=10    ):    0.513 ms (speedup:   0.27x, efficiency:   0.4%)
+    dynamic    (chunk=50    ):    0.530 ms (speedup:   0.26x, efficiency:   0.4%)
+    guided     (default     ):    0.542 ms (speedup:   0.26x, efficiency:   0.4%)
+    guided     (chunk=10    ):    0.564 ms (speedup:   0.25x, efficiency:   0.4%)
+    guided     (chunk=50    ):    0.566 ms (speedup:   0.25x, efficiency:   0.4%)
+    static     (default     ):    0.533 ms (speedup:   0.26x, efficiency:   0.4%)
+
+  Threads: 128
+    dynamic    (default     ):    2.139 ms (speedup:   0.07x, efficiency:   0.1%)
+    dynamic    (chunk=10    ):    1.222 ms (speedup:   0.11x, efficiency:   0.1%)
+    dynamic    (chunk=50    ):    1.257 ms (speedup:   0.11x, efficiency:   0.1%)
+    guided     (default     ):    1.277 ms (speedup:   0.11x, efficiency:   0.1%)
+    guided     (chunk=10    ):    1.269 ms (speedup:   0.11x, efficiency:   0.1%)
+    guided     (chunk=50    ):    1.271 ms (speedup:   0.11x, efficiency:   0.1%)
+    static     (default     ):    1.267 ms (speedup:   0.11x, efficiency:   0.1%)
+
+
+Matrix Size: 500x500, Type: UPPER
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    0.138 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    0.140 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    0.140 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    0.138 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    0.141 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    0.143 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    0.141 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    0.079 ms (speedup:   1.74x, efficiency:  87.0%)
+    dynamic    (chunk=10    ):    0.080 ms (speedup:   1.74x, efficiency:  87.2%)
+    dynamic    (chunk=50    ):    0.090 ms (speedup:   1.55x, efficiency:  77.6%)
+    guided     (default     ):    0.080 ms (speedup:   1.73x, efficiency:  86.5%)
+    guided     (chunk=10    ):    0.082 ms (speedup:   1.71x, efficiency:  85.4%)
+    guided     (chunk=50    ):    0.075 ms (speedup:   1.92x, efficiency:  95.9%)
+    static     (default     ):    0.111 ms (speedup:   1.27x, efficiency:  63.6%)
+
+  Threads: 4
+    dynamic    (default     ):    0.053 ms (speedup:   2.60x, efficiency:  64.9%)
+    dynamic    (chunk=10    ):    0.045 ms (speedup:   3.10x, efficiency:  77.6%)
+    dynamic    (chunk=50    ):    0.049 ms (speedup:   2.87x, efficiency:  71.7%)
+    guided     (default     ):    0.043 ms (speedup:   3.24x, efficiency:  81.1%)
+    guided     (chunk=10    ):    0.055 ms (speedup:   2.55x, efficiency:  63.7%)
+    guided     (chunk=50    ):    0.049 ms (speedup:   2.93x, efficiency:  73.3%)
+    static     (default     ):    0.074 ms (speedup:   1.90x, efficiency:  47.5%)
+
+  Threads: 8
+    dynamic    (default     ):    0.078 ms (speedup:   1.76x, efficiency:  22.0%)
+    dynamic    (chunk=10    ):    0.071 ms (speedup:   1.97x, efficiency:  24.6%)
+    dynamic    (chunk=50    ):    0.077 ms (speedup:   1.81x, efficiency:  22.7%)
+    guided     (default     ):    0.084 ms (speedup:   1.64x, efficiency:  20.5%)
+    guided     (chunk=10    ):    0.081 ms (speedup:   1.74x, efficiency:  21.8%)
+    guided     (chunk=50    ):    0.076 ms (speedup:   1.89x, efficiency:  23.7%)
+    static     (default     ):    0.072 ms (speedup:   1.96x, efficiency:  24.5%)
+
+  Threads: 16
+    dynamic    (default     ):    0.142 ms (speedup:   0.98x, efficiency:   6.1%)
+    dynamic    (chunk=10    ):    0.135 ms (speedup:   1.03x, efficiency:   6.5%)
+    dynamic    (chunk=50    ):    0.140 ms (speedup:   1.00x, efficiency:   6.3%)
+    guided     (default     ):    0.153 ms (speedup:   0.90x, efficiency:   5.6%)
+    guided     (chunk=10    ):    0.146 ms (speedup:   0.97x, efficiency:   6.0%)
+    guided     (chunk=50    ):    0.131 ms (speedup:   1.09x, efficiency:   6.8%)
+    static     (default     ):    0.129 ms (speedup:   1.10x, efficiency:   6.9%)
+
+  Threads: 32
+    dynamic    (default     ):    0.262 ms (speedup:   0.53x, efficiency:   1.6%)
+    dynamic    (chunk=10    ):    0.274 ms (speedup:   0.51x, efficiency:   1.6%)
+    dynamic    (chunk=50    ):    0.272 ms (speedup:   0.51x, efficiency:   1.6%)
+    guided     (default     ):    0.316 ms (speedup:   0.44x, efficiency:   1.4%)
+    guided     (chunk=10    ):    0.302 ms (speedup:   0.47x, efficiency:   1.5%)
+    guided     (chunk=50    ):    0.238 ms (speedup:   0.60x, efficiency:   1.9%)
+    static     (default     ):    0.234 ms (speedup:   0.60x, efficiency:   1.9%)
+
+  Threads: 64
+    dynamic    (default     ):    0.626 ms (speedup:   0.22x, efficiency:   0.3%)
+    dynamic    (chunk=10    ):    0.540 ms (speedup:   0.26x, efficiency:   0.4%)
+    dynamic    (chunk=50    ):    0.549 ms (speedup:   0.25x, efficiency:   0.4%)
+    guided     (default     ):    0.623 ms (speedup:   0.22x, efficiency:   0.3%)
+    guided     (chunk=10    ):    0.578 ms (speedup:   0.24x, efficiency:   0.4%)
+    guided     (chunk=50    ):    0.558 ms (speedup:   0.26x, efficiency:   0.4%)
+    static     (default     ):    0.564 ms (speedup:   0.25x, efficiency:   0.4%)
+
+  Threads: 128
+    dynamic    (default     ):    1.962 ms (speedup:   0.07x, efficiency:   0.1%)
+    dynamic    (chunk=10    ):    1.234 ms (speedup:   0.11x, efficiency:   0.1%)
+    dynamic    (chunk=50    ):    1.253 ms (speedup:   0.11x, efficiency:   0.1%)
+    guided     (default     ):    1.323 ms (speedup:   0.10x, efficiency:   0.1%)
+    guided     (chunk=10    ):    1.282 ms (speedup:   0.11x, efficiency:   0.1%)
+    guided     (chunk=50    ):    1.266 ms (speedup:   0.11x, efficiency:   0.1%)
+    static     (default     ):    1.269 ms (speedup:   0.11x, efficiency:   0.1%)
+
+
+Matrix Size: 1000x1000, Type: BANDED
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    0.012 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    0.012 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    0.012 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    0.013 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    0.012 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    0.013 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    0.013 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    0.016 ms (speedup:   0.76x, efficiency:  38.0%)
+    dynamic    (chunk=10    ):    0.010 ms (speedup:   1.25x, efficiency:  62.3%)
+    dynamic    (chunk=50    ):    0.012 ms (speedup:   1.01x, efficiency:  50.4%)
+    guided     (default     ):    0.016 ms (speedup:   0.83x, efficiency:  41.3%)
+    guided     (chunk=10    ):    0.011 ms (speedup:   1.14x, efficiency:  56.8%)
+    guided     (chunk=50    ):    0.010 ms (speedup:   1.28x, efficiency:  63.9%)
+    static     (default     ):    0.012 ms (speedup:   1.05x, efficiency:  52.3%)
+
+  Threads: 4
+    dynamic    (default     ):    0.014 ms (speedup:   0.89x, efficiency:  22.2%)
+    dynamic    (chunk=10    ):    0.013 ms (speedup:   0.92x, efficiency:  23.0%)
+    dynamic    (chunk=50    ):    0.018 ms (speedup:   0.69x, efficiency:  17.1%)
+    guided     (default     ):    0.017 ms (speedup:   0.77x, efficiency:  19.2%)
+    guided     (chunk=10    ):    0.010 ms (speedup:   1.17x, efficiency:  29.2%)
+    guided     (chunk=50    ):    0.013 ms (speedup:   1.00x, efficiency:  25.0%)
+    static     (default     ):    0.018 ms (speedup:   0.73x, efficiency:  18.1%)
+
+  Threads: 8
+    dynamic    (default     ):    0.046 ms (speedup:   0.26x, efficiency:   3.3%)
+    dynamic    (chunk=10    ):    0.073 ms (speedup:   0.17x, efficiency:   2.1%)
+    dynamic    (chunk=50    ):    0.073 ms (speedup:   0.16x, efficiency:   2.1%)
+    guided     (default     ):    0.068 ms (speedup:   0.19x, efficiency:   2.4%)
+    guided     (chunk=10    ):    0.075 ms (speedup:   0.16x, efficiency:   2.0%)
+    guided     (chunk=50    ):    0.065 ms (speedup:   0.19x, efficiency:   2.4%)
+    static     (default     ):    0.051 ms (speedup:   0.25x, efficiency:   3.2%)
+
+  Threads: 16
+    dynamic    (default     ):    0.124 ms (speedup:   0.10x, efficiency:   0.6%)
+    dynamic    (chunk=10    ):    0.137 ms (speedup:   0.09x, efficiency:   0.6%)
+    dynamic    (chunk=50    ):    0.121 ms (speedup:   0.10x, efficiency:   0.6%)
+    guided     (default     ):    0.142 ms (speedup:   0.09x, efficiency:   0.6%)
+    guided     (chunk=10    ):    0.148 ms (speedup:   0.08x, efficiency:   0.5%)
+    guided     (chunk=50    ):    0.127 ms (speedup:   0.10x, efficiency:   0.6%)
+    static     (default     ):    0.122 ms (speedup:   0.11x, efficiency:   0.7%)
+
+  Threads: 32
+    dynamic    (default     ):    0.274 ms (speedup:   0.04x, efficiency:   0.1%)
+    dynamic    (chunk=10    ):    0.864 ms (speedup:   0.01x, efficiency:   0.0%)
+    dynamic    (chunk=50    ):    0.250 ms (speedup:   0.05x, efficiency:   0.2%)
+    guided     (default     ):    0.289 ms (speedup:   0.04x, efficiency:   0.1%)
+    guided     (chunk=10    ):    0.289 ms (speedup:   0.04x, efficiency:   0.1%)
+    guided     (chunk=50    ):    0.262 ms (speedup:   0.05x, efficiency:   0.2%)
+    static     (default     ):    0.252 ms (speedup:   0.05x, efficiency:   0.2%)
+
+  Threads: 64
+    dynamic    (default     ):    0.618 ms (speedup:   0.02x, efficiency:   0.0%)
+    dynamic    (chunk=10    ):    0.950 ms (speedup:   0.01x, efficiency:   0.0%)
+    dynamic    (chunk=50    ):    0.584 ms (speedup:   0.02x, efficiency:   0.0%)
+    guided     (default     ):    0.594 ms (speedup:   0.02x, efficiency:   0.0%)
+    guided     (chunk=10    ):    0.562 ms (speedup:   0.02x, efficiency:   0.0%)
+    guided     (chunk=50    ):    0.535 ms (speedup:   0.02x, efficiency:   0.0%)
+    static     (default     ):    0.569 ms (speedup:   0.02x, efficiency:   0.0%)
+
+  Threads: 128
+    dynamic    (default     ):    1.956 ms (speedup:   0.01x, efficiency:   0.0%)
+    dynamic    (chunk=10    ):    1.194 ms (speedup:   0.01x, efficiency:   0.0%)
+    dynamic    (chunk=50    ):    1.241 ms (speedup:   0.01x, efficiency:   0.0%)
+    guided     (default     ):    1.261 ms (speedup:   0.01x, efficiency:   0.0%)
+    guided     (chunk=10    ):    1.243 ms (speedup:   0.01x, efficiency:   0.0%)
+    guided     (chunk=50    ):    1.239 ms (speedup:   0.01x, efficiency:   0.0%)
+    static     (default     ):    1.257 ms (speedup:   0.01x, efficiency:   0.0%)
+
+
+Matrix Size: 1000x1000, Type: LOWER
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    0.594 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    0.593 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    0.597 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    0.603 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    0.604 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    0.600 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    0.595 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    0.334 ms (speedup:   1.78x, efficiency:  89.0%)
+    dynamic    (chunk=10    ):    0.330 ms (speedup:   1.80x, efficiency:  90.0%)
+    dynamic    (chunk=50    ):    0.331 ms (speedup:   1.80x, efficiency:  90.1%)
+    guided     (default     ):    0.330 ms (speedup:   1.83x, efficiency:  91.4%)
+    guided     (chunk=10    ):    0.319 ms (speedup:   1.90x, efficiency:  94.8%)
+    guided     (chunk=50    ):    0.330 ms (speedup:   1.82x, efficiency:  90.9%)
+    static     (default     ):    0.494 ms (speedup:   1.20x, efficiency:  60.2%)
+
+  Threads: 4
+    dynamic    (default     ):    0.184 ms (speedup:   3.23x, efficiency:  80.8%)
+    dynamic    (chunk=10    ):    0.174 ms (speedup:   3.40x, efficiency:  85.1%)
+    dynamic    (chunk=50    ):    0.190 ms (speedup:   3.14x, efficiency:  78.5%)
+    guided     (default     ):    0.166 ms (speedup:   3.64x, efficiency:  91.0%)
+    guided     (chunk=10    ):    0.180 ms (speedup:   3.35x, efficiency:  83.8%)
+    guided     (chunk=50    ):    0.196 ms (speedup:   3.07x, efficiency:  76.7%)
+    static     (default     ):    0.296 ms (speedup:   2.01x, efficiency:  50.3%)
+
+  Threads: 8
+    dynamic    (default     ):    0.154 ms (speedup:   3.86x, efficiency:  48.3%)
+    dynamic    (chunk=10    ):    0.144 ms (speedup:   4.12x, efficiency:  51.5%)
+    dynamic    (chunk=50    ):    0.166 ms (speedup:   3.59x, efficiency:  44.9%)
+    guided     (default     ):    0.138 ms (speedup:   4.36x, efficiency:  54.5%)
+    guided     (chunk=10    ):    0.170 ms (speedup:   3.55x, efficiency:  44.3%)
+    guided     (chunk=50    ):    0.171 ms (speedup:   3.52x, efficiency:  43.9%)
+    static     (default     ):    0.201 ms (speedup:   2.95x, efficiency:  36.9%)
+
+  Threads: 16
+    dynamic    (default     ):    0.226 ms (speedup:   2.63x, efficiency:  16.4%)
+    dynamic    (chunk=10    ):    0.213 ms (speedup:   2.79x, efficiency:  17.4%)
+    dynamic    (chunk=50    ):    0.205 ms (speedup:   2.91x, efficiency:  18.2%)
+    guided     (default     ):    0.218 ms (speedup:   2.77x, efficiency:  17.3%)
+    guided     (chunk=10    ):    0.217 ms (speedup:   2.78x, efficiency:  17.4%)
+    guided     (chunk=50    ):    0.215 ms (speedup:   2.79x, efficiency:  17.4%)
+    static     (default     ):    0.229 ms (speedup:   2.60x, efficiency:  16.2%)
+
+  Threads: 32
+    dynamic    (default     ):    0.363 ms (speedup:   1.64x, efficiency:   5.1%)
+    dynamic    (chunk=10    ):    0.336 ms (speedup:   1.77x, efficiency:   5.5%)
+    dynamic    (chunk=50    ):    0.307 ms (speedup:   1.94x, efficiency:   6.1%)
+    guided     (default     ):    0.355 ms (speedup:   1.70x, efficiency:   5.3%)
+    guided     (chunk=10    ):    0.337 ms (speedup:   1.79x, efficiency:   5.6%)
+    guided     (chunk=50    ):    0.329 ms (speedup:   1.83x, efficiency:   5.7%)
+    static     (default     ):    0.276 ms (speedup:   2.16x, efficiency:   6.7%)
+
+  Threads: 64
+    dynamic    (default     ):    0.743 ms (speedup:   0.80x, efficiency:   1.2%)
+    dynamic    (chunk=10    ):    0.766 ms (speedup:   0.77x, efficiency:   1.2%)
+    dynamic    (chunk=50    ):    0.580 ms (speedup:   1.03x, efficiency:   1.6%)
+    guided     (default     ):    0.660 ms (speedup:   0.91x, efficiency:   1.4%)
+    guided     (chunk=10    ):    0.637 ms (speedup:   0.95x, efficiency:   1.5%)
+    guided     (chunk=50    ):    0.579 ms (speedup:   1.04x, efficiency:   1.6%)
+    static     (default     ):    0.608 ms (speedup:   0.98x, efficiency:   1.5%)
+
+  Threads: 128
+    dynamic    (default     ):    2.243 ms (speedup:   0.26x, efficiency:   0.2%)
+    dynamic    (chunk=10    ):    1.391 ms (speedup:   0.43x, efficiency:   0.3%)
+    dynamic    (chunk=50    ):    1.274 ms (speedup:   0.47x, efficiency:   0.4%)
+    guided     (default     ):    1.397 ms (speedup:   0.43x, efficiency:   0.3%)
+    guided     (chunk=10    ):    1.378 ms (speedup:   0.44x, efficiency:   0.3%)
+    guided     (chunk=50    ):    1.266 ms (speedup:   0.47x, efficiency:   0.4%)
+    static     (default     ):    1.340 ms (speedup:   0.44x, efficiency:   0.3%)
+
+
+Matrix Size: 1000x1000, Type: UPPER
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    0.593 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    0.595 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    0.597 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    0.596 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    0.602 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    0.598 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    0.599 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    0.319 ms (speedup:   1.86x, efficiency:  92.9%)
+    dynamic    (chunk=10    ):    0.323 ms (speedup:   1.84x, efficiency:  92.0%)
+    dynamic    (chunk=50    ):    0.323 ms (speedup:   1.85x, efficiency:  92.6%)
+    guided     (default     ):    0.310 ms (speedup:   1.92x, efficiency:  96.2%)
+    guided     (chunk=10    ):    0.321 ms (speedup:   1.88x, efficiency:  93.8%)
+    guided     (chunk=50    ):    0.318 ms (speedup:   1.88x, efficiency:  94.0%)
+    static     (default     ):    0.465 ms (speedup:   1.29x, efficiency:  64.4%)
+
+  Threads: 4
+    dynamic    (default     ):    0.174 ms (speedup:   3.42x, efficiency:  85.5%)
+    dynamic    (chunk=10    ):    0.167 ms (speedup:   3.56x, efficiency:  89.0%)
+    dynamic    (chunk=50    ):    0.177 ms (speedup:   3.37x, efficiency:  84.3%)
+    guided     (default     ):    0.186 ms (speedup:   3.21x, efficiency:  80.3%)
+    guided     (chunk=10    ):    0.172 ms (speedup:   3.51x, efficiency:  87.7%)
+    guided     (chunk=50    ):    0.175 ms (speedup:   3.42x, efficiency:  85.5%)
+    static     (default     ):    0.273 ms (speedup:   2.19x, efficiency:  54.8%)
+
+  Threads: 8
+    dynamic    (default     ):    0.171 ms (speedup:   3.48x, efficiency:  43.5%)
+    dynamic    (chunk=10    ):    0.136 ms (speedup:   4.37x, efficiency:  54.6%)
+    dynamic    (chunk=50    ):    0.142 ms (speedup:   4.21x, efficiency:  52.7%)
+    guided     (default     ):    0.145 ms (speedup:   4.11x, efficiency:  51.4%)
+    guided     (chunk=10    ):    0.140 ms (speedup:   4.32x, efficiency:  54.0%)
+    guided     (chunk=50    ):    0.139 ms (speedup:   4.30x, efficiency:  53.8%)
+    static     (default     ):    0.181 ms (speedup:   3.30x, efficiency:  41.3%)
+
+  Threads: 16
+    dynamic    (default     ):    0.188 ms (speedup:   3.16x, efficiency:  19.7%)
+    dynamic    (chunk=10    ):    0.197 ms (speedup:   3.01x, efficiency:  18.8%)
+    dynamic    (chunk=50    ):    0.208 ms (speedup:   2.87x, efficiency:  18.0%)
+    guided     (default     ):    0.203 ms (speedup:   2.93x, efficiency:  18.3%)
+    guided     (chunk=10    ):    0.187 ms (speedup:   3.23x, efficiency:  20.2%)
+    guided     (chunk=50    ):    0.187 ms (speedup:   3.20x, efficiency:  20.0%)
+    static     (default     ):    0.232 ms (speedup:   2.59x, efficiency:  16.2%)
+
+  Threads: 32
+    dynamic    (default     ):    0.328 ms (speedup:   1.81x, efficiency:   5.7%)
+    dynamic    (chunk=10    ):    0.340 ms (speedup:   1.75x, efficiency:   5.5%)
+    dynamic    (chunk=50    ):    0.315 ms (speedup:   1.89x, efficiency:   5.9%)
+    guided     (default     ):    0.336 ms (speedup:   1.78x, efficiency:   5.5%)
+    guided     (chunk=10    ):    0.336 ms (speedup:   1.80x, efficiency:   5.6%)
+    guided     (chunk=50    ):    0.303 ms (speedup:   1.98x, efficiency:   6.2%)
+    static     (default     ):    0.285 ms (speedup:   2.11x, efficiency:   6.6%)
+
+  Threads: 64
+    dynamic    (default     ):    0.653 ms (speedup:   0.91x, efficiency:   1.4%)
+    dynamic    (chunk=10    ):    0.657 ms (speedup:   0.91x, efficiency:   1.4%)
+    dynamic    (chunk=50    ):    0.598 ms (speedup:   1.00x, efficiency:   1.6%)
+    guided     (default     ):    0.621 ms (speedup:   0.96x, efficiency:   1.5%)
+    guided     (chunk=10    ):    0.610 ms (speedup:   0.99x, efficiency:   1.5%)
+    guided     (chunk=50    ):    0.587 ms (speedup:   1.02x, efficiency:   1.6%)
+    static     (default     ):    0.548 ms (speedup:   1.09x, efficiency:   1.7%)
+
+  Threads: 128
+    dynamic    (default     ):    2.011 ms (speedup:   0.29x, efficiency:   0.2%)
+    dynamic    (chunk=10    ):    1.327 ms (speedup:   0.45x, efficiency:   0.4%)
+    dynamic    (chunk=50    ):    1.299 ms (speedup:   0.46x, efficiency:   0.4%)
+    guided     (default     ):    1.352 ms (speedup:   0.44x, efficiency:   0.3%)
+    guided     (chunk=10    ):    1.323 ms (speedup:   0.46x, efficiency:   0.4%)
+    guided     (chunk=50    ):    1.294 ms (speedup:   0.46x, efficiency:   0.4%)
+    static     (default     ):    1.219 ms (speedup:   0.49x, efficiency:   0.4%)
+
+
+Matrix Size: 2000x2000, Type: BANDED
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    0.025 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    0.025 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    0.025 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    0.026 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    0.025 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    0.025 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    0.025 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    0.030 ms (speedup:   0.84x, efficiency:  41.8%)
+    dynamic    (chunk=10    ):    0.021 ms (speedup:   1.19x, efficiency:  59.5%)
+    dynamic    (chunk=50    ):    0.016 ms (speedup:   1.55x, efficiency:  77.4%)
+    guided     (default     ):    0.023 ms (speedup:   1.15x, efficiency:  57.4%)
+    guided     (chunk=10    ):    0.022 ms (speedup:   1.15x, efficiency:  57.7%)
+    guided     (chunk=50    ):    0.020 ms (speedup:   1.24x, efficiency:  62.1%)
+    static     (default     ):    0.022 ms (speedup:   1.16x, efficiency:  58.1%)
+
+  Threads: 4
+    dynamic    (default     ):    0.036 ms (speedup:   0.70x, efficiency:  17.5%)
+    dynamic    (chunk=10    ):    0.013 ms (speedup:   1.85x, efficiency:  46.3%)
+    dynamic    (chunk=50    ):    0.017 ms (speedup:   1.45x, efficiency:  36.2%)
+    guided     (default     ):    0.017 ms (speedup:   1.56x, efficiency:  38.9%)
+    guided     (chunk=10    ):    0.016 ms (speedup:   1.53x, efficiency:  38.4%)
+    guided     (chunk=50    ):    0.015 ms (speedup:   1.62x, efficiency:  40.5%)
+    static     (default     ):    0.017 ms (speedup:   1.46x, efficiency:  36.4%)
+
+  Threads: 8
+    dynamic    (default     ):    0.055 ms (speedup:   0.45x, efficiency:   5.7%)
+    dynamic    (chunk=10    ):    0.064 ms (speedup:   0.39x, efficiency:   4.8%)
+    dynamic    (chunk=50    ):    0.067 ms (speedup:   0.37x, efficiency:   4.6%)
+    guided     (default     ):    0.074 ms (speedup:   0.35x, efficiency:   4.4%)
+    guided     (chunk=10    ):    0.061 ms (speedup:   0.41x, efficiency:   5.2%)
+    guided     (chunk=50    ):    0.062 ms (speedup:   0.40x, efficiency:   5.0%)
+    static     (default     ):    0.058 ms (speedup:   0.44x, efficiency:   5.5%)
+
+  Threads: 16
+    dynamic    (default     ):    0.143 ms (speedup:   0.17x, efficiency:   1.1%)
+    dynamic    (chunk=10    ):    0.117 ms (speedup:   0.21x, efficiency:   1.3%)
+    dynamic    (chunk=50    ):    0.121 ms (speedup:   0.20x, efficiency:   1.3%)
+    guided     (default     ):    0.154 ms (speedup:   0.17x, efficiency:   1.1%)
+    guided     (chunk=10    ):    0.139 ms (speedup:   0.18x, efficiency:   1.1%)
+    guided     (chunk=50    ):    0.122 ms (speedup:   0.20x, efficiency:   1.3%)
+    static     (default     ):    0.122 ms (speedup:   0.21x, efficiency:   1.3%)
+
+  Threads: 32
+    dynamic    (default     ):    0.238 ms (speedup:   0.10x, efficiency:   0.3%)
+    dynamic    (chunk=10    ):    0.275 ms (speedup:   0.09x, efficiency:   0.3%)
+    dynamic    (chunk=50    ):    0.271 ms (speedup:   0.09x, efficiency:   0.3%)
+    guided     (default     ):    0.286 ms (speedup:   0.09x, efficiency:   0.3%)
+    guided     (chunk=10    ):    0.230 ms (speedup:   0.11x, efficiency:   0.3%)
+    guided     (chunk=50    ):    0.253 ms (speedup:   0.10x, efficiency:   0.3%)
+    static     (default     ):    0.246 ms (speedup:   0.10x, efficiency:   0.3%)
+
+  Threads: 64
+    dynamic    (default     ):    0.609 ms (speedup:   0.04x, efficiency:   0.1%)
+    dynamic    (chunk=10    ):    0.608 ms (speedup:   0.04x, efficiency:   0.1%)
+    dynamic    (chunk=50    ):    0.551 ms (speedup:   0.04x, efficiency:   0.1%)
+    guided     (default     ):    0.624 ms (speedup:   0.04x, efficiency:   0.1%)
+    guided     (chunk=10    ):    0.540 ms (speedup:   0.05x, efficiency:   0.1%)
+    guided     (chunk=50    ):    0.553 ms (speedup:   0.04x, efficiency:   0.1%)
+    static     (default     ):    0.513 ms (speedup:   0.05x, efficiency:   0.1%)
+
+  Threads: 128
+    dynamic    (default     ):    1.928 ms (speedup:   0.01x, efficiency:   0.0%)
+    dynamic    (chunk=10    ):    1.937 ms (speedup:   0.01x, efficiency:   0.0%)
+    dynamic    (chunk=50    ):    1.258 ms (speedup:   0.02x, efficiency:   0.0%)
+    guided     (default     ):    1.359 ms (speedup:   0.02x, efficiency:   0.0%)
+    guided     (chunk=10    ):    1.291 ms (speedup:   0.02x, efficiency:   0.0%)
+    guided     (chunk=50    ):    1.274 ms (speedup:   0.02x, efficiency:   0.0%)
+    static     (default     ):    1.196 ms (speedup:   0.02x, efficiency:   0.0%)
+
+
+Matrix Size: 2000x2000, Type: LOWER
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    2.908 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    2.542 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    2.517 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    2.515 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    2.565 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    2.520 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    2.537 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    1.336 ms (speedup:   2.18x, efficiency: 108.8%)
+    dynamic    (chunk=10    ):    1.321 ms (speedup:   1.92x, efficiency:  96.2%)
+    dynamic    (chunk=50    ):    1.364 ms (speedup:   1.85x, efficiency:  92.3%)
+    guided     (default     ):    1.311 ms (speedup:   1.92x, efficiency:  96.0%)
+    guided     (chunk=10    ):    1.319 ms (speedup:   1.95x, efficiency:  97.3%)
+    guided     (chunk=50    ):    1.354 ms (speedup:   1.86x, efficiency:  93.0%)
+    static     (default     ):    1.938 ms (speedup:   1.31x, efficiency:  65.5%)
+
+  Threads: 4
+    dynamic    (default     ):    0.716 ms (speedup:   4.06x, efficiency: 101.5%)
+    dynamic    (chunk=10    ):    0.713 ms (speedup:   3.56x, efficiency:  89.1%)
+    dynamic    (chunk=50    ):    0.758 ms (speedup:   3.32x, efficiency:  83.0%)
+    guided     (default     ):    0.713 ms (speedup:   3.53x, efficiency:  88.2%)
+    guided     (chunk=10    ):    0.719 ms (speedup:   3.57x, efficiency:  89.1%)
+    guided     (chunk=50    ):    0.749 ms (speedup:   3.36x, efficiency:  84.1%)
+    static     (default     ):    1.156 ms (speedup:   2.20x, efficiency:  54.9%)
+
+  Threads: 8
+    dynamic    (default     ):    0.443 ms (speedup:   6.56x, efficiency:  82.1%)
+    dynamic    (chunk=10    ):    0.434 ms (speedup:   5.86x, efficiency:  73.2%)
+    dynamic    (chunk=50    ):    0.473 ms (speedup:   5.32x, efficiency:  66.5%)
+    guided     (default     ):    0.443 ms (speedup:   5.68x, efficiency:  71.0%)
+    guided     (chunk=10    ):    0.452 ms (speedup:   5.67x, efficiency:  70.9%)
+    guided     (chunk=50    ):    0.476 ms (speedup:   5.29x, efficiency:  66.2%)
+    static     (default     ):    0.703 ms (speedup:   3.61x, efficiency:  45.1%)
+
+  Threads: 16
+    dynamic    (default     ):    0.454 ms (speedup:   6.40x, efficiency:  40.0%)
+    dynamic    (chunk=10    ):    0.464 ms (speedup:   5.48x, efficiency:  34.3%)
+    dynamic    (chunk=50    ):    0.471 ms (speedup:   5.34x, efficiency:  33.4%)
+    guided     (default     ):    0.448 ms (speedup:   5.62x, efficiency:  35.1%)
+    guided     (chunk=10    ):    0.448 ms (speedup:   5.72x, efficiency:  35.8%)
+    guided     (chunk=50    ):    0.473 ms (speedup:   5.32x, efficiency:  33.3%)
+    static     (default     ):    0.542 ms (speedup:   4.68x, efficiency:  29.3%)
+
+  Threads: 32
+    dynamic    (default     ):    0.579 ms (speedup:   5.02x, efficiency:  15.7%)
+    dynamic    (chunk=10    ):    0.589 ms (speedup:   4.32x, efficiency:  13.5%)
+    dynamic    (chunk=50    ):    0.576 ms (speedup:   4.37x, efficiency:  13.7%)
+    guided     (default     ):    0.600 ms (speedup:   4.19x, efficiency:  13.1%)
+    guided     (chunk=10    ):    0.564 ms (speedup:   4.55x, efficiency:  14.2%)
+    guided     (chunk=50    ):    0.562 ms (speedup:   4.49x, efficiency:  14.0%)
+    static     (default     ):    0.602 ms (speedup:   4.21x, efficiency:  13.2%)
+
+  Threads: 64
+    dynamic    (default     ):    0.938 ms (speedup:   3.10x, efficiency:   4.8%)
+    dynamic    (chunk=10    ):    0.912 ms (speedup:   2.79x, efficiency:   4.4%)
+    dynamic    (chunk=50    ):    0.807 ms (speedup:   3.12x, efficiency:   4.9%)
+    guided     (default     ):    0.860 ms (speedup:   2.92x, efficiency:   4.6%)
+    guided     (chunk=10    ):    0.843 ms (speedup:   3.04x, efficiency:   4.8%)
+    guided     (chunk=50    ):    0.816 ms (speedup:   3.09x, efficiency:   4.8%)
+    static     (default     ):    0.797 ms (speedup:   3.18x, efficiency:   5.0%)
+
+  Threads: 128
+    dynamic    (default     ):    2.239 ms (speedup:   1.30x, efficiency:   1.0%)
+    dynamic    (chunk=10    ):    2.213 ms (speedup:   1.15x, efficiency:   0.9%)
+    dynamic    (chunk=50    ):    1.523 ms (speedup:   1.65x, efficiency:   1.3%)
+    guided     (default     ):    1.594 ms (speedup:   1.58x, efficiency:   1.2%)
+    guided     (chunk=10    ):    1.594 ms (speedup:   1.61x, efficiency:   1.3%)
+    guided     (chunk=50    ):    1.536 ms (speedup:   1.64x, efficiency:   1.3%)
+    static     (default     ):    1.423 ms (speedup:   1.78x, efficiency:   1.4%)
+
+
+Matrix Size: 2000x2000, Type: UPPER
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    2.485 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    2.488 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    2.486 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    2.650 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    2.595 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    2.485 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    2.488 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    1.283 ms (speedup:   1.94x, efficiency:  96.9%)
+    dynamic    (chunk=10    ):    1.315 ms (speedup:   1.89x, efficiency:  94.6%)
+    dynamic    (chunk=50    ):    1.326 ms (speedup:   1.87x, efficiency:  93.7%)
+    guided     (default     ):    1.322 ms (speedup:   2.01x, efficiency: 100.3%)
+    guided     (chunk=10    ):    1.328 ms (speedup:   1.95x, efficiency:  97.7%)
+    guided     (chunk=50    ):    1.297 ms (speedup:   1.92x, efficiency:  95.8%)
+    static     (default     ):    1.895 ms (speedup:   1.31x, efficiency:  65.6%)
+
+  Threads: 4
+    dynamic    (default     ):    0.696 ms (speedup:   3.57x, efficiency:  89.3%)
+    dynamic    (chunk=10    ):    0.705 ms (speedup:   3.53x, efficiency:  88.2%)
+    dynamic    (chunk=50    ):    0.721 ms (speedup:   3.45x, efficiency:  86.2%)
+    guided     (default     ):    0.687 ms (speedup:   3.86x, efficiency:  96.5%)
+    guided     (chunk=10    ):    0.694 ms (speedup:   3.74x, efficiency:  93.4%)
+    guided     (chunk=50    ):    0.708 ms (speedup:   3.51x, efficiency:  87.7%)
+    static     (default     ):    1.113 ms (speedup:   2.24x, efficiency:  55.9%)
+
+  Threads: 8
+    dynamic    (default     ):    0.425 ms (speedup:   5.85x, efficiency:  73.2%)
+    dynamic    (chunk=10    ):    0.418 ms (speedup:   5.95x, efficiency:  74.4%)
+    dynamic    (chunk=50    ):    0.445 ms (speedup:   5.59x, efficiency:  69.8%)
+    guided     (default     ):    0.436 ms (speedup:   6.08x, efficiency:  75.9%)
+    guided     (chunk=10    ):    0.457 ms (speedup:   5.68x, efficiency:  71.0%)
+    guided     (chunk=50    ):    0.469 ms (speedup:   5.29x, efficiency:  66.2%)
+    static     (default     ):    0.643 ms (speedup:   3.87x, efficiency:  48.4%)
+
+  Threads: 16
+    dynamic    (default     ):    0.440 ms (speedup:   5.64x, efficiency:  35.3%)
+    dynamic    (chunk=10    ):    0.448 ms (speedup:   5.55x, efficiency:  34.7%)
+    dynamic    (chunk=50    ):    0.463 ms (speedup:   5.37x, efficiency:  33.6%)
+    guided     (default     ):    0.461 ms (speedup:   5.75x, efficiency:  36.0%)
+    guided     (chunk=10    ):    0.477 ms (speedup:   5.44x, efficiency:  34.0%)
+    guided     (chunk=50    ):    0.433 ms (speedup:   5.74x, efficiency:  35.9%)
+    static     (default     ):    0.532 ms (speedup:   4.67x, efficiency:  29.2%)
+
+  Threads: 32
+    dynamic    (default     ):    0.592 ms (speedup:   4.20x, efficiency:  13.1%)
+    dynamic    (chunk=10    ):    0.597 ms (speedup:   4.17x, efficiency:  13.0%)
+    dynamic    (chunk=50    ):    0.580 ms (speedup:   4.29x, efficiency:  13.4%)
+    guided     (default     ):    0.617 ms (speedup:   4.29x, efficiency:  13.4%)
+    guided     (chunk=10    ):    0.579 ms (speedup:   4.48x, efficiency:  14.0%)
+    guided     (chunk=50    ):    0.578 ms (speedup:   4.30x, efficiency:  13.4%)
+    static     (default     ):    0.546 ms (speedup:   4.56x, efficiency:  14.2%)
+
+  Threads: 64
+    dynamic    (default     ):    0.962 ms (speedup:   2.58x, efficiency:   4.0%)
+    dynamic    (chunk=10    ):    0.927 ms (speedup:   2.68x, efficiency:   4.2%)
+    dynamic    (chunk=50    ):    0.891 ms (speedup:   2.79x, efficiency:   4.4%)
+    guided     (default     ):    0.902 ms (speedup:   2.94x, efficiency:   4.6%)
+    guided     (chunk=10    ):    0.867 ms (speedup:   2.99x, efficiency:   4.7%)
+    guided     (chunk=50    ):    0.872 ms (speedup:   2.85x, efficiency:   4.5%)
+    static     (default     ):    0.788 ms (speedup:   3.16x, efficiency:   4.9%)
+
+  Threads: 128
+    dynamic    (default     ):    2.260 ms (speedup:   1.10x, efficiency:   0.9%)
+    dynamic    (chunk=10    ):    2.252 ms (speedup:   1.10x, efficiency:   0.9%)
+    dynamic    (chunk=50    ):    1.595 ms (speedup:   1.56x, efficiency:   1.2%)
+    guided     (default     ):    1.506 ms (speedup:   1.76x, efficiency:   1.4%)
+    guided     (chunk=10    ):    1.574 ms (speedup:   1.65x, efficiency:   1.3%)
+    guided     (chunk=50    ):    1.584 ms (speedup:   1.57x, efficiency:   1.2%)
+    static     (default     ):    1.392 ms (speedup:   1.79x, efficiency:   1.4%)
+
+
+Matrix Size: 3000x3000, Type: BANDED
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    0.042 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    0.042 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    0.043 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    0.043 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    0.042 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    0.046 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    0.045 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    0.046 ms (speedup:   0.92x, efficiency:  45.8%)
+    dynamic    (chunk=10    ):    0.034 ms (speedup:   1.24x, efficiency:  62.1%)
+    dynamic    (chunk=50    ):    0.024 ms (speedup:   1.80x, efficiency:  90.1%)
+    guided     (default     ):    0.022 ms (speedup:   1.93x, efficiency:  96.7%)
+    guided     (chunk=10    ):    0.025 ms (speedup:   1.68x, efficiency:  83.9%)
+    guided     (chunk=50    ):    0.023 ms (speedup:   2.00x, efficiency: 100.1%)
+    static     (default     ):    0.031 ms (speedup:   1.45x, efficiency:  72.7%)
+
+  Threads: 4
+    dynamic    (default     ):    0.030 ms (speedup:   1.41x, efficiency:  35.2%)
+    dynamic    (chunk=10    ):    0.024 ms (speedup:   1.77x, efficiency:  44.2%)
+    dynamic    (chunk=50    ):    0.019 ms (speedup:   2.32x, efficiency:  58.0%)
+    guided     (default     ):    0.025 ms (speedup:   1.72x, efficiency:  43.0%)
+    guided     (chunk=10    ):    0.123 ms (speedup:   0.34x, efficiency:   8.6%)
+    guided     (chunk=50    ):    0.021 ms (speedup:   2.19x, efficiency:  54.9%)
+    static     (default     ):    0.043 ms (speedup:   1.04x, efficiency:  26.1%)
+
+  Threads: 8
+    dynamic    (default     ):    0.079 ms (speedup:   0.53x, efficiency:   6.7%)
+    dynamic    (chunk=10    ):    0.057 ms (speedup:   0.74x, efficiency:   9.2%)
+    dynamic    (chunk=50    ):    0.063 ms (speedup:   0.69x, efficiency:   8.6%)
+    guided     (default     ):    0.080 ms (speedup:   0.54x, efficiency:   6.8%)
+    guided     (chunk=10    ):    0.101 ms (speedup:   0.42x, efficiency:   5.2%)
+    guided     (chunk=50    ):    0.060 ms (speedup:   0.77x, efficiency:   9.6%)
+    static     (default     ):    0.056 ms (speedup:   0.81x, efficiency:  10.1%)
+
+  Threads: 16
+    dynamic    (default     ):    0.159 ms (speedup:   0.26x, efficiency:   1.6%)
+    dynamic    (chunk=10    ):    0.160 ms (speedup:   0.26x, efficiency:   1.7%)
+    dynamic    (chunk=50    ):    0.140 ms (speedup:   0.31x, efficiency:   1.9%)
+    guided     (default     ):    0.162 ms (speedup:   0.27x, efficiency:   1.7%)
+    guided     (chunk=10    ):    0.158 ms (speedup:   0.27x, efficiency:   1.7%)
+    guided     (chunk=50    ):    0.133 ms (speedup:   0.35x, efficiency:   2.2%)
+    static     (default     ):    0.121 ms (speedup:   0.38x, efficiency:   2.3%)
+
+  Threads: 32
+    dynamic    (default     ):    0.263 ms (speedup:   0.16x, efficiency:   0.5%)
+    dynamic    (chunk=10    ):    0.286 ms (speedup:   0.15x, efficiency:   0.5%)
+    dynamic    (chunk=50    ):    0.263 ms (speedup:   0.16x, efficiency:   0.5%)
+    guided     (default     ):    0.325 ms (speedup:   0.13x, efficiency:   0.4%)
+    guided     (chunk=10    ):    0.280 ms (speedup:   0.15x, efficiency:   0.5%)
+    guided     (chunk=50    ):    0.238 ms (speedup:   0.19x, efficiency:   0.6%)
+    static     (default     ):    0.285 ms (speedup:   0.16x, efficiency:   0.5%)
+
+  Threads: 64
+    dynamic    (default     ):    0.658 ms (speedup:   0.06x, efficiency:   0.1%)
+    dynamic    (chunk=10    ):    0.637 ms (speedup:   0.07x, efficiency:   0.1%)
+    dynamic    (chunk=50    ):    0.589 ms (speedup:   0.07x, efficiency:   0.1%)
+    guided     (default     ):    0.606 ms (speedup:   0.07x, efficiency:   0.1%)
+    guided     (chunk=10    ):    0.591 ms (speedup:   0.07x, efficiency:   0.1%)
+    guided     (chunk=50    ):    0.590 ms (speedup:   0.08x, efficiency:   0.1%)
+    static     (default     ):    0.581 ms (speedup:   0.08x, efficiency:   0.1%)
+
+  Threads: 128
+    dynamic    (default     ):    1.957 ms (speedup:   0.02x, efficiency:   0.0%)
+    dynamic    (chunk=10    ):    1.911 ms (speedup:   0.02x, efficiency:   0.0%)
+    dynamic    (chunk=50    ):    1.298 ms (speedup:   0.03x, efficiency:   0.0%)
+    guided     (default     ):    1.448 ms (speedup:   0.03x, efficiency:   0.0%)
+    guided     (chunk=10    ):    1.300 ms (speedup:   0.03x, efficiency:   0.0%)
+    guided     (chunk=50    ):    1.212 ms (speedup:   0.04x, efficiency:   0.0%)
+    static     (default     ):    1.319 ms (speedup:   0.03x, efficiency:   0.0%)
+
+
+Matrix Size: 3000x3000, Type: LOWER
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    5.704 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    5.732 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    5.697 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    5.703 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    5.707 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    5.706 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    5.807 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    2.939 ms (speedup:   1.94x, efficiency:  97.0%)
+    dynamic    (chunk=10    ):    2.981 ms (speedup:   1.92x, efficiency:  96.1%)
+    dynamic    (chunk=50    ):    2.988 ms (speedup:   1.91x, efficiency:  95.3%)
+    guided     (default     ):    2.944 ms (speedup:   1.94x, efficiency:  96.9%)
+    guided     (chunk=10    ):    2.975 ms (speedup:   1.92x, efficiency:  95.9%)
+    guided     (chunk=50    ):    2.985 ms (speedup:   1.91x, efficiency:  95.6%)
+    static     (default     ):    4.257 ms (speedup:   1.36x, efficiency:  68.2%)
+
+  Threads: 4
+    dynamic    (default     ):    1.545 ms (speedup:   3.69x, efficiency:  92.3%)
+    dynamic    (chunk=10    ):    1.552 ms (speedup:   3.69x, efficiency:  92.3%)
+    dynamic    (chunk=50    ):    1.576 ms (speedup:   3.61x, efficiency:  90.4%)
+    guided     (default     ):    1.535 ms (speedup:   3.72x, efficiency:  92.9%)
+    guided     (chunk=10    ):    1.540 ms (speedup:   3.71x, efficiency:  92.6%)
+    guided     (chunk=50    ):    1.597 ms (speedup:   3.57x, efficiency:  89.3%)
+    static     (default     ):    2.553 ms (speedup:   2.27x, efficiency:  56.9%)
+
+  Threads: 8
+    dynamic    (default     ):    0.865 ms (speedup:   6.59x, efficiency:  82.4%)
+    dynamic    (chunk=10    ):    0.856 ms (speedup:   6.70x, efficiency:  83.7%)
+    dynamic    (chunk=50    ):    0.928 ms (speedup:   6.14x, efficiency:  76.8%)
+    guided     (default     ):    0.848 ms (speedup:   6.72x, efficiency:  84.0%)
+    guided     (chunk=10    ):    0.878 ms (speedup:   6.50x, efficiency:  81.3%)
+    guided     (chunk=50    ):    0.934 ms (speedup:   6.11x, efficiency:  76.4%)
+    static     (default     ):    1.471 ms (speedup:   3.95x, efficiency:  49.4%)
+
+  Threads: 16
+    dynamic    (default     ):    0.831 ms (speedup:   6.86x, efficiency:  42.9%)
+    dynamic    (chunk=10    ):    0.815 ms (speedup:   7.04x, efficiency:  44.0%)
+    dynamic    (chunk=50    ):    0.852 ms (speedup:   6.69x, efficiency:  41.8%)
+    guided     (default     ):    0.817 ms (speedup:   6.98x, efficiency:  43.6%)
+    guided     (chunk=10    ):    0.806 ms (speedup:   7.08x, efficiency:  44.3%)
+    guided     (chunk=50    ):    0.871 ms (speedup:   6.55x, efficiency:  40.9%)
+    static     (default     ):    1.021 ms (speedup:   5.69x, efficiency:  35.5%)
+
+  Threads: 32
+    dynamic    (default     ):    0.973 ms (speedup:   5.86x, efficiency:  18.3%)
+    dynamic    (chunk=10    ):    0.947 ms (speedup:   6.05x, efficiency:  18.9%)
+    dynamic    (chunk=50    ):    0.944 ms (speedup:   6.04x, efficiency:  18.9%)
+    guided     (default     ):    0.938 ms (speedup:   6.08x, efficiency:  19.0%)
+    guided     (chunk=10    ):    0.928 ms (speedup:   6.15x, efficiency:  19.2%)
+    guided     (chunk=50    ):    1.008 ms (speedup:   5.66x, efficiency:  17.7%)
+    static     (default     ):    0.999 ms (speedup:   5.81x, efficiency:  18.2%)
+
+  Threads: 64
+    dynamic    (default     ):    1.311 ms (speedup:   4.35x, efficiency:   6.8%)
+    dynamic    (chunk=10    ):    1.294 ms (speedup:   4.43x, efficiency:   6.9%)
+    dynamic    (chunk=50    ):    1.164 ms (speedup:   4.90x, efficiency:   7.7%)
+    guided     (default     ):    1.227 ms (speedup:   4.65x, efficiency:   7.3%)
+    guided     (chunk=10    ):    1.207 ms (speedup:   4.73x, efficiency:   7.4%)
+    guided     (chunk=50    ):    1.171 ms (speedup:   4.87x, efficiency:   7.6%)
+    static     (default     ):    1.145 ms (speedup:   5.07x, efficiency:   7.9%)
+
+  Threads: 128
+    dynamic    (default     ):    2.609 ms (speedup:   2.19x, efficiency:   1.7%)
+    dynamic    (chunk=10    ):    2.544 ms (speedup:   2.25x, efficiency:   1.8%)
+    dynamic    (chunk=50    ):    1.851 ms (speedup:   3.08x, efficiency:   2.4%)
+    guided     (default     ):    1.878 ms (speedup:   3.04x, efficiency:   2.4%)
+    guided     (chunk=10    ):    1.960 ms (speedup:   2.91x, efficiency:   2.3%)
+    guided     (chunk=50    ):    1.842 ms (speedup:   3.10x, efficiency:   2.4%)
+    static     (default     ):    1.709 ms (speedup:   3.40x, efficiency:   2.7%)
+
+
+Matrix Size: 3000x3000, Type: UPPER
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1
+    dynamic    (default     ):    5.896 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=10    ):    5.727 ms (speedup:   1.00x, efficiency: 100.0%)
+    dynamic    (chunk=50    ):    5.727 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (default     ):    5.720 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=10    ):    5.734 ms (speedup:   1.00x, efficiency: 100.0%)
+    guided     (chunk=50    ):    5.749 ms (speedup:   1.00x, efficiency: 100.0%)
+    static     (default     ):    6.009 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2
+    dynamic    (default     ):    3.007 ms (speedup:   1.96x, efficiency:  98.0%)
+    dynamic    (chunk=10    ):    2.980 ms (speedup:   1.92x, efficiency:  96.1%)
+    dynamic    (chunk=50    ):    3.020 ms (speedup:   1.90x, efficiency:  94.8%)
+    guided     (default     ):    2.965 ms (speedup:   1.93x, efficiency:  96.5%)
+    guided     (chunk=10    ):    2.968 ms (speedup:   1.93x, efficiency:  96.6%)
+    guided     (chunk=50    ):    2.969 ms (speedup:   1.94x, efficiency:  96.8%)
+    static     (default     ):    4.331 ms (speedup:   1.39x, efficiency:  69.4%)
+
+  Threads: 4
+    dynamic    (default     ):    1.532 ms (speedup:   3.85x, efficiency:  96.2%)
+    dynamic    (chunk=10    ):    1.551 ms (speedup:   3.69x, efficiency:  92.3%)
+    dynamic    (chunk=50    ):    1.587 ms (speedup:   3.61x, efficiency:  90.2%)
+    guided     (default     ):    1.542 ms (speedup:   3.71x, efficiency:  92.7%)
+    guided     (chunk=10    ):    1.536 ms (speedup:   3.73x, efficiency:  93.3%)
+    guided     (chunk=50    ):    1.545 ms (speedup:   3.72x, efficiency:  93.0%)
+    static     (default     ):    2.569 ms (speedup:   2.34x, efficiency:  58.5%)
+
+  Threads: 8
+    dynamic    (default     ):    0.861 ms (speedup:   6.85x, efficiency:  85.6%)
+    dynamic    (chunk=10    ):    0.868 ms (speedup:   6.60x, efficiency:  82.5%)
+    dynamic    (chunk=50    ):    0.875 ms (speedup:   6.55x, efficiency:  81.8%)
+    guided     (default     ):    0.858 ms (speedup:   6.67x, efficiency:  83.4%)
+    guided     (chunk=10    ):    0.854 ms (speedup:   6.72x, efficiency:  84.0%)
+    guided     (chunk=50    ):    0.852 ms (speedup:   6.74x, efficiency:  84.3%)
+    static     (default     ):    1.491 ms (speedup:   4.03x, efficiency:  50.4%)
+
+  Threads: 16
+    dynamic    (default     ):    0.828 ms (speedup:   7.12x, efficiency:  44.5%)
+    dynamic    (chunk=10    ):    0.829 ms (speedup:   6.91x, efficiency:  43.2%)
+    dynamic    (chunk=50    ):    0.842 ms (speedup:   6.80x, efficiency:  42.5%)
+    guided     (default     ):    0.916 ms (speedup:   6.25x, efficiency:  39.0%)
+    guided     (chunk=10    ):    0.818 ms (speedup:   7.01x, efficiency:  43.8%)
+    guided     (chunk=50    ):    0.833 ms (speedup:   6.90x, efficiency:  43.1%)
+    static     (default     ):    1.068 ms (speedup:   5.63x, efficiency:  35.2%)
+
+  Threads: 32
+    dynamic    (default     ):    0.952 ms (speedup:   6.20x, efficiency:  19.4%)
+    dynamic    (chunk=10    ):    0.942 ms (speedup:   6.08x, efficiency:  19.0%)
+    dynamic    (chunk=50    ):    0.939 ms (speedup:   6.10x, efficiency:  19.1%)
+    guided     (default     ):    0.963 ms (speedup:   5.94x, efficiency:  18.6%)
+    guided     (chunk=10    ):    0.952 ms (speedup:   6.02x, efficiency:  18.8%)
+    guided     (chunk=50    ):    0.939 ms (speedup:   6.12x, efficiency:  19.1%)
+    static     (default     ):    1.048 ms (speedup:   5.73x, efficiency:  17.9%)
+
+  Threads: 64
+    dynamic    (default     ):    1.306 ms (speedup:   4.52x, efficiency:   7.1%)
+    dynamic    (chunk=10    ):    1.291 ms (speedup:   4.44x, efficiency:   6.9%)
+    dynamic    (chunk=50    ):    1.203 ms (speedup:   4.76x, efficiency:   7.4%)
+    guided     (default     ):    1.254 ms (speedup:   4.56x, efficiency:   7.1%)
+    guided     (chunk=10    ):    1.215 ms (speedup:   4.72x, efficiency:   7.4%)
+    guided     (chunk=50    ):    1.216 ms (speedup:   4.73x, efficiency:   7.4%)
+    static     (default     ):    1.278 ms (speedup:   4.70x, efficiency:   7.3%)
+
+  Threads: 128
+    dynamic    (default     ):    2.630 ms (speedup:   2.24x, efficiency:   1.8%)
+    dynamic    (chunk=10    ):    2.562 ms (speedup:   2.24x, efficiency:   1.7%)
+    dynamic    (chunk=50    ):    1.852 ms (speedup:   3.09x, efficiency:   2.4%)
+    guided     (default     ):    1.887 ms (speedup:   3.03x, efficiency:   2.4%)
+    guided     (chunk=10    ):    1.916 ms (speedup:   2.99x, efficiency:   2.3%)
+    guided     (chunk=50    ):    1.850 ms (speedup:   3.11x, efficiency:   2.4%)
+    static     (default     ):    1.729 ms (speedup:   3.48x, efficiency:   2.7%)
+
+
+========================================================================================================================
+MATRIX TYPE COMPARISON
+========================================================================================================================
+
+
+Matrix Size: 500x500
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1 (static schedule)
+    banded      :    0.006 ms (speedup:   1.00x, efficiency: 100.0%)
+    lower       :    0.139 ms (speedup:   1.00x, efficiency: 100.0%)
+    upper       :    0.141 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2 (static schedule)
+    banded      :    0.009 ms (speedup:   0.68x, efficiency:  33.8%)
+    lower       :    0.130 ms (speedup:   1.07x, efficiency:  53.6%)
+    upper       :    0.111 ms (speedup:   1.27x, efficiency:  63.6%)
+
+  Threads: 4 (static schedule)
+    banded      :    0.021 ms (speedup:   0.27x, efficiency:   6.8%)
+    lower       :    0.076 ms (speedup:   1.84x, efficiency:  46.0%)
+    upper       :    0.074 ms (speedup:   1.90x, efficiency:  47.5%)
+
+  Threads: 8 (static schedule)
+    banded      :    0.055 ms (speedup:   0.11x, efficiency:   1.3%)
+    lower       :    0.088 ms (speedup:   1.58x, efficiency:  19.7%)
+    upper       :    0.072 ms (speedup:   1.96x, efficiency:  24.5%)
+
+  Threads: 16 (static schedule)
+    banded      :    0.110 ms (speedup:   0.05x, efficiency:   0.3%)
+    lower       :    0.121 ms (speedup:   1.15x, efficiency:   7.2%)
+    upper       :    0.129 ms (speedup:   1.10x, efficiency:   6.9%)
+
+  Threads: 32 (static schedule)
+    banded      :    0.247 ms (speedup:   0.02x, efficiency:   0.1%)
+    lower       :    0.254 ms (speedup:   0.55x, efficiency:   1.7%)
+    upper       :    0.234 ms (speedup:   0.60x, efficiency:   1.9%)
+
+  Threads: 64 (static schedule)
+    banded      :    0.557 ms (speedup:   0.01x, efficiency:   0.0%)
+    lower       :    0.533 ms (speedup:   0.26x, efficiency:   0.4%)
+    upper       :    0.564 ms (speedup:   0.25x, efficiency:   0.4%)
+
+  Threads: 128 (static schedule)
+    banded      :    1.217 ms (speedup:   0.00x, efficiency:   0.0%)
+    lower       :    1.267 ms (speedup:   0.11x, efficiency:   0.1%)
+    upper       :    1.269 ms (speedup:   0.11x, efficiency:   0.1%)
+
+
+Matrix Size: 1000x1000
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1 (static schedule)
+    banded      :    0.013 ms (speedup:   1.00x, efficiency: 100.0%)
+    lower       :    0.595 ms (speedup:   1.00x, efficiency: 100.0%)
+    upper       :    0.599 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2 (static schedule)
+    banded      :    0.012 ms (speedup:   1.05x, efficiency:  52.3%)
+    lower       :    0.494 ms (speedup:   1.20x, efficiency:  60.2%)
+    upper       :    0.465 ms (speedup:   1.29x, efficiency:  64.4%)
+
+  Threads: 4 (static schedule)
+    banded      :    0.018 ms (speedup:   0.73x, efficiency:  18.1%)
+    lower       :    0.296 ms (speedup:   2.01x, efficiency:  50.3%)
+    upper       :    0.273 ms (speedup:   2.19x, efficiency:  54.8%)
+
+  Threads: 8 (static schedule)
+    banded      :    0.051 ms (speedup:   0.25x, efficiency:   3.2%)
+    lower       :    0.201 ms (speedup:   2.95x, efficiency:  36.9%)
+    upper       :    0.181 ms (speedup:   3.30x, efficiency:  41.3%)
+
+  Threads: 16 (static schedule)
+    banded      :    0.122 ms (speedup:   0.11x, efficiency:   0.7%)
+    lower       :    0.229 ms (speedup:   2.60x, efficiency:  16.2%)
+    upper       :    0.232 ms (speedup:   2.59x, efficiency:  16.2%)
+
+  Threads: 32 (static schedule)
+    banded      :    0.252 ms (speedup:   0.05x, efficiency:   0.2%)
+    lower       :    0.276 ms (speedup:   2.16x, efficiency:   6.7%)
+    upper       :    0.285 ms (speedup:   2.11x, efficiency:   6.6%)
+
+  Threads: 64 (static schedule)
+    banded      :    0.569 ms (speedup:   0.02x, efficiency:   0.0%)
+    lower       :    0.608 ms (speedup:   0.98x, efficiency:   1.5%)
+    upper       :    0.548 ms (speedup:   1.09x, efficiency:   1.7%)
+
+  Threads: 128 (static schedule)
+    banded      :    1.257 ms (speedup:   0.01x, efficiency:   0.0%)
+    lower       :    1.340 ms (speedup:   0.44x, efficiency:   0.3%)
+    upper       :    1.219 ms (speedup:   0.49x, efficiency:   0.4%)
+
+
+Matrix Size: 2000x2000
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1 (static schedule)
+    banded      :    0.025 ms (speedup:   1.00x, efficiency: 100.0%)
+    lower       :    2.537 ms (speedup:   1.00x, efficiency: 100.0%)
+    upper       :    2.488 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2 (static schedule)
+    banded      :    0.022 ms (speedup:   1.16x, efficiency:  58.1%)
+    lower       :    1.938 ms (speedup:   1.31x, efficiency:  65.5%)
+    upper       :    1.895 ms (speedup:   1.31x, efficiency:  65.6%)
+
+  Threads: 4 (static schedule)
+    banded      :    0.017 ms (speedup:   1.46x, efficiency:  36.4%)
+    lower       :    1.156 ms (speedup:   2.20x, efficiency:  54.9%)
+    upper       :    1.113 ms (speedup:   2.24x, efficiency:  55.9%)
+
+  Threads: 8 (static schedule)
+    banded      :    0.058 ms (speedup:   0.44x, efficiency:   5.5%)
+    lower       :    0.703 ms (speedup:   3.61x, efficiency:  45.1%)
+    upper       :    0.643 ms (speedup:   3.87x, efficiency:  48.4%)
+
+  Threads: 16 (static schedule)
+    banded      :    0.122 ms (speedup:   0.21x, efficiency:   1.3%)
+    lower       :    0.542 ms (speedup:   4.68x, efficiency:  29.3%)
+    upper       :    0.532 ms (speedup:   4.67x, efficiency:  29.2%)
+
+  Threads: 32 (static schedule)
+    banded      :    0.246 ms (speedup:   0.10x, efficiency:   0.3%)
+    lower       :    0.602 ms (speedup:   4.21x, efficiency:  13.2%)
+    upper       :    0.546 ms (speedup:   4.56x, efficiency:  14.2%)
+
+  Threads: 64 (static schedule)
+    banded      :    0.513 ms (speedup:   0.05x, efficiency:   0.1%)
+    lower       :    0.797 ms (speedup:   3.18x, efficiency:   5.0%)
+    upper       :    0.788 ms (speedup:   3.16x, efficiency:   4.9%)
+
+  Threads: 128 (static schedule)
+    banded      :    1.196 ms (speedup:   0.02x, efficiency:   0.0%)
+    lower       :    1.423 ms (speedup:   1.78x, efficiency:   1.4%)
+    upper       :    1.392 ms (speedup:   1.79x, efficiency:   1.4%)
+
+
+Matrix Size: 3000x3000
+------------------------------------------------------------------------------------------------------------------------
+
+  Threads: 1 (static schedule)
+    banded      :    0.045 ms (speedup:   1.00x, efficiency: 100.0%)
+    lower       :    5.807 ms (speedup:   1.00x, efficiency: 100.0%)
+    upper       :    6.009 ms (speedup:   1.00x, efficiency: 100.0%)
+
+  Threads: 2 (static schedule)
+    banded      :    0.031 ms (speedup:   1.45x, efficiency:  72.7%)
+    lower       :    4.257 ms (speedup:   1.36x, efficiency:  68.2%)
+    upper       :    4.331 ms (speedup:   1.39x, efficiency:  69.4%)
+
+  Threads: 4 (static schedule)
+    banded      :    0.043 ms (speedup:   1.04x, efficiency:  26.1%)
+    lower       :    2.553 ms (speedup:   2.27x, efficiency:  56.9%)
+    upper       :    2.569 ms (speedup:   2.34x, efficiency:  58.5%)
+
+  Threads: 8 (static schedule)
+    banded      :    0.056 ms (speedup:   0.81x, efficiency:  10.1%)
+    lower       :    1.471 ms (speedup:   3.95x, efficiency:  49.4%)
+    upper       :    1.491 ms (speedup:   4.03x, efficiency:  50.4%)
+
+  Threads: 16 (static schedule)
+    banded      :    0.121 ms (speedup:   0.38x, efficiency:   2.3%)
+    lower       :    1.021 ms (speedup:   5.69x, efficiency:  35.5%)
+    upper       :    1.068 ms (speedup:   5.63x, efficiency:  35.2%)
+
+  Threads: 32 (static schedule)
+    banded      :    0.285 ms (speedup:   0.16x, efficiency:   0.5%)
+    lower       :    0.999 ms (speedup:   5.81x, efficiency:  18.2%)
+    upper       :    1.048 ms (speedup:   5.73x, efficiency:  17.9%)
+
+  Threads: 64 (static schedule)
+    banded      :    0.581 ms (speedup:   0.08x, efficiency:   0.1%)
+    lower       :    1.145 ms (speedup:   5.07x, efficiency:   7.9%)
+    upper       :    1.278 ms (speedup:   4.70x, efficiency:   7.3%)
+
+  Threads: 128 (static schedule)
+    banded      :    1.319 ms (speedup:   0.03x, efficiency:   0.0%)
+    lower       :    1.709 ms (speedup:   3.40x, efficiency:   2.7%)
+    upper       :    1.729 ms (speedup:   3.48x, efficiency:   2.7%)
+

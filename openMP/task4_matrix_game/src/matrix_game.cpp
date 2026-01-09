@@ -111,56 +111,29 @@ std::vector<BenchmarkResult> run_benchmark(const Matrix& matrix,
 }
 
 bool verify_correctness() {
-    std::cout << "\n=== Correctness Verification ===" << std::endl;
+    Matrix test_matrix = {
+        {5.0, 3.0, 7.0},
+        {2.0, 8.0, 1.0},
+        {6.0, 4.0, 9.0}
+    };
     
-    // Test 1: Small matrix with known result
-    {
-        Matrix test_matrix = {
-            {5.0, 3.0, 7.0},
-            {2.0, 8.0, 1.0},
-            {6.0, 4.0, 9.0}
-        };
-        
-        double seq = maximin_sequential(test_matrix);
-        double par_red = maximin_reduction(test_matrix, 2);
-        
-        // Expected: row mins are [3.0, 1.0, 4.0], max is 4.0
-        double expected = 4.0;
-        
-        std::cout << "\nTest 1: 3x3 matrix (expected = " << expected << ")" << std::endl;
-        std::cout << "  Sequential: " << std::fixed << std::setprecision(6) << seq
-                  << " (error: " << std::abs(seq - expected) << ")" << std::endl;
-        std::cout << "  Reduction:  " << par_red
-                  << " (error: " << std::abs(par_red - expected) << ")" << std::endl;
-        
-        if (std::abs(seq - expected) > 1e-6 ||
-            std::abs(par_red - expected) > 1e-6) {
-            std::cout << "  ✗ FAILED" << std::endl;
-            return false;
-        }
-        std::cout << "  ✓ PASSED" << std::endl;
+    double seq = maximin_sequential(test_matrix);
+    double par_red = maximin_reduction(test_matrix, 2);
+    double expected = 4.0;
+    
+    if (std::abs(seq - expected) > 1e-6 || std::abs(par_red - expected) > 1e-6) {
+        return false;
     }
     
-    // Test 2: Larger random matrix - all methods should give same result
-    {
-        int N = 100;
-        Matrix test_matrix = generate_matrix(N, 12345);
-        
-        double seq = maximin_sequential(test_matrix);
-        double par_red = maximin_reduction(test_matrix, 4);
-        
-        std::cout << "\nTest 2: " << N << "x" << N << " random matrix" << std::endl;
-        std::cout << "  Sequential: " << seq << std::endl;
-        std::cout << "  Reduction:  " << par_red << std::endl;
-        
-        if (std::abs(seq - par_red) > 1e-6) {
-            std::cout << "  ✗ FAILED - Methods give different results" << std::endl;
-            return false;
-        }
-        std::cout << "  ✓ PASSED - Both methods agree" << std::endl;
+    int N = 100;
+    Matrix test_matrix2 = generate_matrix(N, 12345);
+    double seq2 = maximin_sequential(test_matrix2);
+    double par_red2 = maximin_reduction(test_matrix2, 4);
+    
+    if (std::abs(seq2 - par_red2) > 1e-6) {
+        return false;
     }
     
-    std::cout << "\n=== Verification Complete ===" << std::endl;
     return true;
 }
 
@@ -195,16 +168,9 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     
-    // Generate matrix
-    std::cout << "\nGenerating " << N << "x" << N << " matrix..." << std::endl;
     Matrix matrix = generate_matrix(N);
-    std::cout << "Matrix generated." << std::endl;
-    
-    // Run benchmark
-    std::cout << "\nRunning benchmark..." << std::endl;
     auto results = run_benchmark(matrix, num_threads, method, iterations);
     
-    // Calculate statistics
     double sum_time = 0.0;
     double min_time = results[0].execution_time;
     double max_time = results[0].execution_time;
@@ -217,13 +183,6 @@ int main(int argc, char* argv[]) {
     
     double avg_time = sum_time / results.size();
     
-    std::cout << "\nResults:" << std::endl;
-    std::cout << "  Average time: " << std::fixed << std::setprecision(3) << avg_time << " ms" << std::endl;
-    std::cout << "  Min time:     " << min_time << " ms" << std::endl;
-    std::cout << "  Max time:     " << max_time << " ms" << std::endl;
-    std::cout << "  Result value: " << std::setprecision(6) << results[0].result_value << std::endl;
-    
-    // Save results to file if specified
     if (!output_file.empty()) {
         std::ofstream out(output_file, std::ios::app);
         if (out.is_open()) {

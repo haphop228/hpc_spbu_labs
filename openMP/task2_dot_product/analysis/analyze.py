@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-"""
-Analysis script for dot product benchmark results
-Processes CSV data and calculates performance metrics
-"""
 
 import pandas as pd
 import numpy as np
@@ -11,18 +7,13 @@ import os
 from pathlib import Path
 
 def load_data(csv_file):
-    """Load benchmark data from CSV file"""
     try:
         df = pd.read_csv(csv_file)
-        print(f"✓ Loaded {len(df)} records from {csv_file}")
         return df
     except Exception as e:
-        print(f"✗ Error loading file: {e}")
         sys.exit(1)
 
 def calculate_statistics(df):
-    """Calculate statistics for each configuration"""
-    # Group by configuration
     grouped = df.groupby(['vector_size', 'num_threads', 'method'])
     
     stats = grouped['execution_time_ms'].agg([
@@ -37,7 +28,6 @@ def calculate_statistics(df):
     return stats
 
 def calculate_speedup(stats):
-    """Calculate speedup relative to single thread"""
     results = []
     
     for size in stats['vector_size'].unique():
@@ -104,12 +94,9 @@ def print_summary(stats_with_speedup):
             print(f"  → Efficiency: {best_row['efficiency']:.4f}")
 
 def save_processed_data(stats_with_speedup, output_file):
-    """Save processed data to CSV"""
     stats_with_speedup.to_csv(output_file, index=False)
-    print(f"\n✓ Processed data saved to: {output_file}")
 
 def compare_methods(stats_with_speedup):
-    """Compare reduction vs no-reduction methods"""
     print("\n" + "="*80)
     print("METHOD COMPARISON")
     print("="*80)
@@ -146,45 +133,19 @@ def main():
     csv_file = sys.argv[1]
     
     if not os.path.exists(csv_file):
-        print(f"✗ File not found: {csv_file}")
         sys.exit(1)
     
-    print("="*80)
-    print("DOT PRODUCT BENCHMARK ANALYSIS")
-    print("="*80)
-    print()
-    
-    # Load data
     df = load_data(csv_file)
-    
-    # Calculate statistics
-    print("\nCalculating statistics...")
     stats = calculate_statistics(df)
-    
-    # Calculate speedup and efficiency
-    print("Calculating speedup and efficiency...")
     stats_with_speedup = calculate_speedup(stats)
     
     if len(stats_with_speedup) == 0:
-        print("✗ No data to analyze")
         sys.exit(1)
     
-    # Print summary
     print_summary(stats_with_speedup)
-    
-    # Compare methods
     compare_methods(stats_with_speedup)
-    
-    # Save processed data
     output_file = csv_file.replace('.csv', '_processed.csv')
     save_processed_data(stats_with_speedup, output_file)
-    
-    print("\n" + "="*80)
-    print("ANALYSIS COMPLETE")
-    print("="*80)
-    print(f"\nNext step: Generate graphs with:")
-    print(f"  python3 plot_graphs.py")
-    print()
 
 if __name__ == "__main__":
     main()

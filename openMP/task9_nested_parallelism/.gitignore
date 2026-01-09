@@ -1,20 +1,11 @@
-# Compiled binaries
 bin/
 *.o
 *.out
 *.exe
 
-# Results and data
-results/*.csv
-results/*.json
-!results/.gitkeep
+data/
+results/
 
-# Graphs
-graphs/*.png
-graphs/*.txt
-!graphs/.gitkeep
-
-# Python cache
 __pycache__/
 *.pyc
 *.pyo
@@ -22,20 +13,15 @@ __pycache__/
 .Python
 *.so
 
-# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Logs
 *.log
-
-# Temporary files
 *.tmp
 *.bak

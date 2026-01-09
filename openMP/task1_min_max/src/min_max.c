@@ -1,11 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <omp.h> // OpenMP
+#include <omp.h>
 #include <float.h>
 #include <time.h>
 #include <string.h>
 
-// объявляем функции
 double find_min_with_reduction(double *arr, long long n, int num_threads);
 double find_min_without_reduction(double *arr, long long n, int num_threads, double *thread_storage);
 double find_max_with_reduction(double *arr, long long n, int num_threads);
