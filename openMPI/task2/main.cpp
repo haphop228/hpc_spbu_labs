@@ -5,8 +5,6 @@
 #include <numeric>
 #include <iomanip>
 
-// Функция генерации данных
-// Заполняем небольшими числами, чтобы результат оставался читаемым
 void generate_data(std::vector<double>& data, long long size, int rank, int seed_offset) {
     std::mt19937 rng(42 + rank + seed_offset);
     std::uniform_real_distribution<double> dist(-100.0, 100.0);
@@ -36,7 +34,6 @@ int main(int argc, char** argv) {
 
     std::vector<double> vec_a;
     std::vector<double> vec_b;
-    // гарантируем, что a и b будут заполнены разными данными
     generate_data(vec_a, local_n, rank, 0);
     generate_data(vec_b, local_n, rank, 1);
 
@@ -52,7 +49,7 @@ int main(int argc, char** argv) {
     }
 
     double global_dot_prod = 0.0;
-    MPI_Reduce(&local_dot_prod, &global_dot_prod, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD); // Суммируем результаты всех процессов
+    MPI_Reduce(&local_dot_prod, &global_dot_prod, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 
     double end_time = MPI_Wtime();
     double elapsed_time = end_time - start_time;

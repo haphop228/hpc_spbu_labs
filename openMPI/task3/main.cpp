@@ -18,7 +18,6 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    // Размеры сообщений: от 0 байт до 16 МБ
     std::vector<long long> msg_sizes;
     msg_sizes.push_back(0);
     for (long long s = 1; s <= 16 * 1024 * 1024; s *= 2) {
@@ -34,7 +33,6 @@ int main(int argc, char** argv) {
     }
 
     for (long long n : msg_sizes) {
-        // много итераций для малых, мало итераций для больших
         int iterations = 1000;
         if (n > 64 * 1024) iterations = 100;
         if (n > 1024 * 1024) iterations = 20;
@@ -44,9 +42,7 @@ int main(int argc, char** argv) {
 
         for (int i = 0; i < iterations; ++i) {
             if (rank == 0) {
-                // Ping
                 MPI_Send(send_buf.data(), n, MPI_BYTE, 1, 0, MPI_COMM_WORLD);
-                // Pong
                 MPI_Recv(recv_buf.data(), n, MPI_BYTE, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             } else if (rank == 1) {
                 MPI_Recv(recv_buf.data(), n, MPI_BYTE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);

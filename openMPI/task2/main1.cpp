@@ -5,7 +5,6 @@
 #include <numeric>
 #include <iomanip>
 
-// Функция генерации теперь просто заполняет переданный вектор
 void generate_data(std::vector<double>& data, long long size, int seed) {
     std::mt19937 rng(seed);
     std::uniform_real_distribution<double> dist(-100.0, 100.0);
@@ -27,7 +26,6 @@ int main(int argc, char** argv) {
     if (argc > 1) {
         global_n = std::atoll(argv[1]);
     }
-
 
     long long count_per_proc = global_n / size;
 

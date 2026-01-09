@@ -39,11 +39,10 @@ void solve_cannon_modes(int n, int rank, int size, std::string mode_str) {
 
     int buffer_size = 0;
     char* buffer = nullptr;
-    // Подготовка буфера
     if (mode_str == "Buffered") {
         buffer_size = 128 * 1024 * 1024;
         buffer = new char[buffer_size];
-        MPI_Buffer_attach(buffer, buffer_size); // но MPI не выделяет этот буфер сам, поэтому это сделаем мы
+        MPI_Buffer_attach(buffer, buffer_size);
     }
 
     MPI_Status stats[2];
@@ -69,7 +68,6 @@ void solve_cannon_modes(int n, int rank, int size, std::string mode_str) {
                 }
             }
         }
-        // запускаем прием данных до того, как начинаем отправку
         MPI_Irecv(A_recv.data(), count, MPI_DOUBLE, right, 1, cart_comm, &reqs[0]);
         MPI_Irecv(B_recv.data(), count, MPI_DOUBLE, down, 1, cart_comm, &reqs[1]);
 
@@ -81,13 +79,13 @@ void solve_cannon_modes(int n, int rank, int size, std::string mode_str) {
             MPI_Send(A.data(), count, MPI_DOUBLE, left, 1, cart_comm);
             MPI_Send(B.data(), count, MPI_DOUBLE, up, 1, cart_comm);
         } else if (mode_str == "Synchronous") {
-            MPI_Ssend(A.data(), count, MPI_DOUBLE, left, 1, cart_comm); // ждем, когда получатель готов
+            MPI_Ssend(A.data(), count, MPI_DOUBLE, left, 1, cart_comm);
             MPI_Ssend(B.data(), count, MPI_DOUBLE, up, 1, cart_comm);
         } else if (mode_str == "Buffered") {
-            MPI_Bsend(A.data(), count, MPI_DOUBLE, left, 1, cart_comm); // все кладем в буфер
+            MPI_Bsend(A.data(), count, MPI_DOUBLE, left, 1, cart_comm);
             MPI_Bsend(B.data(), count, MPI_DOUBLE, up, 1, cart_comm);
         } else if (mode_str == "Ready") {
-            MPI_Rsend(A.data(), count, MPI_DOUBLE, left, 1, cart_comm); // отправка без проверки
+            MPI_Rsend(A.data(), count, MPI_DOUBLE, left, 1, cart_comm);
             MPI_Rsend(B.data(), count, MPI_DOUBLE, up, 1, cart_comm);
         }
 

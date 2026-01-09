@@ -6,7 +6,6 @@
 #include <limits>
 #include <iomanip>
 
-// Функция для заполнения части вектора случайными числами
 void generate_data(std::vector<int>& data, int size, int rank) {
     std::mt19937 rng(42 + rank);
     std::uniform_int_distribution<int> dist(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
@@ -18,13 +17,12 @@ void generate_data(std::vector<int>& data, int size, int rank) {
 }
 
 int main(int argc, char** argv) {
-    MPI_Init(&argc, &argv); // Инициализация MPI
+    MPI_Init(&argc, &argv);
 
     int rank, size;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank); // Получение номера текущего процесса
-    MPI_Comm_size(MPI_COMM_WORLD, &size); // Получение количества процессов
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
 
-    // Расчет local_n и генерация
     long long global_n = 10000000;
     if (argc > 1) {
         global_n = std::atoll(argv[1]);
@@ -38,7 +36,7 @@ int main(int argc, char** argv) {
     std::vector<int> local_vec;
     generate_data(local_vec, local_n, rank);
 
-    MPI_Barrier(MPI_COMM_WORLD); // Барьер для синхронизации процессов, чтобы все процессы начали работу одновременно
+    MPI_Barrier(MPI_COMM_WORLD);
     double start_time = MPI_Wtime();
 
     int local_min = std::numeric_limits<int>::max();
@@ -47,7 +45,7 @@ int main(int argc, char** argv) {
     }
 
     int global_min = 0;
-    MPI_Reduce(&local_min, &global_min, 1, MPI_INT, MPI_MIN, 0, MPI_COMM_WORLD); // Редукция для нахождения минимального значения
+    MPI_Reduce(&local_min, &global_min, 1, MPI_INT, MPI_MIN, 0, MPI_COMM_WORLD);
 
     double end_time = MPI_Wtime();
     double elapsed_time = end_time - start_time;

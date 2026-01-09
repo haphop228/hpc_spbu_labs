@@ -9,7 +9,7 @@ void emulate_computation(double work_us) {
     double start = MPI_Wtime();
     double seconds = work_us / 1000000.0;
     while (MPI_Wtime() - start < seconds) {
-        __asm__ volatile("" ::: "memory"); // эмуляция вычислений
+        __asm__ volatile("" ::: "memory");
     }
 }
 
@@ -21,9 +21,9 @@ int main(int argc, char** argv) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
 
     std::string label = "Default";
-    double compute_us = 1000.0; // 1 мс вычислений
-    long long comm_bytes = 1024; // 1 Кб данных
-    int iterations = 100;        // Количество циклов
+    double compute_us = 1000.0;
+    long long comm_bytes = 1024;
+    int iterations = 100;
 
     if (argc > 1) label = argv[1];
     if (argc > 2) compute_us = std::atof(argv[2]);
@@ -39,10 +39,9 @@ int main(int argc, char** argv) {
     double start_time = MPI_Wtime();
 
     for (int i = 0; i < iterations; ++i) {
-        emulate_computation(compute_us); // сколько вычислять
-        // Каждый отправляет данные соседу справа и получает от соседа слева
+        emulate_computation(compute_us);
         if (comm_bytes > 0) {
-            MPI_Sendrecv(send_buf.data(), comm_bytes, MPI_BYTE, right, 0, // cколько байт передавать
+            MPI_Sendrecv(send_buf.data(), comm_bytes, MPI_BYTE, right, 0,
                          recv_buf.data(), comm_bytes, MPI_BYTE, left, 0,
                          MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }

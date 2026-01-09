@@ -7,7 +7,7 @@
 #include <iomanip>
 
 void generate_data(std::vector<int>& data, int size) {
-    std::mt19937 rng(42); // Фиксированный сид для воспроизводимости
+    std::mt19937 rng(42);
     std::uniform_int_distribution<int> dist(std::numeric_limits<int>::min(), std::numeric_limits<int>::max());
 
     data.resize(size);
@@ -28,13 +28,11 @@ int main(int argc, char** argv) {
         global_n = std::atoll(argv[1]);
     }
 
-    // Вычисляем размер порции
     int count_per_proc = global_n / size;
 
     std::vector<int> global_vec;
     std::vector<int> local_vec(count_per_proc);
 
-    // Генерируем данные ТОЛЬКО на главном процессе
     if (rank == 0) {
         generate_data(global_vec, count_per_proc * size);
     }

@@ -9,11 +9,7 @@ OUTPUT_FOLDER = 'graphs'
 if not os.path.exists(OUTPUT_FOLDER):
     os.makedirs(OUTPUT_FOLDER)
 
-try:
-    df = pd.read_csv(INPUT_FILE, sep=';')
-except:
-    print("Error reading CSV")
-    exit()
+df = pd.read_csv(INPUT_FILE, sep=';')
 
 df = df[df['Algorithm'] != 'Skipped']
 
@@ -56,7 +52,7 @@ sns.lineplot(data=df, x='Processes', y='Speedup', hue='Algorithm', style='Matrix
 max_p = df['Processes'].max()
 plt.plot([1, max_p], [1, max_p], 'k--', label='Ideal', alpha=0.5)
 
-plt.title('Ускорение (Speedup)')
+plt.title('Speedup')
 plt.legend()
 plt.grid(True)
 plt.xticks(df['Processes'].unique())
@@ -68,10 +64,8 @@ df['GFLOPS'] = (2 * df['MatrixSize']**3) / df['Time'] / 1e9
 plt.figure(figsize=(10, 6))
 sns.barplot(data=df, x='Processes', y='GFLOPS', hue='Algorithm')
 
-plt.title('Производительность (GFLOPS)')
+plt.title('Performance (GFLOPS)')
 plt.ylabel('GFLOPS')
 plt.grid(True, axis='y')
 plt.savefig(f'{OUTPUT_FOLDER}/comparison_gflops.png')
 plt.close()
-
-print(f"Graphs saved in {OUTPUT_FOLDER}/")
