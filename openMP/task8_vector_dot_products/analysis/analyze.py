@@ -1,132 +1,163 @@
 #!/usr/bin/env python3
 """
-Analysis script for Task 8: Vector Dot Products with OpenMP Sections
-Processes benchmark results and calculates performance metrics
+Анализ результатов бенчмарков для задачи 8: Vector Dot Products with Sections
 """
 
 import pandas as pd
 import sys
 import os
 
-def analyze_results(csv_file):
-    """Analyze benchmark results from CSV file"""
-    
-    print("=== Task 8: Vector Dot Products - Results Analysis ===\n")
-    
-    # Read CSV file
+def load_data(csv_file):
+    """Загрузка данных из CSV файла"""
     try:
         df = pd.read_csv(csv_file)
-    except FileNotFoundError:
-        print(f"Error: File not found: {csv_file}")
-        return
+        print(f"✓ Loaded {len(df)} benchmark results from {csv_file}")
+        return df
     except Exception as e:
-        print(f"Error reading file: {e}")
-        return
-    
-    print(f"Loaded {len(df)} benchmark results from {csv_file}\n")
-    
-    # Display column names
-    print("Columns:", df.columns.tolist())
-    print()
-    
-    # Group by configuration
-    configs = df.groupby(['num_pairs', 'vector_size'])
-    
-    for (pairs, size), group in configs:
-        print(f"\n{'='*80}")
-        print(f"Configuration: {pairs} pairs × {size} elements")
-        print(f"{'='*80}\n")
-        
-        # Get sequential baseline
-        seq_data = group[group['method'] == 'sequential']
-        if len(seq_data) == 0:
-            print("Warning: No sequential baseline found")
-            continue
-        
-        seq_time = seq_data['total_time_ms'].values[0]
-        seq_input = seq_data['input_time_ms'].values[0]
-        seq_compute = seq_data['computation_time_ms'].values[0]
-        
-        print(f"Sequential Baseline:")
-        print(f"  Total time:   {seq_time:8.3f} ms")
-        print(f"  Input time:   {seq_input:8.3f} ms ({seq_input/seq_time*100:5.1f}%)")
-        print(f"  Compute time: {seq_compute:8.3f} ms ({seq_compute/seq_time*100:5.1f}%)")
-        print()
-        
-        # Analyze parallel results
-        par_data = group[group['method'] == 'sections'].sort_values('num_threads')
-        
-        if len(par_data) == 0:
-            print("Warning: No parallel results found")
-            continue
-        
-        print(f"{'Threads':<8} {'Total(ms)':<12} {'Input(ms)':<12} {'Compute(ms)':<12} {'Speedup':<10} {'Efficiency':<10}")
-        print(f"{'-'*80}")
-        
-        for _, row in par_data.iterrows():
-            threads = row['num_threads']
-            total_time = row['total_time_ms']
-            input_time = row['input_time_ms']
-            compute_time = row['computation_time_ms']
-            
-            speedup = seq_time / total_time if total_time > 0 else 0
-            efficiency = speedup / threads if threads > 0 else 0
-            
-            print(f"{threads:<8} {total_time:<12.3f} {input_time:<12.3f} {compute_time:<12.3f} {speedup:<10.3f} {efficiency:<10.3f}")
-        
-        print()
-        
-        # Find best configuration
-        best_idx = par_data['total_time_ms'].idxmin()
-        best_row = par_data.loc[best_idx]
-        best_speedup = seq_time / best_row['total_time_ms']
-        
-        print(f"Best Performance:")
-        print(f"  Threads:   {best_row['num_threads']}")
-        print(f"  Time:      {best_row['total_time_ms']:.3f} ms")
-        print(f"  Speedup:   {best_speedup:.3f}x")
-        print(f"  Efficiency: {best_speedup/best_row['num_threads']:.3f}")
-    
-    # Overall summary
-    print(f"\n{'='*80}")
-    print("Overall Summary")
-    print(f"{'='*80}\n")
-    
-    # Best speedup across all configurations
-    seq_times = df[df['method'] == 'sequential'].set_index(['num_pairs', 'vector_size'])['total_time_ms']
-    par_df = df[df['method'] == 'sections'].copy()
-    
-    par_df['speedup'] = par_df.apply(
-        lambda row: seq_times.loc[(row['num_pairs'], row['vector_size'])] / row['total_time_ms']
-        if (row['num_pairs'], row['vector_size']) in seq_times.index else 0,
-        axis=1
-    )
-    
-    best_overall = par_df.loc[par_df['speedup'].idxmax()]
-    print(f"Best Overall Speedup:")
-    print(f"  Configuration: {best_overall['num_pairs']} pairs × {best_overall['vector_size']} elements")
-    print(f"  Threads:       {best_overall['num_threads']}")
-    print(f"  Speedup:       {best_overall['speedup']:.3f}x")
-    print(f"  Efficiency:    {best_overall['speedup']/best_overall['num_threads']:.3f}")
-    print()
-    
-    # Scalability analysis
-    print("Scalability Analysis:")
-    print(f"  Configurations tested: {len(configs)}")
-    print(f"  Thread counts tested:  {sorted(df['num_threads'].unique())}")
-    print(f"  Average speedup (all): {par_df['speedup'].mean():.3f}x")
-    print(f"  Max speedup achieved:  {par_df['speedup'].max():.3f}x")
-    print()
-    
-    # Save processed results
-    output_file = csv_file.replace('.csv', '_processed.csv')
-    par_df.to_csv(output_file, index=False)
-    print(f"Processed results saved to: {output_file}")
+        print(f"✗ Error loading data: {e}")
+        sys.exit(1)
 
-if __name__ == "__main__":
+def calculate_metrics(df):
+    """Расчет метрик производительности"""
+    
+    # Получаем базовое время (sequential с 1 потоком)
+    baseline = df[df['method'] == 'sequential'].copy()
+    
+    results = []
+    
+    for (num_pairs, vector_size), group in df.groupby(['num_pairs', 'vector_size']):
+        # Базовое время для этой конфигурации
+        base_time = baseline[
+            (baseline['num_pairs'] == num_pairs) & 
+            (baseline['vector_size'] == vector_size)
+        ]['total_time_ms'].values
+        
+        if len(base_time) == 0:
+            continue
+            
+        base_time = base_time[0]
+        
+        for _, row in group.iterrows():
+            speedup = base_time / row['total_time_ms'] if row['total_time_ms'] > 0 else 0
+            efficiency = (speedup / row['num_threads']) * 100 if row['num_threads'] > 0 else 0
+            
+            results.append({
+                'num_pairs': num_pairs,
+                'vector_size': vector_size,
+                'num_threads': row['num_threads'],
+                'method': row['method'],
+                'total_time_ms': row['total_time_ms'],
+                'input_time_ms': row['input_time_ms'],
+                'computation_time_ms': row['computation_time_ms'],
+                'speedup': speedup,
+                'efficiency': efficiency
+            })
+    
+    return pd.DataFrame(results)
+
+def print_summary(df):
+    """Вывод сводной информации"""
+    
+    print("\n" + "="*80)
+    print("SUMMARY: Vector Dot Products with OpenMP Sections")
+    print("="*80)
+    
+    # Группировка по конфигурациям
+    for (num_pairs, vector_size), group in df.groupby(['num_pairs', 'vector_size']):
+        print(f"\n{'─'*80}")
+        print(f"Configuration: {num_pairs} pairs, vector size {vector_size}")
+        print(f"{'─'*80}")
+        
+        print(f"\n{'Method':<15} {'Threads':<10} {'Time (ms)':<12} {'Speedup':<10} {'Efficiency':<12}")
+        print("─"*80)
+        
+        for _, row in group.iterrows():
+            print(f"{row['method']:<15} {row['num_threads']:<10} "
+                  f"{row['total_time_ms']:>10.2f}  {row['speedup']:>8.2f}x  "
+                  f"{row['efficiency']:>10.1f}%")
+    
+    print("\n" + "="*80)
+    print("KEY INSIGHTS")
+    print("="*80)
+    
+    # Лучшее ускорение для sections
+    sections_df = df[df['method'] == 'sections']
+    if not sections_df.empty:
+        best_speedup = sections_df.loc[sections_df['speedup'].idxmax()]
+        print(f"\n✓ Best speedup with sections: {best_speedup['speedup']:.2f}x")
+        print(f"  Configuration: {best_speedup['num_pairs']} pairs, "
+              f"vector size {best_speedup['vector_size']}, "
+              f"{best_speedup['num_threads']} threads")
+        
+        # Анализ для 2 потоков (оптимально для 2 секций)
+        sections_2t = sections_df[sections_df['num_threads'] == 2]
+        if not sections_2t.empty:
+            avg_speedup_2t = sections_2t['speedup'].mean()
+            avg_efficiency_2t = sections_2t['efficiency'].mean()
+            print(f"\n✓ Average performance with 2 threads (optimal for 2 sections):")
+            print(f"  Speedup: {avg_speedup_2t:.2f}x")
+            print(f"  Efficiency: {avg_efficiency_2t:.1f}%")
+        
+        # Сравнение 2 vs 4 потока
+        sections_4t = sections_df[sections_df['num_threads'] == 4]
+        if not sections_2t.empty and not sections_4t.empty:
+            improvement = ((sections_4t['speedup'].mean() / sections_2t['speedup'].mean()) - 1) * 100
+            print(f"\n✓ Performance improvement from 2 to 4 threads: {improvement:+.1f}%")
+            if improvement < 10:
+                print("  → Limited benefit beyond 2 threads (expected for 2 sections)")
+    
+    # Анализ времени ввода vs вычислений
+    print(f"\n{'─'*80}")
+    print("TIME BREAKDOWN ANALYSIS")
+    print(f"{'─'*80}")
+    
+    for method in df['method'].unique():
+        method_df = df[df['method'] == method]
+        avg_input = method_df['input_time_ms'].mean()
+        avg_compute = method_df['computation_time_ms'].mean()
+        total = avg_input + avg_compute
+        
+        print(f"\n{method.capitalize()}:")
+        print(f"  Input time:       {avg_input:>8.2f} ms ({avg_input/total*100:>5.1f}%)")
+        print(f"  Computation time: {avg_compute:>8.2f} ms ({avg_compute/total*100:>5.1f}%)")
+        print(f"  Total:            {total:>8.2f} ms")
+
+def save_processed_data(df, original_file):
+    """Сохранение обработанных данных"""
+    output_file = original_file.replace('.csv', '_processed.csv')
+    df.to_csv(output_file, index=False)
+    print(f"\n✓ Processed data saved to: {output_file}")
+    return output_file
+
+def main():
     if len(sys.argv) < 2:
         print("Usage: python3 analyze.py <benchmark_results.csv>")
         sys.exit(1)
     
     csv_file = sys.argv[1]
-    analyze_results(csv_file)
+    
+    if not os.path.exists(csv_file):
+        print(f"Error: File not found: {csv_file}")
+        sys.exit(1)
+    
+    # Загрузка и обработка данных
+    df = load_data(csv_file)
+    df_processed = calculate_metrics(df)
+    
+    # Вывод результатов
+    print_summary(df_processed)
+    
+    # Сохранение обработанных данных
+    output_file = save_processed_data(df_processed, csv_file)
+    
+    print("\n" + "="*80)
+    print("NEXT STEPS")
+    print("="*80)
+    print("\n1. Generate graphs:")
+    print("   python3 plot_graphs.py")
+    print("\n2. View processed data:")
+    print(f"   cat {output_file}")
+    print()
+
+if __name__ == "__main__":
+    main()

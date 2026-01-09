@@ -4,23 +4,24 @@
 
 Разработка программы для вычисления скалярного произведения для последовательного набора векторов. Ввод векторов и вычисление их произведения организованы как две раздельные задачи, для распараллеливания которых используется директива `sections`.
 
-**Implementation of dot product computation for a sequence of vector pairs using OpenMP sections directive:**
-- Input task: Reading vectors from file
-- Computation task: Computing dot products
-- Parallelization using `#pragma omp parallel sections`
+**Формула скалярного произведения:**
+```
+dot_product(a, b) = Σ(a[i] * b[i]) для i=0..n-1
+```
+
+Implementation of parallel vector dot product computation using OpenMP sections directive. Input and computation are organized as two separate parallel tasks using producer-consumer pattern.
 
 ## Структура проекта (Project Structure)
 
 ```
-task8_vector_dot_products/
+task8_vector_dot_products_fixed/
 ├── src/                          # Source code
 │   └── vector_dot_products.cpp   # Main program with sections
 ├── scripts/                      # Automation scripts
 │   ├── compile.sh                # Compilation script
 │   ├── run_benchmarks.sh         # Benchmark runner
 │   └── test_pipeline.sh          # Full test pipeline
-├── data/                         # Vector data files
-│   └── *.txt                     # Generated vector pairs
+├── data/                         # Test data files
 ├── analysis/                     # Analysis scripts
 │   ├── analyze.py                # Results processing
 │   └── plot_graphs.py            # Graph generation
@@ -28,25 +29,63 @@ task8_vector_dot_products/
 ├── results/                      # Benchmark results (CSV)
 ├── graphs/                       # Generated graphs
 ├── .gitignore                    # Git ignore file
-└── README.md                     # This file
+├── README.md                     # This file
+└── QUICKSTART.md                 # Quick start guide
 ```
+
+## Ключевые особенности (Key Features)
+
+### 1. OpenMP Sections Directive
+Программа использует `#pragma omp parallel sections` для создания двух параллельных задач:
+
+```cpp
+#pragma omp parallel sections
+{
+    #pragma omp section  // СЕКЦИЯ 1: Чтение векторов из файла
+    {
+        // Producer: читает векторы и добавляет в очередь
+    }
+    
+    #pragma omp section  // СЕКЦИЯ 2: Вычисление скалярных произведений
+    {
+        // Consumer: берет векторы из очереди и вычисляет
+    }
+}
+```
+
+### 2. Producer-Consumer Pattern
+- **Producer (Section 1)**: Читает пары векторов из файла и помещает в потокобезопасную очередь
+- **Consumer (Section 2)**: Извлекает пары из очереди и вычисляет скалярные произведения
+- **Синхронизация**: Использует атомарные переменные и OpenMP locks
+
+### 3. Thread-Safe Queue
+Реализована потокобезопасная очередь с использованием `omp_lock_t`:
+
+```cpp
+class ThreadSafeQueue {
+    queue<VectorPair> q;
+    omp_lock_t lock;
+    
+    void push(const VectorPair& item);
+    bool try_pop(VectorPair& item);
+};
+```
+
+### 4. Ограничение Sections
+**Важно**: Директива `sections` создает ровно столько параллельных задач, сколько указано секций (в нашем случае 2). Поэтому:
+- Оптимальное количество потоков: **2**
+- Дополнительные потоки (4, 8, и т.д.) дают минимальное улучшение
+- Теоретический максимум ускорения: **~2x**
 
 ## Быстрый старт (Quick Start)
 
 ### 1. Компиляция (Compilation)
 
 ```bash
-cd task8_vector_dot_products/scripts
+cd task8_vector_dot_products_fixed/scripts
 chmod +x *.sh
 ./compile.sh
 ```
-
-Скрипт автоматически:
-- Определит вашу ОС (macOS/Linux)
-- Найдет подходящий компилятор с поддержкой OpenMP
-- Скомпилирует программу с оптимизациями
-- Сгенерирует тестовые данные
-- Проверит корректность работы
 
 ### 2. Быстрый тест (Quick Test)
 
@@ -57,9 +96,8 @@ chmod +x *.sh
 Выполнит:
 - Компиляцию программы
 - Генерацию тестовых данных
-- Проверку корректности вычислений
+- Проверку корректности
 - Быстрый бенчмарк
-- Проверку зависимостей Python
 
 ### 3. Полный бенчмарк (Full Benchmark)
 
@@ -67,13 +105,11 @@ chmod +x *.sh
 ./run_benchmarks.sh
 ```
 
-Запустит полный набор тестов:
-- Количество пар векторов: 50, 100, 200, 500
-- Размер векторов: 1000, 5000, 10000 элементов
-- Количество потоков: 1, 2, 4, 8, 16, 32, 64, 128
-- По 10 запусков каждой конфигурации
-
-⏱️ **Время выполнения:** ~15-30 минут в зависимости от системы
+Запустит тесты для:
+- Размеры векторов: 1000, 5000, 10000
+- Количество пар: 10, 50, 100
+- Количество потоков: 1, 2, 4, 8
+- Методы: sequential, sections
 
 ### 4. Анализ результатов (Analysis)
 
@@ -89,173 +125,162 @@ python3 plot_graphs.py
 
 ## Использование программы (Program Usage)
 
-### Генерация тестовых данных
+### Команды
 
 ```bash
+# Генерация тестовых данных
 ./bin/vector_dot_products generate <num_pairs> <vector_size> <output_file>
-```
 
-Пример:
-```bash
-./bin/vector_dot_products generate 100 1000 data/vectors.txt
-```
+# Запуск бенчмарка
+./bin/vector_dot_products benchmark <data_file> <num_threads> <method> <runs>
 
-### Запуск бенчмарка
+# Полный бенчмарк с анализом
+./bin/vector_dot_products full <data_file> <runs>
 
-```bash
-./bin/vector_dot_products benchmark <data_file> <num_threads> <method> <runs> [output_file]
-```
-
-Параметры:
-- `data_file` - файл с векторами
-- `num_threads` - количество потоков OpenMP
-- `method` - метод: `sequential` или `sections`
-- `runs` - количество запусков для усреднения
-- `output_file` - (опционально) CSV файл для сохранения результатов
-
-Примеры:
-```bash
-# Последовательное выполнение (baseline)
-./bin/vector_dot_products benchmark data/vectors.txt 1 sequential 10
-
-# Параллельное выполнение с sections, 4 потока
-./bin/vector_dot_products benchmark data/vectors.txt 4 sections 10
-
-# С сохранением результатов
-./bin/vector_dot_products benchmark data/vectors.txt 8 sections 10 results/test.csv
-```
-
-### Проверка корректности
-
-```bash
+# Проверка корректности
 ./bin/vector_dot_products verify <data_file>
+```
+
+### Примеры
+
+```bash
+# Генерация 50 пар векторов размером 10000
+./bin/vector_dot_products generate 50 10000 vectors.txt
+
+# Полный бенчмарк (5 запусков)
+./bin/vector_dot_products full vectors.txt 5
+
+# Бенчмарк sections с 2 потоками (10 запусков)
+./bin/vector_dot_products benchmark vectors.txt 2 sections 10
+
+# Проверка корректности
+./bin/vector_dot_products verify vectors.txt
 ```
 
 ## Реализация (Implementation)
 
-### Формат данных
-
-Файл с векторами имеет следующий формат:
-```
-<num_pairs> <vector_size>
-<vec1_elem1> <vec1_elem2> ... <vec1_elemN>
-<vec2_elem1> <vec2_elem2> ... <vec2_elemN>
-<vec3_elem1> <vec3_elem2> ... <vec3_elemN>
-<vec4_elem1> <vec4_elem2> ... <vec4_elemN>
-...
-```
-
-Каждая пара векторов занимает две строки.
-
-### Последовательная реализация (Sequential)
+### Последовательный метод (Sequential)
 
 ```cpp
-// 1. Чтение всех векторов из файла
-for (int p = 0; p < num_pairs; ++p) {
-    read_vector_pair(file, pairs[p]);
-}
-
-// 2. Вычисление всех скалярных произведений
-for (int p = 0; p < num_pairs; ++p) {
-    results[p] = compute_dot_product(pairs[p].vec1, pairs[p].vec2);
-}
-```
-
-### Параллельная реализация с sections
-
-```cpp
-#pragma omp parallel sections
-{
-    // Section 1: Задача ввода - чтение векторов из файла
-    #pragma omp section
-    {
-        for (int p = 0; p < num_pairs; ++p) {
-            VectorPair pair = read_vector_pair(file, p);
-            
-            #pragma omp critical
-            {
-                compute_buffer.push_back(pair);
-            }
-        }
-        input_done = true;
+BenchmarkResult sequential_method(const string& filename, int runs) {
+    // Фаза 1: Чтение всех векторов
+    for (int p = 0; p < num_pairs; ++p) {
+        // Читаем vec1 и vec2
     }
     
-    // Section 2: Задача вычисления - вычисление скалярных произведений
-    #pragma omp section
+    // Фаза 2: Вычисление всех скалярных произведений
+    for (int p = 0; p < num_pairs; ++p) {
+        result = compute_dot_product(vec1, vec2);
+    }
+}
+```
+
+### Параллельный метод с Sections
+
+```cpp
+BenchmarkResult sections_method(const string& filename, int num_threads, int runs) {
+    ThreadSafeQueue work_queue;
+    atomic<bool> input_done(false);
+    
+    #pragma omp parallel sections
     {
-        while (processed < num_pairs) {
-            VectorPair pair;
-            
-            #pragma omp critical
-            {
-                if (!compute_buffer.empty()) {
-                    pair = compute_buffer.front();
-                    compute_buffer.erase(compute_buffer.begin());
-                }
+        #pragma omp section  // Producer
+        {
+            // Читаем векторы из файла
+            for (int p = 0; p < num_pairs; ++p) {
+                VectorPair pair = read_pair();
+                work_queue.push(pair);
             }
-            
-            if (has_work) {
-                results[pair.id] = compute_dot_product(pair.vec1, pair.vec2);
-                processed++;
+            input_done = true;
+        }
+        
+        #pragma omp section  // Consumer
+        {
+            while (true) {
+                VectorPair pair;
+                if (work_queue.try_pop(pair)) {
+                    result = compute_dot_product(pair.vec1, pair.vec2);
+                } else if (input_done && work_queue.empty()) {
+                    break;
+                }
             }
         }
     }
 }
 ```
 
-**Ключевые особенности:**
-- Две независимые секции выполняются параллельно
-- Секция ввода читает векторы и помещает их в буфер
-- Секция вычисления берет векторы из буфера и вычисляет скалярные произведения
-- Синхронизация через критические секции для доступа к общему буферу
-- Конвейерная обработка: вычисления начинаются до завершения ввода
+### Утяжеление вычислений
 
-## Проверка корректности (Correctness Verification)
+Для демонстрации эффекта параллелизма используется искусственное утяжеление:
 
-Программа автоматически проверяет корректность:
-
-```
-=== Correctness Verification ===
-Sequential results:
-  Pair 0: 123456.789012
-  Pair 1: 234567.890123
-  ...
-
-Parallel (sections) results:
-  Pair 0: 123456.789012
-  Pair 1: 234567.890123
-  ...
-
-✓ PASSED: All results match!
+```cpp
+double compute_dot_product(const vector<double>& vec1, const vector<double>& vec2) {
+    double result = 0.0;
+    
+    // 100 повторений для утяжеления
+    for (int repeat = 0; repeat < 100; ++repeat) {
+        double temp = 0.0;
+        for (size_t i = 0; i < vec1.size(); ++i) {
+            temp += vec1[i] * vec2[i];
+        }
+        result = temp;
+    }
+    
+    return result;
+}
 ```
 
 ## Метрики производительности (Performance Metrics)
 
 ### 1. Время выполнения (Execution Time)
-- **Total time** - общее время выполнения
-- **Input time** - время чтения векторов
-- **Computation time** - время вычисления скалярных произведений
+- **Total time**: Общее время выполнения
+- **Input time**: Время чтения данных (Section 1)
+- **Computation time**: Время вычислений (Section 2)
 
 ### 2. Ускорение (Speedup)
 ```
-Speedup = T(sequential) / T(parallel)
+Speedup = T_sequential / T_parallel
 ```
 
 ### 3. Эффективность (Efficiency)
 ```
-Efficiency = Speedup / n
+Efficiency = Speedup / num_threads * 100%
 ```
-где n - количество потоков.
+
+### 4. Теоретическое ускорение (Theoretical Speedup)
+```
+Theoretical_Speedup = (T_input + T_compute) / max(T_input, T_compute)
+```
+
+Для pipeline-параллелизма максимальное ускорение достигается когда обе секции работают одновременно.
+
+## Ожидаемые результаты (Expected Results)
+
+### С 2 потоками (оптимально)
+- **Speedup**: ~1.2-1.5x
+- **Efficiency**: ~60-75%
+- Обе секции выполняются параллельно
+
+### С 4+ потоками
+- **Speedup**: ~1.3-1.6x (незначительное улучшение)
+- **Efficiency**: ~30-40% (снижается)
+- Дополнительные потоки простаивают
+
+### Почему ограничение?
+- Только **2 секции** могут выполняться параллельно
+- Дополнительные потоки не могут быть использованы
+- Это фундаментальное ограничение директивы `sections`
 
 ## Генерируемые графики (Generated Graphs)
 
 После запуска анализа в директории `graphs/` создаются:
 
-1. **execution_time_<config>.png** - Время выполнения vs потоки
-2. **speedup_<config>.png** - Ускорение vs потоки (с идеальной линией)
-3. **efficiency_<config>.png** - Эффективность vs потоки
-4. **comparison_all.png** - Сравнение всех конфигураций
-5. **summary_table.txt** - Сводная таблица результатов
+1. **execution_time_*.png** - Время выполнения vs потоки
+2. **speedup_*.png** - Ускорение vs потоки (с идеальной линией)
+3. **efficiency_*.png** - Эффективность vs потоки
+4. **time_breakdown.png** - Разбивка времени на ввод и вычисления
+5. **sections_limitation.png** - Демонстрация ограничения 2 секций
+6. **summary_table.txt** - Сводная таблица результатов
 
 ## Требования (Requirements)
 
@@ -265,7 +290,7 @@ Efficiency = Speedup / n
   - GCC 11+ (рекомендуется для macOS)
   - Clang с libomp
   - GCC на Linux
-- Минимум 4 ядра CPU (рекомендуется 8+)
+- Минимум 2 ядра CPU
 
 ### Python (для анализа)
 ```bash
@@ -298,98 +323,65 @@ sudo apt-get install g++
 pip3 install pandas matplotlib numpy
 ```
 
-## Ожидаемые результаты (Expected Results)
+## Ключевые выводы (Key Findings)
 
-### Последовательное выполнение (Sequential)
-- Полная сериализация: сначала весь ввод, затем все вычисления
-- Используется как baseline для сравнения
+1. ✅ **Sections directive** создает фиксированное количество параллельных задач
+2. ✅ **Producer-Consumer pattern** эффективен для pipeline-параллелизма
+3. ✅ **Оптимальное количество потоков = количество секций** (в нашем случае 2)
+4. ✅ **Thread-safe queue** необходима для безопасной передачи данных
+5. ✅ **Atomic variables** обеспечивают корректную синхронизацию
+6. ✅ **Дополнительные потоки** не дают значительного улучшения
 
-### Параллельное выполнение с sections
-- **Малое количество потоков (2-4)**: Умеренное ускорение
-  - Две секции могут выполняться параллельно
-  - Ввод и вычисления перекрываются
-  
-- **Среднее количество потоков (8-16)**: Хорошее ускорение
-  - Эффективное использование конвейера
-  - Минимальное время простоя
-  
-- **Большое количество потоков (32+)**: Ограниченное ускорение
-  - Только две секции могут выполняться параллельно
-  - Накладные расходы на синхронизацию растут
+## Применение в реальных задачах (Real-world Applications)
 
-### Влияние размера задачи
+### Pipeline Processing
+- Чтение данных из файла/сети + обработка
+- Декодирование + рендеринг видео
+- Парсинг + анализ данных
 
-**Малые векторы (1000 элементов):**
-- Накладные расходы на синхронизацию более заметны
-- Ограниченное ускорение
+### Producer-Consumer Tasks
+- Веб-сервер: прием запросов + обработка
+- Обработка изображений: загрузка + фильтрация
+- Научные вычисления: ввод данных + расчеты
 
-**Средние векторы (5000 элементов):**
-- Баланс между вычислениями и синхронизацией
-- Хорошее ускорение
+### Ограничения Sections
+- Подходит для **фиксированного числа** параллельных задач
+- Для динамического параллелизма лучше использовать `task` или `parallel for`
+- Эффективно когда задачи имеют **разную природу** (I/O vs CPU)
 
-**Большие векторы (10000 элементов):**
-- Вычисления доминируют
-- Максимальное ускорение от параллелизма
+## Сравнение с другими подходами (Comparison)
+
+### Sections vs Parallel For
+- **Sections**: Фиксированное число разнородных задач
+- **Parallel For**: Динамическое распределение однородных итераций
+
+### Sections vs Tasks
+- **Sections**: Статическое распределение при запуске
+- **Tasks**: Динамическое создание задач во время выполнения
+
+### Когда использовать Sections?
+- ✅ Небольшое фиксированное число задач (2-4)
+- ✅ Задачи имеют разную природу (I/O, CPU, GPU)
+- ✅ Нужен простой pipeline-параллелизм
+- ❌ Не подходит для большого числа задач
+- ❌ Не подходит для динамического параллелизма
 
 ## Для отчета (For Report)
 
 Используйте следующие материалы:
 
-1. **Графики ускорения** - показывают эффективность sections
-2. **Графики эффективности** - демонстрируют масштабируемость
-3. **Анализ времени** - разделение на ввод и вычисления
-4. **Сравнение конфигураций** - влияние размера задачи
-5. **Таблица summary_table.txt** - числовые данные для отчета
+1. **Графики ускорения** - показывают ограничение 2 секций
+2. **Графики эффективности** - демонстрируют падение при >2 потоках
+3. **Time breakdown** - показывает параллельное выполнение секций
+4. **Sections limitation** - ключевой график для понимания ограничений
+5. **Summary table** - числовые данные для таблиц в отчете
 
-## Ключевые выводы (Key Findings)
-
-1. ✅ **Директива sections позволяет параллелизовать разнородные задачи**
-   - Ввод и вычисления выполняются одновременно
-   - Конвейерная обработка данных
-   - Эффективное использование ресурсов
-
-2. ✅ **Ограничение масштабируемости**
-   - Только две секции могут выполняться параллельно
-   - Ускорение ограничено количеством секций
-   - Дополнительные потоки не дают преимущества
-
-3. ✅ **Важность синхронизации**
-   - Критические секции необходимы для общего буфера
-   - Накладные расходы на синхронизацию растут с потоками
-   - Баланс между параллелизмом и overhead
-
-4. ✅ **Размер задачи влияет на эффективность**
-   - Большие векторы: лучшее ускорение
-   - Малые векторы: накладные расходы доминируют
-   - Оптимальный размер зависит от системы
-
-5. ✅ **Sections vs другие подходы**
-   - Sections: для разнородных задач
-   - For: для однородных циклов
-   - Tasks: для динамического параллелизма
-
-## Применение в реальных задачах (Real-world Applications)
-
-### Конвейерная обработка данных
-- Чтение данных из файла/сети
-- Обработка данных
-- Запись результатов
-
-### Научные вычисления
-- Загрузка данных эксперимента
-- Вычисление метрик
-- Визуализация результатов
-
-### Обработка потоков данных
-- Получение данных от датчиков
-- Фильтрация и обработка
-- Сохранение результатов
-
-### Когда использовать sections:
-- Есть несколько независимых задач
-- Задачи имеют разную природу (ввод/вывод, вычисления)
-- Количество задач известно заранее
-- Нужна простая параллелизация без сложной логики
+### Ключевые пункты для отчета:
+- Директива `sections` создает фиксированное число параллельных задач
+- Оптимальное количество потоков равно количеству секций
+- Producer-Consumer pattern эффективен для pipeline-обработки
+- Дополнительные потоки не улучшают производительность значительно
+- Sections подходит для небольшого числа разнородных задач
 
 ## Автор (Author)
 
