@@ -1,133 +1,102 @@
 #!/bin/bash
 
-# Compilation script for Task 3: Numerical Integration with OpenMP
-# Supports macOS and Linux with automatic compiler detection
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
-set -e
+cd "$PROJECT_ROOT"
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+mkdir -p bin
 
-echo -e "${GREEN}=== Task 3: Numerical Integration - Compilation Script ===${NC}"
+OS="$(uname -s)"
 
-# Detect OS
-OS=$(uname -s)
-echo "Detected OS: $OS"
-
-# Create necessary directories
-mkdir -p ../bin
-mkdir -p ../results
-mkdir -p ../graphs
-
-# Compiler selection based on OS
-if [[ "$OS" == "Darwin" ]]; then
-    echo -e "${YELLOW}macOS detected${NC}"
+check_openmp() {
+    local compiler=$1
+    local flags=$2
     
-    # Check for GCC (preferred for macOS)
-    if command -v g++-13 &> /dev/null; then
-        CXX="g++-13"
-        echo "Using GCC 13"
-    elif command -v g++-12 &> /dev/null; then
-        CXX="g++-12"
-        echo "Using GCC 12"
-    elif command -v g++-11 &> /dev/null; then
-        CXX="g++-11"
-        echo "Using GCC 11"
-    else
-        # Try Clang with libomp
-        if command -v clang++ &> /dev/null; then
-            CXX="clang++"
-            echo "Using Clang (will check for libomp)"
-            
-            # Check if libomp is installed
-            if ! brew list libomp &> /dev/null; then
-                echo -e "${YELLOW}libomp not found. Installing...${NC}"
-                brew install libomp
-            fi
-            
-            LIBOMP_PREFIX=$(brew --prefix libomp)
-            EXTRA_FLAGS="-I${LIBOMP_PREFIX}/include -L${LIBOMP_PREFIX}/lib"
-        else
-            echo -e "${RED}Error: No suitable compiler found${NC}"
-            echo "Please install GCC: brew install gcc"
-            echo "Or install libomp for Clang: brew install libomp"
-            exit 1
+    cat > /tmp/omp_test.cpp << 'EOF'
+#include <omp.h>
+#include <iostream>
+int main() {
+    #pragma omp parallel
+    {
+        #pragma omp single
+        std::cout << "OpenMP threads: " << omp_get_num_threads() << std::endl;
+    }
+    return 0;
+}
+EOF
+    
+    if $compiler $flags /tmp/omp_test.cpp -o /tmp/omp_test 2>/dev/null; then
+        if /tmp/omp_test >/dev/null 2>&1; then
+            rm -f /tmp/omp_test /tmp/omp_test.cpp
+            return 0
         fi
     fi
-elif [[ "$OS" == "Linux" ]]; then
-    echo -e "${YELLOW}Linux detected${NC}"
-    
-    if command -v g++ &> /dev/null; then
-        CXX="g++"
-        echo "Using system GCC"
-    else
-        echo -e "${RED}Error: g++ not found${NC}"
-        echo "Please install: sudo apt-get install g++"
+    rm -f /tmp/omp_test /tmp/omp_test.cpp
+    return 1
+}
+
+COMPILER=""
+CXXFLAGS=""
+
+case "$OS" in
+    Darwin*)
+        for version in 14 13 12 11; do
+            if command -v g++-$version &> /dev/null; then
+                COMPILER="g++-$version"
+                CXXFLAGS="-std=c++11 -O3 -fopenmp -Wall -Wextra"
+                if check_openmp "$COMPILER" "$CXXFLAGS"; then
+                    break
+                fi
+            fi
+        done
+        
+        if [ -z "$COMPILER" ]; then
+            if command -v clang++ &> /dev/null; then
+                if [ -d "/opt/homebrew/opt/libomp" ]; then
+                    LIBOMP_PATH="/opt/homebrew/opt/libomp"
+                elif [ -d "/usr/local/opt/libomp" ]; then
+                    LIBOMP_PATH="/usr/local/opt/libomp"
+                else
+                    exit 1
+                fi
+                
+                COMPILER="clang++"
+                CXXFLAGS="-std=c++11 -O3 -Xclang -fopenmp -Wall -Wextra -I${LIBOMP_PATH}/include -L${LIBOMP_PATH}/lib -lomp"
+                
+                if ! check_openmp "$COMPILER" "$CXXFLAGS"; then
+                    exit 1
+                fi
+            else
+                exit 1
+            fi
+        fi
+        ;;
+        
+    Linux*)
+        if command -v g++ &> /dev/null; then
+            COMPILER="g++"
+            CXXFLAGS="-std=c++11 -O3 -fopenmp -Wall -Wextra"
+            if ! check_openmp "$COMPILER" "$CXXFLAGS"; then
+                exit 1
+            fi
+        else
+            exit 1
+        fi
+        ;;
+        
+    *)
         exit 1
-    fi
-else
-    echo -e "${RED}Unsupported OS: $OS${NC}"
-    exit 1
-fi
+        ;;
+esac
 
-# Compilation flags
-if [[ "$CXX" == "clang++" ]]; then
-    # Clang needs -Xpreprocessor for OpenMP
-    CXXFLAGS="-std=c++17 -O3 -Xpreprocessor -fopenmp -Wall -Wextra"
-else
-    CXXFLAGS="-std=c++17 -O3 -fopenmp -Wall -Wextra"
-fi
-SOURCE="../src/integration.cpp"
-OUTPUT="../bin/integration"
+SOURCE="src/dot_product.cpp"
+OUTPUT="bin/dot_product"
 
-echo -e "\n${GREEN}Compiling...${NC}"
-echo "Compiler: $CXX"
-echo "Flags: $CXXFLAGS $EXTRA_FLAGS"
-echo "Source: $SOURCE"
-echo "Output: $OUTPUT"
-
-# Compile
-if [[ "$CXX" == "clang++" ]]; then
-    # Clang needs explicit -lomp linking
-    if $CXX $CXXFLAGS $EXTRA_FLAGS $SOURCE -o $OUTPUT -lomp; then
-        echo -e "${GREEN}✓ Compilation successful!${NC}"
-    else
-        echo -e "${RED}✗ Compilation failed!${NC}"
-        exit 1
-    fi
-else
-    if $CXX $CXXFLAGS $EXTRA_FLAGS $SOURCE -o $OUTPUT; then
-        echo -e "${GREEN}✓ Compilation successful!${NC}"
-    else
-        echo -e "${RED}✗ Compilation failed!${NC}"
-        exit 1
-    fi
-fi
-
-# Test OpenMP
-echo -e "\n${GREEN}Testing OpenMP support...${NC}"
-$OUTPUT x2 0 1 100000 4 reduction 1 > /dev/null 2>&1
+$COMPILER $CXXFLAGS $SOURCE -o $OUTPUT
 
 if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ OpenMP is working correctly!${NC}"
+    chmod +x $OUTPUT
 else
-    echo -e "${RED}✗ OpenMP test failed!${NC}"
     exit 1
 fi
-
-# Display binary info
-echo -e "\n${GREEN}Binary information:${NC}"
-ls -lh $OUTPUT
-file $OUTPUT
-
-echo -e "\n${GREEN}=== Compilation Complete ===${NC}"
-echo "Binary location: $OUTPUT"
-echo ""
-echo "Quick test:"
-echo "  $OUTPUT x2 0 1 1000000 4 reduction 10"
-echo ""
-echo "Run full benchmarks:"
-echo "  ./run_benchmarks.sh"

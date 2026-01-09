@@ -1,123 +1,102 @@
 #!/bin/bash
 
-# Compilation script for Task 6: Loop Scheduling Investigation
-# Automatically detects OS and compiles with appropriate OpenMP flags
-
-set -e  # Exit on error
-
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
-
-echo -e "${BLUE}=== Task 6: Loop Scheduling - Compilation ===${NC}"
-
-# Detect OS
-OS="$(uname -s)"
-echo -e "${YELLOW}Detected OS: $OS${NC}"
-
-# Determine project root (parent of scripts directory)
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PROJECT_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 
-echo -e "${YELLOW}Project root: $PROJECT_ROOT${NC}"
+cd "$PROJECT_ROOT"
 
-# Create bin directory if it doesn't exist
-mkdir -p "$PROJECT_ROOT/bin"
+mkdir -p bin
 
-# Source and output files
-SRC_FILE="$PROJECT_ROOT/src/loop_scheduling.cpp"
-OUT_FILE="$PROJECT_ROOT/bin/loop_scheduling"
+OS="$(uname -s)"
 
-# Compilation flags
-CXXFLAGS="-std=c++17 -O3 -Wall"
-OMPFLAG="-fopenmp"
-CLANG_OMPFLAG="-Xpreprocessor -fopenmp"
+check_openmp() {
+    local compiler=$1
+    local flags=$2
+    
+    cat > /tmp/omp_test.cpp << 'EOF'
+#include <omp.h>
+#include <iostream>
+int main() {
+    #pragma omp parallel
+    {
+        #pragma omp single
+        std::cout << "OpenMP threads: " << omp_get_num_threads() << std::endl;
+    }
+    return 0;
+}
+EOF
+    
+    if $compiler $flags /tmp/omp_test.cpp -o /tmp/omp_test 2>/dev/null; then
+        if /tmp/omp_test >/dev/null 2>&1; then
+            rm -f /tmp/omp_test /tmp/omp_test.cpp
+            return 0
+        fi
+    fi
+    rm -f /tmp/omp_test /tmp/omp_test.cpp
+    return 1
+}
 
-# Detect compiler and compile based on OS
+COMPILER=""
+CXXFLAGS=""
+
 case "$OS" in
     Darwin*)
-        echo -e "${YELLOW}macOS detected${NC}"
+        for version in 14 13 12 11; do
+            if command -v g++-$version &> /dev/null; then
+                COMPILER="g++-$version"
+                CXXFLAGS="-std=c++11 -O3 -fopenmp -Wall -Wextra"
+                if check_openmp "$COMPILER" "$CXXFLAGS"; then
+                    break
+                fi
+            fi
+        done
         
-        # Try to find GCC with OpenMP support
-        if command -v g++-13 &> /dev/null; then
-            CXX="g++-13"
-            echo -e "${GREEN}Using g++-13${NC}"
-        elif command -v g++-12 &> /dev/null; then
-            CXX="g++-12"
-            echo -e "${GREEN}Using g++-12${NC}"
-        elif command -v g++-11 &> /dev/null; then
-            CXX="g++-11"
-            echo -e "${GREEN}Using g++-11${NC}"
-        elif brew list libomp &> /dev/null 2>&1; then
-            # Use Clang with libomp
-            CXX="clang++"
-            LIBOMP_PREFIX=$(brew --prefix libomp)
-            CXXFLAGS="$CXXFLAGS -I$LIBOMP_PREFIX/include"
-            OMPFLAG="$CLANG_OMPFLAG"
-            LDFLAGS="-L$LIBOMP_PREFIX/lib -lomp"
-            echo -e "${GREEN}Using clang++ with libomp${NC}"
-        else
-            echo -e "${RED}Error: No suitable compiler found${NC}"
-            echo -e "${YELLOW}Please install one of:${NC}"
-            echo "  1. GCC with OpenMP: brew install gcc"
-            echo "  2. libomp for Clang: brew install libomp"
-            exit 1
+        if [ -z "$COMPILER" ]; then
+            if command -v clang++ &> /dev/null; then
+                if [ -d "/opt/homebrew/opt/libomp" ]; then
+                    LIBOMP_PATH="/opt/homebrew/opt/libomp"
+                elif [ -d "/usr/local/opt/libomp" ]; then
+                    LIBOMP_PATH="/usr/local/opt/libomp"
+                else
+                    exit 1
+                fi
+                
+                COMPILER="clang++"
+                CXXFLAGS="-std=c++11 -O3 -Xclang -fopenmp -Wall -Wextra -I${LIBOMP_PATH}/include -L${LIBOMP_PATH}/lib -lomp"
+                
+                if ! check_openmp "$COMPILER" "$CXXFLAGS"; then
+                    exit 1
+                fi
+            else
+                exit 1
+            fi
         fi
         ;;
         
     Linux*)
-        echo -e "${YELLOW}Linux detected${NC}"
-        
         if command -v g++ &> /dev/null; then
-            CXX="g++"
-            echo -e "${GREEN}Using g++${NC}"
+            COMPILER="g++"
+            CXXFLAGS="-std=c++11 -O3 -fopenmp -Wall -Wextra"
+            if ! check_openmp "$COMPILER" "$CXXFLAGS"; then
+                exit 1
+            fi
         else
-            echo -e "${RED}Error: g++ not found${NC}"
-            echo "Please install: sudo apt-get install g++"
             exit 1
         fi
         ;;
         
     *)
-        echo -e "${RED}Unsupported OS: $OS${NC}"
         exit 1
         ;;
 esac
 
-# Compile
-echo -e "${BLUE}Compiling...${NC}"
-echo "Command: $CXX $CXXFLAGS $OMPFLAG $SRC_FILE -o $OUT_FILE $LDFLAGS"
+SOURCE="src/dot_product.cpp"
+OUTPUT="bin/dot_product"
 
-if [ -z "$LDFLAGS" ]; then
-    $CXX $CXXFLAGS $OMPFLAG "$SRC_FILE" -o "$OUT_FILE"
-else
-    $CXX $CXXFLAGS $OMPFLAG "$SRC_FILE" -o "$OUT_FILE" $LDFLAGS
-fi
+$COMPILER $CXXFLAGS $SOURCE -o $OUTPUT
 
 if [ $? -eq 0 ]; then
-    echo -e "${GREEN}✓ Compilation successful!${NC}"
-    echo -e "${GREEN}Binary created: $OUT_FILE${NC}"
-    
-    # Test OpenMP
-    echo -e "\n${BLUE}Testing OpenMP...${NC}"
-    export OMP_NUM_THREADS=4
-    
-    if "$OUT_FILE" --verify; then
-        echo -e "${GREEN}✓ OpenMP is working correctly!${NC}"
-    else
-        echo -e "${RED}✗ OpenMP test failed${NC}"
-        exit 1
-    fi
+    chmod +x $OUTPUT
 else
-    echo -e "${RED}✗ Compilation failed${NC}"
     exit 1
 fi
-
-echo -e "\n${GREEN}=== Compilation Complete ===${NC}"
-echo -e "${YELLOW}You can now run the program:${NC}"
-echo "  $OUT_FILE 5000 4 static 0 10"
-echo "  $OUT_FILE 5000 8 dynamic 10 10"
-echo "  $OUT_FILE 10000 16 guided 0 5"
